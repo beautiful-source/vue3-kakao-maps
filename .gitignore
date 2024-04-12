@@ -28,3 +28,8 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# ignore files in folder 디렉토리명
+VUE3-KAKAO-MAPS/*
+# but keep the folder by keeping .gitkeep file
+!VUE3-KAKAO-MAPS/.gitkeep
