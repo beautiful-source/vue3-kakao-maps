@@ -1,6 +1,10 @@
-import './assets/main.css'
+import type { App } from 'vue'
+import TestComponent from './components/TestComponent.vue'
 
-import { createApp } from 'vue'
-import App from './App.vue'
+export { TestComponent }
 
-createApp(App).mount('#app')
+export default {
+  install: (app: App) => {
+    app.component('TestComponent', TestComponent)
+  }
+}
