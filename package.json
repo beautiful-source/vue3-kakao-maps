@@ -1,7 +1,7 @@
 {
   "name": "vue3-kakao-maps",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.0.2",
+  "private": false,
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -36,5 +36,40 @@
     "vite-plugin-vue-devtools": "^7.0.25",
     "vitest": "^1.4.0",
     "vue-tsc": "^2.0.11"
-  }
+  },
+  "description": "kakao maps component library with vue3 and TS ",
+  "main": "index.js",
+  "contributors": [
+    {
+      "name": "lire-eruel",
+      "email": "jsh001505@naver.com",
+      "url": "https://github.com/lireEruel"
+    },
+    {
+      "name": "ahjin",
+      "email": "chris2761@naver.com",
+      "url": "https://github.com/ahjinU"
+    },
+    {
+      "name": "yangsoyoung",
+      "email": "maysoyoung@gmail.com",
+      "url ": "https://github.com/YangSSo51"
+    },
+    {
+      "name": "khryu0610",
+      "email": "khryu0610@gmail.com",
+      "url ": "https://github.com/geekseal"
+    },
+    {
+      "name": "eunjinkim",
+      "email": "asd0755@naver.com",
+      "url": "https://github.com/aeroej"
+    },
+    {
+      "name": "goflvhxj96",
+      "email": "goflvhxj96@naver.com",
+      "url ": "https://github.com/goflvhxj96"
+    }
+  ],
+  "license": "MIT"
 }
