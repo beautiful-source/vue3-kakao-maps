@@ -75,3 +75,5 @@ VUE3-KAKAO-MAPS/*
 # but keep the folder by keeping .gitkeep file
 !VUE3-KAKAO-MAPS/.gitkeep
 
+
+*storybook.log
