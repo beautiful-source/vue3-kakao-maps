@@ -35,8 +35,8 @@ if ! echo "$COMMIT_MSG" | head -n 1 | grep -qE ":[ ]"; then
 fi
 
 # 커밋 메시지 Type 제한
-if ! echo "$COMMIT_MSG" | head -n 1 | grep -qE "^(Init|Feat|Fix|Refactor|Design|Comment|Style|Test|Chore|Rename|Remove|Docs|Conflict|Config):"; then
-  echo -e "\nCommit message error: 허용되지 않은 커밋 메시지 Type을 사용했습니다. \n허용된 Type: Init, Feat, Fix, Refactor, Design, Comment, Style, Test, Chore, Rename, Remove, Docs, Conflict, Config"
+if ! echo "$COMMIT_MSG" | head -n 1 | grep -qE "^(Init|Feature|Fix|Refactor|Design|Comment|Style|Test|Chore|Rename|Remove|Docs|Conflict|Config):"; then
+  echo -e "\nCommit message error: 허용되지 않은 커밋 메시지 Type을 사용했습니다. \n허용된 Type: Init, Feature, Fix, Refactor, Design, Comment, Style, Test, Chore, Rename, Remove, Docs, Conflict, Config"
   exit 1
 fi
 
