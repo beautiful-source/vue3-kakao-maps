@@ -12,7 +12,10 @@
         <h1>Acme</h1>
       </div>
       <div>
-        <span class="welcome" v-if="user">Welcome, <b>{{ user.name }}</b>!</span>
+        <span class="welcome" v-if="user"
+          >Welcome, <b>{{ user.name }}</b
+          >!</span
+        >
         <my-button size="small" @click="$emit('logout')" label="Log out" v-if="user" />
         <my-button size="small" @click="$emit('login')" label="Log in" v-if="!user" />
         <my-button primary size="small" @click="$emit('createAccount')" label="Sign up" v-if="!user" />
@@ -22,16 +25,14 @@
 </template>
 
 <script lang="ts" setup>
-import './header.css';
-import MyButton from './Button.vue';
+import "./header.css";
+import MyButton from "./VButton.vue";
 
 defineProps<{ user: { name: string } | null }>();
 
 defineEmits<{
-  (event: 'createAccount'): void;
-  (event: 'login'): void;
-  (event: 'logout'): void;
+  (event: "createAccount"): void;
+  (event: "login"): void;
+  (event: "logout"): void;
 }>();
-
 </script>
-
