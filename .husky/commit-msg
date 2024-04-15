@@ -1,0 +1,39 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+
+# 커밋 메시지 파일의 내용을 읽어옴
+COMMIT_MSG=$(cat "$1")
+
+# 커밋 메시지가 "Merge"로 시작하는 경우 (즉, git merge로 생성된 커밋인 경우) 이하 검사 생략
+if echo "$COMMIT_MSG" | head -n 1 | grep -qE "^Merge"; then
+  exit 0
+fi
+
+# 커밋 Type이 대문자로 시작하지 않으면 error
+if ! echo "$COMMIT_MSG" | head -n 1 | grep -qE "^[A-Z]"; then
+  echo "Commit message error: 커밋 메시지 Type은 반드시 영어 대문자로 시작해야 합니다."
+  exit 1
+fi
+
+# :가 없으면 error
+if echo "$COMMIT_MSG" | head -n 1 | grep -qE "^[^:]*$"; then
+  echo "Commit message error: 커밋 메시지 Type과 Subject 사이에 콜론이 있어야 합니다."
+  exit 1
+fi
+
+# : 앞에 공백이 있으면 error
+if echo "$COMMIT_MSG" | head -n 1 | grep -qE "\s+:"; then
+  echo "Commit message error: 커밋 메시지 Type과 콜론 사이에 공백이 없어야 합니다."
+  exit 1
+fi
+
+# : 뒤에 공백이 없으면 error
+if ! echo "$COMMIT_MSG" | head -n 1 | grep -qE ":[ ]"; then
+  echo "Commit message error: 커밋 메시지 콜론과 Subject 사이에 공백이 있어야 합니다."
+  exit 1
+fi
+
+
+
+

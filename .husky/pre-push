@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+
+# 현재 브랜치
+current_branch=$(git branch --show-current)
+
+# 직접 push가 차단된 브랜치들
+protected_branches="develop master main release"
+
+for branch in $protected_branches; do
+  if [ "$current_branch" = "$branch" ]; then
+    echo "Pre push error: $branch 브랜치로 직접 push할 수 없습니다."
+    exit 1
+  fi
+done
+
+
+# 빌드 실행
+yarn build
+
+# 빌드 종료 코드 
+BUILD_EXIT_CODE=$?
+
+# 빌드 성공여부 확인
+if [ $BUILD_EXIT_CODE -ne 0 ]; then
+  echo "Pre push error: 빌드를 실패하여 push를 중단합니다."
+  exit 1
+fi
