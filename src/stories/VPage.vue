@@ -12,25 +12,18 @@
         process starting with atomic components and ending with pages.
       </p>
       <p>
-        Render pages with mock data. This makes it easy to build and review page states without
-        needing to navigate to them in your app. Here are some handy patterns for managing page data
-        in Storybook:
+        Render pages with mock data. This makes it easy to build and review page states without needing to navigate to them in
+        your app. Here are some handy patterns for managing page data in Storybook:
       </p>
       <ul>
         <li>
-          Use a higher-level connected component. Storybook helps you compose such data from the
-          "args" of child component stories
+          Use a higher-level connected component. Storybook helps you compose such data from the "args" of child component stories
         </li>
-        <li>
-          Assemble data in the page component from your services. You can mock these services out
-          using Storybook.
-        </li>
+        <li>Assemble data in the page component from your services. You can mock these services out using Storybook.</li>
       </ul>
       <p>
         Get a guided tutorial on component-driven development at
-        <a href="https://storybook.js.org/tutorials/" target="_blank" rel="noopener noreferrer"
-          >Storybook tutorials</a
-        >
+        <a href="https://storybook.js.org/tutorials/" target="_blank" rel="noopener noreferrer">Storybook tutorials</a>
         . Read more in the
         <a href="https://storybook.js.org/docs" target="_blank" rel="noopener noreferrer">docs</a>
         .
@@ -54,20 +47,20 @@
 </template>
 
 <script lang="ts" setup>
-import './page.css';
-import MyHeader from './Header.vue';
+import "./page.css";
+import MyHeader from "./VHeader.vue";
 
-import { ref } from 'vue';
+import { ref } from "vue";
 
 const user = ref<{ name: string } | null>(null);
 
-const onLogin = () => {
-  user.value = { name: 'Jane Doe' };
+const onLogin = (): void => {
+  user.value = { name: "Jane Doe" };
 };
-const onLogout = () => {
+const onLogout = (): void => {
   user.value = null;
 };
-const onCreateAccount = () => {
-  user.value = { name: 'Jane Doe' };
+const onCreateAccount = (): void => {
+  user.value = { name: "Jane Doe" };
 };
 </script>
