@@ -1,13 +1,20 @@
 {
   "name": "ryutest",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "type": "module",
-  "module": "./dist/index.js",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
+    }
+  },
   "scripts": {
     "dev": "vite build --watch",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -43,5 +50,7 @@
     "vitest": "^1.4.0",
     "vue-tsc": "^2.0.11"
   },
-  "peerDependencies": {}
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  }
 }
