@@ -9,6 +9,7 @@
     "test:unit": "vitest",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
+    "postinstall": "husky install",
     "format": "prettier --write src/",
     "lint": "eslint --cache --cache-location .eslintcache --fix --ext .ts,.vue src/"
   },
