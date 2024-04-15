@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+
+# 현재 브랜치명 가져오기
+BRANCH_NAME=$(git branch --show-current)
+
+if echo "$BRANCH_NAME" | grep -qE "[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]"; then
+  echo -e "Branch name error: 브랜치명에 한글을 포함할 수 없습니다.\n브랜치명은 영어 소문자, 숫자, 대시/, 하이픈- 기호로만 작성해주세요."
+  exit 1
+fi
+
+
+if echo "$BRANCH_NAME" | grep -qE "[A-Z]"; then
+  echo -e "Branch name error: 브랜치명에 영어 대문자를 포함할 수 없습니다.\n브랜치명은 영어 소문자, 숫자, 대시/, 하이픈- 기호로만 작성해주세요."
+  exit 1
+fi
+
+
+if echo "$BRANCH_NAME" | grep -qE "[ ]"; then
+  echo -e "Branch name error: 브랜치명에 공백을 포함할 수 없습니다.\n브랜치명은 영어 소문자, 숫자, 대시/, 하이픈- 기호로만 작성해주세요."
+  exit 1
+fi
+
+
+if echo "$BRANCH_NAME" | grep -qE "[^a-z0-9/\-]"; then
+  echo -e "Branch name error: 브랜치명은 영어 소문자, 숫자, 대시/, 하이픈- 기호로만 작성해주세요."
+  exit 1
+fi
+
+
+if echo "$BRANCH_NAME" | grep -qE "(^[/\-])|([/\-]$)"; then
+  echo -e "Branch name error: 브랜치명에서 대시/ 또는 하이픈- 기호의 위치를 확인해주세요."
+  exit 1
+fi
+
+
+yarn lint
