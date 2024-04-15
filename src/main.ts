@@ -1,5 +1,3 @@
-import "./assets/main.css";
-
 import { createApp, type Component, type ComputedOptions, type MethodOptions } from "vue";
 import App from "./App.vue";
 
