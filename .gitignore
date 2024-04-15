@@ -67,3 +67,11 @@ yarn-error.log
 .eslintcache
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,vue,vuejs,yarn
+
+*.tsbuildinfo
+
+# ignore files in folder 디렉토리명
+VUE3-KAKAO-MAPS/*
+# but keep the folder by keeping .gitkeep file
+!VUE3-KAKAO-MAPS/.gitkeep
+
