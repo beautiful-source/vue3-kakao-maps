@@ -1,5 +1,5 @@
 <template>
-  <div class="kakao-map" ref="map" />
+  <div class="kakao-map" ref="kakaoMapRef" />
 </template>
 
 <script setup lang="ts">
@@ -18,7 +18,7 @@ const theme = {
   appKey
 };
 
-const map = ref<null | HTMLElement>(null);
+const kakaoMapRef = ref<null | HTMLElement>(null);
 
 onMounted(() => {
   if (window.kakao?.maps !== undefined) {
@@ -40,8 +40,8 @@ const initMap = (): void => {
     center: new window.kakao.maps.LatLng(lat, lng),
     level: 3
   };
-  if (map.value != null) {
-    window.kakao.maps.Map(map.value, options);
+  if (kakaoMapRef.value != null) {
+    window.kakao.maps.Map(kakaoMapRef.value, options);
   }
 };
 </script>
