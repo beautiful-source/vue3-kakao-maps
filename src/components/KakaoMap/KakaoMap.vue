@@ -1,9 +1,9 @@
 <template>
-  <div id="map" />
+  <div class="kakao-map" ref="map" />
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import type { MapProps } from "./";
 
 declare global {
@@ -12,12 +12,13 @@ declare global {
   }
 }
 const { width = 40, height = 30, appKey, lat = 37.566826, lng = 126.9786567 } = defineProps<MapProps>();
-
 const theme = {
   width: width + "rem",
   height: height + "rem",
   appKey
 };
+
+const map = ref<null | HTMLElement>(null);
 
 onMounted(() => {
   if (window.kakao?.maps !== undefined) {
@@ -35,17 +36,18 @@ onMounted(() => {
 });
 
 const initMap = (): void => {
-  const container = document.getElementById("map");
   const options = {
     center: new window.kakao.maps.LatLng(lat, lng),
     level: 3
   };
-  window.kakao.maps.Map(container, options);
+  if (map.value != null) {
+    window.kakao.maps.Map(map.value, options);
+  }
 };
 </script>
 
 <style scoped>
-#map {
+.kakao-map {
   width: v-bind("theme.width");
   height: v-bind("theme.height");
 }
