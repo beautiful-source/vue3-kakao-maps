@@ -1,1 +1,3 @@
-export * from "./KakaoMap";
+import KakaoMap from "./KakaoMap/KakaoMap.vue";
+
+export { KakaoMap };

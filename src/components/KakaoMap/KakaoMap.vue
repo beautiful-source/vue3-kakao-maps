@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import type { MapProps } from "./";
+import type { MapProps } from "./types";
 
 declare global {
   interface Window {
