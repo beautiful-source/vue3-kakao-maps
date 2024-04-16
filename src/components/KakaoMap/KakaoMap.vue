@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import type { MapProps } from "./types";
+import { onMounted, ref } from 'vue';
+import type { MapProps } from './types';
 
 declare global {
   interface Window {
@@ -9,8 +9,8 @@ declare global {
 }
 const { width = 40, height = 30, appKey, lat = 37.566826, lng = 126.9786567 } = defineProps<MapProps>();
 const theme = {
-  width: width + "rem",
-  height: height + "rem",
+  width: width + 'rem',
+  height: height + 'rem',
   appKey
 };
 
@@ -20,7 +20,7 @@ onMounted(() => {
   if (window.kakao?.maps !== undefined) {
     initMap();
   } else {
-    const script = document.createElement("script");
+    const script = document.createElement('script');
     script.onload = () => {
       window.kakao.maps.load(() => {
         initMap();
@@ -48,7 +48,7 @@ const initMap = (): void => {
 
 <style scoped>
 .kakao-map {
-  width: v-bind("theme.width");
-  height: v-bind("theme.height");
+  width: v-bind('theme.width');
+  height: v-bind('theme.height');
 }
 </style>

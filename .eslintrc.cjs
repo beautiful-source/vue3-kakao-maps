@@ -1,5 +1,5 @@
 /* eslint-env node */
-require('@rushstack/eslint-patch/modern-module-resolution')
+require('@rushstack/eslint-patch/modern-module-resolution');
 
 module.exports = {
   root: true,
@@ -13,17 +13,11 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: [
-      './tsconfig.json',
-      './tsconfig.app.json',
-      './tsconfig.node.json',
-      './tsconfig.vitest.json'
-    ],
+    project: ['./tsconfig.json', './tsconfig.app.json', './tsconfig.node.json', './tsconfig.vitest.json'],
     extraFileExtensions: ['.vue'] // .vue 파일 확장자 추가
   },
   plugins: ['vue'],
   rules: {
     '@typescript-eslint/consistent-type-definitions': 'off'
-  },
-  ignorePatterns: ['vite/']
-}
+  }
+};

@@ -6,7 +6,7 @@
     "cypress.config.*",
     "nightwatch.conf.*",
     "playwright.config.*",
-    "./.eslintrc.js"
+    ".eslintrc.cjs"
   ],
   "compilerOptions": {
     "composite": true,
