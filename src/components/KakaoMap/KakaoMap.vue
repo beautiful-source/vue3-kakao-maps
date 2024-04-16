@@ -1,7 +1,3 @@
-<template>
-  <div class="kakao-map" ref="kakaoMapRef" />
-</template>
-
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import type { MapProps } from "./";
@@ -45,6 +41,10 @@ const initMap = (): void => {
   }
 };
 </script>
+
+<template>
+  <div class="kakao-map" ref="kakaoMapRef" />
+</template>
 
 <style scoped>
 .kakao-map {
