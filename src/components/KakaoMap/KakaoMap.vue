@@ -17,7 +17,7 @@ export type KakaoMapProps = {
   container?: any;
   center?: number;
   mapTypeId?: any;
-  draggable: boolean;
+  draggable?: boolean;
   disableDoubleClick?: boolean;
   projectionId?: any;
   tileAnimation?: boolean;
@@ -60,7 +60,6 @@ const initMap = (): void => {
     center: new window.kakao.maps.LatLng(lat, lng),
     level: 3
   };
-  console.log(kakaoMapRef.value);
   if (kakaoMapRef.value !== null) {
     const map = new window.kakao.maps.Map(kakaoMapRef.value, options);
     map.setDraggable(draggable);
