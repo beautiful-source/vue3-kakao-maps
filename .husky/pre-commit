@@ -35,10 +35,10 @@ if echo "$BRANCH_NAME" | grep -qE "(^[/\-])|([/\-]$)"; then
 fi
 
 # 커밋 메시지 Type 제한
-if ! echo "$BRANCH_NAME" | head -n 1 | grep -qE "^(bugfix|config|develop|feature|hotfix|main|maintenance|qa|refactor|release)/"; then
+if ! echo "$BRANCH_NAME" | head -n 1 | grep -qE "^(bugfix|config|feature|hotfix|maintenance|qa|refactor)/|^(develop|main|release)"; then
   echo -e "Branch name error: 허용되지 않은 브랜치명을 사용했습니다. \n허용된 브랜치명: bugfix, config, develop, feature, hotfix, main, maintenance, qa, refactor, release"
   exit 1
 fi
 
 
-yarn lint
+pnpm lint
