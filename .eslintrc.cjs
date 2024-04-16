@@ -7,7 +7,7 @@ module.exports = {
     browser: true,
     es2021: true
   },
-  extends: ['standard-with-typescript', 'plugin:vue/vue3-essential', 'prettier', 'plugin:storybook/recommended'],
+  extends: ['love', 'plugin:vue/vue3-essential', 'prettier', 'plugin:storybook/recommended'],
   parserOptions: {
     parser: '@typescript-eslint/parser',
     ecmaVersion: 'latest',
