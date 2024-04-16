@@ -1,6 +1,6 @@
 export type MapProps = {
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
   appKey: string;
   lat?: number;
   lng?: number;

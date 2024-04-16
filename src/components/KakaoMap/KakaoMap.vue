@@ -7,10 +7,10 @@ declare global {
     kakao: any; // kakao map 관련 타입 정비시 수정 필요
   }
 }
-const { width = 40, height = 30, appKey, lat = 37.566826, lng = 126.9786567 } = defineProps<MapProps>();
+const { width = "40rem", height = "30rem", appKey, lat = 37.566826, lng = 126.9786567 } = defineProps<MapProps>();
 const theme = {
-  width: width + "rem",
-  height: height + "rem",
+  width: typeof width === "number" ? width + "rem" : width,
+  height: typeof height === "number" ? height + "rem" : height,
   appKey
 };
 
