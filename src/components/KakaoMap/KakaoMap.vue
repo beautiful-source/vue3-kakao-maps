@@ -1,58 +1,54 @@
-<template>
-  <div id="map" />
-</template>
-
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from "vue";
+import type { MapProps } from "./types";
 
-type MapProps = {
-  width?: number
-  height?: number
-  appKey: string
-  lat?: number
-  lng?: number
+declare global {
+  interface Window {
+    kakao: any; // kakao map 관련 타입 정비시 수정 필요
+  }
 }
-
-const {
-  width = 40,
-  height = 30,
-  appKey,
-  lat = 37.566826,
-  lng = 126.9786567
-} = defineProps<MapProps>()
-
+const { width = 40, height = 30, appKey, lat = 37.566826, lng = 126.9786567 } = defineProps<MapProps>();
 const theme = {
-  width: width + 'rem',
-  height: height + 'rem',
-  appKey: appKey
-}
+  width: width + "rem",
+  height: height + "rem",
+  appKey
+};
+
+const kakaoMapRef = ref<null | HTMLElement>(null);
 
 onMounted(() => {
-  if (window.kakao && window.kakao.maps) {
-    initMap()
+  if (window.kakao?.maps !== undefined) {
+    initMap();
   } else {
-    const script = document.createElement('script')
+    const script = document.createElement("script");
     script.onload = () => {
-      kakao.maps.load(() => initMap())
-    }
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${theme.appKey}&autoload=false`
-    document.body.appendChild(script)
+      window.kakao.maps.load(() => {
+        initMap();
+      });
+    };
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${theme.appKey}&autoload=false`;
+    document.body.appendChild(script);
   }
-})
+});
 
-const initMap = () => {
-  const container = document.getElementById('map')
+const initMap = (): void => {
   const options = {
-    center: new kakao.maps.LatLng(lat, lng),
+    center: new window.kakao.maps.LatLng(lat, lng),
     level: 3
+  };
+  if (kakaoMapRef.value != null) {
+    window.kakao.maps.Map(kakaoMapRef.value, options);
   }
-  const kakaoMap = new kakao.maps.Map(container, options)
-}
+};
 </script>
 
+<template>
+  <div class="kakao-map" ref="kakaoMapRef" />
+</template>
+
 <style scoped>
-#map {
-  width: v-bind('theme.width');
-  height: v-bind('theme.height');
+.kakao-map {
+  width: v-bind("theme.width");
+  height: v-bind("theme.height");
 }
 </style>

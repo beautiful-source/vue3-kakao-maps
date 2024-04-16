@@ -17,7 +17,7 @@ done
 
 
 # 빌드 실행
-yarn build
+pnpm build
 
 # 빌드 종료 코드 
 BUILD_EXIT_CODE=$?
