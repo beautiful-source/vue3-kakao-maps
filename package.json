@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@typescript-eslint/parser": "^7.1.0",
+    "kakao.maps.d.ts": "^0.1.39",
     "sass": "^1.75.0",
     "vue": "^3.4.21"
   },
