@@ -74,6 +74,10 @@ yarn-error.log
 VUE3-KAKAO-MAPS/*
 # but keep the folder by keeping .gitkeep file
 !VUE3-KAKAO-MAPS/.gitkeep
+# 화면표시
+App.vue
+main.ts
+.env
 
 
 *storybook.log

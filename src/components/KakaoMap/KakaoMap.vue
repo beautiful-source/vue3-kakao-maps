@@ -1,38 +1,58 @@
 <template>
-    <div id="map"></div>
+  <div id="map" />
 </template>
 
-<script setup props="props">
-import { ref, onMounted } from 'vue';
+<script setup lang="ts">
+import { onMounted } from 'vue'
 
-const map = ref(null);
-const { width, height, appKey } = props;
+type MapProps = {
+  width?: number
+  height?: number
+  appKey: string
+  lat?: number
+  lng?: number
+}
+
+const {
+  width = 40,
+  height = 30,
+  appKey,
+  lat = 37.566826,
+  lng = 126.9786567
+} = defineProps<MapProps>()
+
+const theme = {
+  width: width + 'rem',
+  height: height + 'rem',
+  appKey: appKey
+}
 
 onMounted(() => {
-  const script = document.createElement('script');
-  script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}`;
-  script.async = true;
-  script.onload = () => {
-    initMap();
-  };
-  document.head.appendChild(script);
-});
+  if (window.kakao && window.kakao.maps) {
+    initMap()
+  } else {
+    const script = document.createElement('script')
+    script.onload = () => {
+      kakao.maps.load(() => initMap())
+    }
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${theme.appKey}&autoload=false`
+    document.body.appendChild(script)
+  }
+})
 
-function initMap() {
-  const container = map.value;
+const initMap = () => {
+  const container = document.getElementById('map')
   const options = {
-    center: new kakao.maps.LatLng(37.566826, 126.9786567),
-    level: 3,
-  };
-  const kakaoMap = new kakao.maps.Map(container, options);
+    center: new kakao.maps.LatLng(lat, lng),
+    level: 3
+  }
+  const kakaoMap = new kakao.maps.Map(container, options)
 }
 </script>
 
 <style scoped>
 #map {
-  --custom-width: {{ width }}px;
-  --custom-height: {{ height }}px;
-  width: var(--custom-width);
-  height: var(--custom-height);
+  width: v-bind('theme.width');
+  height: v-bind('theme.height');
 }
 </style>
