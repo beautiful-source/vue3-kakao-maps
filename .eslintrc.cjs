@@ -8,7 +8,6 @@ module.exports = {
     es2021: true
   },
   extends: ['standard-with-typescript', 'plugin:vue/vue3-essential', 'prettier', 'plugin:storybook/recommended'],
-  parser: 'vue-eslint-parser',
   parserOptions: {
     parser: '@typescript-eslint/parser',
     ecmaVersion: 'latest',
@@ -18,6 +17,7 @@ module.exports = {
   },
   plugins: ['vue'],
   rules: {
-    '@typescript-eslint/consistent-type-definitions': 'off'
+    '@typescript-eslint/consistent-type-definitions': 'off',
+    'vue/no-undef-components': 'error'
   }
 };
