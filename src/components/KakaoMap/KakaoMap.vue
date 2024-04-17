@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 export interface KakaoMapProps extends /* @vue-ignore */ Omit<kakao.maps.MapOptions, 'center'> {
   width?: number | string;
@@ -20,10 +20,15 @@ const props = withDefaults(defineProps<KakaoMapProps>(), {
 });
 
 // 기본지도 생성
-const theme = {
+
+type MapTheme = {
+  width: number | string;
+  height: number | string;
+};
+const theme = ref<MapTheme>({
   width: typeof props.width === 'number' ? props.width + 'px' : props.width,
   height: typeof props.height === 'number' ? props.height + 'px' : props.height
-};
+});
 
 const kakaoMapRef = ref<null | HTMLElement>(null);
 
@@ -51,15 +56,15 @@ const initMap = (): void => {
     (() => new window.kakao.maps.Map(kakaoMapRef.value, options))();
   }
 };
+
+const styles = computed(() => ({
+  width: theme.value.width,
+  height: theme.value.height
+}));
 </script>
 
 <template>
-  <div class="kakao-map" ref="kakaoMapRef"></div>
+  <div class="kakao-map" ref="kakaoMapRef" :style="styles"></div>
 </template>
 
-<style scoped>
-.kakao-map {
-  width: v-bind('theme.width');
-  height: v-bind('theme.height');
-}
-</style>
+<style scoped></style>
