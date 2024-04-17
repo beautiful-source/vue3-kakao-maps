@@ -12,35 +12,12 @@
     }
   ],
   "compilerOptions": {
-    // TODO: 아래 옵션들은 추후 조사를 통해 정제되어야 할 사항입니다.
+    // Modules
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
 
-    // "target": "ESNext",
-    // "useDefineForClassFields": true,
-    // "module": "ESNext",
-    "moduleResolution": "Node10",
-    "strict": true,
-    "jsx": "preserve",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    // "lib": ["ESNext", "DOM"],
-    "skipLibCheck": true,
-    // "noEmit": true,
-
-    // Tells TypeScript to read JS files, as
-    // normally they are ignored as source files
-    "allowJs": true,
-    // Generate d.ts files
-    "declaration": true,
-    // This compiler run should
-    // only output d.ts files
-    "emitDeclarationOnly": true,
-    // Types should go into this directory.
-    // Removing this would place the .d.ts files
-    // next to the .js files
-    "outDir": "dist",
-    // go to js file when using IDE functions like
-    // "Go to Definition" in VSCode
-    // "declarationMap": true,
+    // Interop Constraints
+    // https://vitejs.dev/guide/features.html#isolatedmodules
     "isolatedModules": true
   }
 }
