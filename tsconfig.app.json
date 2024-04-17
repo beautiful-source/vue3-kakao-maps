@@ -1,6 +1,6 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "./.eslintrc.js"],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", ".eslintrc.cjs"],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "composite": true,
@@ -10,6 +10,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@public/*": ["./public/*"]
-    }
+    },
+    "types": ["kakao.maps.d.ts"]
   }
 }

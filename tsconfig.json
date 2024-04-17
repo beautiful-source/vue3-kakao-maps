@@ -12,6 +12,7 @@
     }
   ],
   "compilerOptions": {
+    "types": ["kakao.maps.d.ts"],
     // Modules
     "module": "ESNext",
     "moduleResolution": "Bundler",
