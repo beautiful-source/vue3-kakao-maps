@@ -19,5 +19,6 @@ module.exports = {
   rules: {
     '@typescript-eslint/consistent-type-definitions': 'off',
     'vue/no-undef-components': 'error'
-  }
+  },
+  ignorePatterns: ['dist/**/*']
 };
