@@ -18,6 +18,8 @@ const props = withDefaults(defineProps<KakaoMapProps>(), {
   draggable: true,
   level: 3
 });
+const map = ref<kakao.maps.Map | null>(null);
+const emits = defineEmits(['onLoadMap']);
 
 // 기본지도 생성
 const theme = {
@@ -48,13 +50,16 @@ const initMap = (): void => {
     ...props
   };
   if (kakaoMapRef.value !== null) {
-    (() => new window.kakao.maps.Map(kakaoMapRef.value, options))();
+    map.value = new window.kakao.maps.Map(kakaoMapRef.value, options);
+    emits('onLoadMap', map.value);
   }
 };
 </script>
 
 <template>
-  <div class="kakao-map" ref="kakaoMapRef"></div>
+  <div class="kakao-map" ref="kakaoMapRef">
+    <slot />
+  </div>
 </template>
 
 <style scoped>
