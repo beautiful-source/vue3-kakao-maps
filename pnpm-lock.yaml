@@ -8,6 +8,9 @@ overrides:
   strip-ansi: 6.0.1
 
 dependencies:
+  kakao.maps.d.ts:
+    specifier: ^0.1.39
+    version: 0.1.39
   sass:
     specifier: ^1.75.0
     version: 1.75.0
@@ -6257,6 +6260,10 @@ packages:
       is-promise: 2.2.2
       promise: 7.3.1
     dev: true
+
+  /kakao.maps.d.ts@0.1.39:
+    resolution: {integrity: sha512-KXENJ8hHYtjb5G+0vf8TXx/PwWW4j5ndDiQTSMvGtF7EFWu2P3N/+Zivcj9/UKn3j29Iz/sIUaA7WL8Ug3IDGQ==}
+    dev: false
 
   /keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
