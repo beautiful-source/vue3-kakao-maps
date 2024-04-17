@@ -1,12 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 
-declare global {
-  interface Window {
-    kakao: any; // kakao map 관련 타입 정비시 수정 필요
-    Map: any;
-  }
-}
 export type KakaoMapProps = {
   width?: number | string;
   height?: number | string;
@@ -41,12 +35,12 @@ const theme = {
 const kakaoMapRef = ref<null | HTMLElement>(null);
 
 onMounted(() => {
-  if (window.kakao?.maps !== undefined) {
+  if (kakao.maps !== undefined) {
     initMap();
   } else {
     const script = document.createElement('script');
     script.onload = () => {
-      window.kakao.maps.load(() => {
+      kakao.maps.load(() => {
         initMap();
       });
     };
@@ -57,7 +51,7 @@ onMounted(() => {
 
 const initMap = (): void => {
   const options = {
-    center: new window.kakao.maps.LatLng(lat, lng),
+    center: new kakao.maps.LatLng(lat, lng),
     level: 3
   };
   if (kakaoMapRef.value !== null) {
