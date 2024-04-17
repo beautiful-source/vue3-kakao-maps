@@ -1,41 +1,32 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 
-export type KakaoMapProps = {
+export interface KakaoMapProps extends /* @vue-ignore */ Omit<kakao.maps.MapOptions, 'center'> {
   width?: number | string;
   height?: number | string;
   appKey: string;
-  lat?: number; // center
-  lng?: number; // center
   markerList?: any;
-  container?: any;
-  center?: number;
-  mapTypeId?: any;
-  draggable?: boolean;
-  disableDoubleClick?: boolean;
-  projectionId?: any;
-  tileAnimation?: boolean;
-  keyboardShortcuts?: any;
-};
+  // x, y로 받는건 안해서 추후 요청이 있다면 수정 필요
+  lat: number;
+  lng: number;
+}
 
 const { width, height, appKey, lat, lng, draggable } = withDefaults(defineProps<KakaoMapProps>(), {
   width: '40rem',
   height: '30rem',
-  lat: 37.566826,
-  lng: 126.9786567,
   draggable: true
 });
 
 // 기본지도 생성
 const theme = {
-  width: typeof width === 'number' ? width + 'rem' : width,
-  height: typeof height === 'number' ? height + 'rem' : height
+  width: typeof width === 'number' ? width + 'px' : width,
+  height: typeof height === 'number' ? height + 'px' : height
 };
 
 const kakaoMapRef = ref<null | HTMLElement>(null);
 
 onMounted(() => {
-  if (kakao.maps !== undefined) {
+  if (window.kakao?.maps !== undefined) {
     initMap();
   } else {
     const script = document.createElement('script');
