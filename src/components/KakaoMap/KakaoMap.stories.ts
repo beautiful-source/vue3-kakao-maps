@@ -11,14 +11,14 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     width: {
-      description: '맵의 가로 길이입니다. number로 설정할 시 단위는 rem으로 결정됩니다.',
+      description: '맵의 가로 길이입니다. number로 설정할 시 단위는 px로 결정됩니다.',
       table: {
         type: { summary: 'number | string' },
         defaultValue: { summary: '40rem' }
       }
     },
     height: {
-      description: '맵의 세로 길이입니다. number로 설정할 시 단위는 rem으로 결정됩니다.',
+      description: '맵의 세로 길이입니다. number로 설정할 시 단위는 px로 결정됩니다.',
       table: {
         type: { summary: 'number | string' },
         defaultValue: { summary: '50rem' }
@@ -27,8 +27,7 @@ const meta = {
     appKey: {
       description: '카카오 맵의 API Key입니다.',
       table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: '' }
+        type: { summary: 'string' }
       },
       control: false
     },
@@ -73,9 +72,9 @@ const renderKakaoMap: any = (args: KakaoMapProps) => ({
   },
   template: `
   <KakaoMap
-  :width='width'
-  :height='height'
-  :appKey='appKey'
+  :width=width
+  :height=height
+  :appKey=appKey
   :markerList=[]
   :lat=lat
   :lng=lng
