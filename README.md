@@ -1,6 +1,6 @@
 <div align="center"><a href="https://vuejs.org">
   <img width="100" src="https://vuejs.org/images/logo.png" alt="Vue logo"></a>
-  <img width="100" src="https://drive.google.com/uc?export=view&id=1nIhN4NpBOQaY-jwYnzP7yMtMVvKAI18g" alt="플랑크톤 섭취" width="200"/>
+  <img width="100" src="https://drive.google.com/uc?export=view&id=1nIhN4NpBOQaY-jwYnzP7yMtMVvKAI18g" alt="카카오맵 api 이미지" width="200"/>
   <h1>vue3-kakao-maps</h1>
   
 [Kakao Maps API](https://apis.map.kakao.com/)를 vue3에 맞게 포팅한 라이브러리입니다.    
@@ -29,7 +29,7 @@ yarn add vue3-kakao-maps
 pnpm add vue3-kakao-maps
 ```
 
-# 🏃‍♂️ 기능 추가 일정 안내
+## 🏃‍♂️ 기능 추가 일정 안내
 ### 2024.04.19 (v1.0.0)
 - 지도 생성하기
 - 지도 이동시키기
