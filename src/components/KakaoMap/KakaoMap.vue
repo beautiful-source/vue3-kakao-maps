@@ -11,7 +11,7 @@ export interface KakaoMapProps extends /* @vue-ignore */ Omit<kakao.maps.MapOpti
   lng: number;
 }
 
-const { width, height, appKey, lat, lng, draggable } = withDefaults(defineProps<KakaoMapProps>(), {
+const props = withDefaults(defineProps<KakaoMapProps>(), {
   width: '40rem',
   height: '30rem',
   draggable: true
@@ -19,8 +19,8 @@ const { width, height, appKey, lat, lng, draggable } = withDefaults(defineProps<
 
 // 기본지도 생성
 const theme = {
-  width: typeof width === 'number' ? width + 'px' : width,
-  height: typeof height === 'number' ? height + 'px' : height
+  width: typeof props.width === 'number' ? props.width + 'px' : props.width,
+  height: typeof props.height === 'number' ? props.height + 'px' : props.height
 };
 
 const kakaoMapRef = ref<null | HTMLElement>(null);
@@ -35,19 +35,19 @@ onMounted(() => {
         initMap();
       });
     };
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${appKey}&autoload=false`;
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${props.appKey}&autoload=false`;
     document.body.appendChild(script);
   }
 });
 
 const initMap = (): void => {
   const options = {
-    center: new kakao.maps.LatLng(lat, lng),
+    center: new kakao.maps.LatLng(props.lat, props.lng),
     level: 3
   };
   if (kakaoMapRef.value !== null) {
     const map = new window.kakao.maps.Map(kakaoMapRef.value, options);
-    map.setDraggable(draggable);
+    map.setDraggable(props.draggable);
   }
 };
 </script>
