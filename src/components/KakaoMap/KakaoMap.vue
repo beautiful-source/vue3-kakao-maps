@@ -9,12 +9,14 @@ export interface KakaoMapProps extends /* @vue-ignore */ Omit<kakao.maps.MapOpti
   // x, y로 받는건 안해서 추후 요청이 있다면 수정 필요
   lat: number;
   lng: number;
+  draggable: boolean;
 }
 
 const props = withDefaults(defineProps<KakaoMapProps>(), {
   width: '40rem',
   height: '30rem',
-  draggable: true
+  draggable: true,
+  level: 3
 });
 
 // 기본지도 생성
@@ -43,11 +45,10 @@ onMounted(() => {
 const initMap = (): void => {
   const options = {
     center: new kakao.maps.LatLng(props.lat, props.lng),
-    level: 3
+    ...props
   };
   if (kakaoMapRef.value !== null) {
-    const map = new window.kakao.maps.Map(kakaoMapRef.value, options);
-    map.setDraggable(props.draggable);
+    (() => new window.kakao.maps.Map(kakaoMapRef.value, options))();
   }
 };
 </script>
