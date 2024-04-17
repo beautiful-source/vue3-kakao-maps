@@ -9,7 +9,7 @@ export interface KakaoMapProps extends /* @vue-ignore */ Omit<kakao.maps.MapOpti
   // x, y로 받는건 안해서 추후 요청이 있다면 수정 필요
   lat: number;
   lng: number;
-  draggable: boolean;
+  draggable?: boolean;
 }
 
 const props = withDefaults(defineProps<KakaoMapProps>(), {
