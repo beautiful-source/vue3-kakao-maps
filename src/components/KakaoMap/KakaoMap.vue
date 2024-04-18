@@ -10,13 +10,11 @@ export interface KakaoMapProps extends /* @vue-ignore */ Omit<kakao.maps.MapOpti
   // x, y로 받는건 안해서 추후 요청이 있다면 수정 필요
   lat: number;
   lng: number;
-  draggable?: boolean;
 }
 
 const props = withDefaults(defineProps<KakaoMapProps>(), {
   width: '40rem',
   height: '30rem',
-  draggable: true,
   level: 3
 });
 
@@ -26,10 +24,15 @@ watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
 });
 
 // 기본지도 생성
-const theme = {
+
+type MapTheme = {
+  width: number | string;
+  height: number | string;
+};
+const theme = ref<MapTheme>({
   width: typeof props.width === 'number' ? props.width + 'px' : props.width,
   height: typeof props.height === 'number' ? props.height + 'px' : props.height
-};
+});
 
 const kakaoMapRef = ref<null | HTMLElement>(null);
 
