@@ -40,14 +40,14 @@ onMounted(() => {
   if (window.kakao?.maps !== undefined) {
     initMap();
   } else {
-    const script = document.createElement('script');
-    script.onload = () => {
-      kakao.maps.load(() => {
-        initMap();
-      });
-    };
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${props.appKey}&autoload=false`;
-    document.body.appendChild(script);
+    const script = document.getElementById('kakao-map-api-script');
+    if (script != null) {
+      script.onload = () => {
+        kakao.maps.load(() => {
+          initMap();
+        });
+      };
+    }
   }
 });
 
