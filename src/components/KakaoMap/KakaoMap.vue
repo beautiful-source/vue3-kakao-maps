@@ -17,6 +17,7 @@ const props = withDefaults(defineProps<KakaoMapProps>(), {
   height: '30rem',
   level: 3
 });
+const emits = defineEmits(['onLoadMap']);
 
 // LatLng 변경감지
 watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
@@ -58,12 +59,15 @@ const initMap = (): void => {
   };
   if (kakaoMapRef.value !== null) {
     map.value = new window.kakao.maps.Map(kakaoMapRef.value, options);
+    emits('onLoadMap', map.value);
   }
 };
 </script>
 
 <template>
-  <div class="kakao-map" ref="kakaoMapRef"></div>
+  <div class="kakao-map" ref="kakaoMapRef">
+    <slot />
+  </div>
 </template>
 
 <style scoped>
