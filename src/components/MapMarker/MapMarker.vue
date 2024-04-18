@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 const props = defineProps<{
   map: kakao.maps.Map;
@@ -25,6 +25,10 @@ const initMarker = (map: kakao.maps.Map): void => {
 };
 onMounted(() => {
   initMarker(props.map);
+});
+
+onBeforeUnmount(() => {
+  marker.value?.setMap(null); // 컴포넌트 삭제될 때 map에서 marker 삭제
 });
 </script>
 
