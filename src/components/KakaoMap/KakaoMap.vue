@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+const map = ref<null | kakao.maps.Map>(null);
 
 export interface KakaoMapProps extends /* @vue-ignore */ Omit<kakao.maps.MapOptions, 'center'> {
   width?: number | string;
@@ -17,6 +18,11 @@ const props = withDefaults(defineProps<KakaoMapProps>(), {
   height: '30rem',
   draggable: true,
   level: 3
+});
+
+// LatLng 변경감지
+watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
+  map.value?.panTo(new kakao.maps.LatLng(newLat, newLng));
 });
 
 // 기본지도 생성
@@ -48,7 +54,7 @@ const initMap = (): void => {
     ...props
   };
   if (kakaoMapRef.value !== null) {
-    (() => new window.kakao.maps.Map(kakaoMapRef.value, options))();
+    map.value = new window.kakao.maps.Map(kakaoMapRef.value, options);
   }
 };
 </script>
