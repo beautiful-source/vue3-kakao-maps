@@ -1,18 +1,34 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import type { MapProps } from './types';
 
-const { width = 40, height = 30, appKey, lat = 37.566826, lng = 126.9786567 } = defineProps<MapProps>();
+export interface KakaoMapProps extends /* @vue-ignore */ Omit<kakao.maps.MapOptions, 'center'> {
+  width?: number | string;
+  height?: number | string;
+  appKey: string;
+  markerList?: any;
+  // x, y로 받는건 안해서 추후 요청이 있다면 수정 필요
+  lat: number;
+  lng: number;
+  draggable?: boolean;
+}
+
+const props = withDefaults(defineProps<KakaoMapProps>(), {
+  width: '40rem',
+  height: '30rem',
+  draggable: true,
+  level: 3
+});
+
+// 기본지도 생성
 const theme = {
-  width: width + 'rem',
-  height: height + 'rem',
-  appKey
+  width: typeof props.width === 'number' ? props.width + 'px' : props.width,
+  height: typeof props.height === 'number' ? props.height + 'px' : props.height
 };
 
 const kakaoMapRef = ref<null | HTMLElement>(null);
 
 onMounted(() => {
-  if (kakao.maps !== undefined) {
+  if (window.kakao?.maps !== undefined) {
     initMap();
   } else {
     const script = document.createElement('script');
@@ -21,24 +37,24 @@ onMounted(() => {
         initMap();
       });
     };
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${theme.appKey}&autoload=false`;
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${props.appKey}&autoload=false`;
     document.body.appendChild(script);
   }
 });
 
 const initMap = (): void => {
   const options = {
-    center: new kakao.maps.LatLng(lat, lng),
-    level: 3
+    center: new kakao.maps.LatLng(props.lat, props.lng),
+    ...props
   };
-  if (kakaoMapRef.value != null) {
-    (() => new kakao.maps.Map(kakaoMapRef.value, options))();
+  if (kakaoMapRef.value !== null) {
+    (() => new window.kakao.maps.Map(kakaoMapRef.value, options))();
   }
 };
 </script>
 
 <template>
-  <div class="kakao-map" ref="kakaoMapRef" />
+  <div class="kakao-map" ref="kakaoMapRef"></div>
 </template>
 
 <style scoped>
