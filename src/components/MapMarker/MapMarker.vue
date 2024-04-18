@@ -33,7 +33,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="markerElement" id="aaaaaaaaaaaaaaaaaaaaaaaaaaaaa">
+  <div ref="markerElement">
     <slot></slot>
   </div>
 </template>
