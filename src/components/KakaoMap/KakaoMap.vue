@@ -66,7 +66,7 @@ const initMap = (): void => {
 
 <template>
   <div class="kakao-map" ref="kakaoMapRef">
-    <slot />
+    <slot></slot>
   </div>
 </template>
 
