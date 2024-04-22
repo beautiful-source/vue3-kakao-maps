@@ -1,11 +1,12 @@
 import type { App, Plugin } from 'vue';
-import KakaoMapVue from './components/KakaoMap/KakaoMap.vue';
+import { KakaoMap, MapMarker } from './components';
 
 // `app.use()`에 쓰일 수 있는 플러그인
 const Vue3KakaoMaps: Plugin = {
   install: (app: App) => {
-    // app.component("KakaoMap", KakaoMapVue);
+    app.component('KakaoMap', KakaoMap);
+    app.component('MapMarker', MapMarker);
   }
 };
 
-export { Vue3KakaoMaps, KakaoMapVue };
+export { Vue3KakaoMaps, KakaoMap, MapMarker };
