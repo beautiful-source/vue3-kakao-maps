@@ -17,7 +17,6 @@ const lng = ref<number>(props.lng);
 watch(
   () => isKakaoMapApiLoaded.value,
   (isKakaoMapApiLoaded) => {
-    console.log(isKakaoMapApiLoaded);
     if (isKakaoMapApiLoaded) {
       initMarker(props.map);
     }
