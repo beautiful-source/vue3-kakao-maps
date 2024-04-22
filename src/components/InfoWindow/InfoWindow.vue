@@ -35,7 +35,6 @@ const initInfoWindow = (): void => {
     position: infoWindowPosition,
     content: contentSlot.value ?? props.content ?? ''
   });
-  console.log(contentSlot.value);
 
   infoWindow.value.open(props.map, props.markerElement);
 };
