@@ -6,12 +6,13 @@ const infoWindowElement = ref<HTMLDivElement>();
 type infoWindowProps = {
   map: kakao.maps.Map;
   markerElement?: kakao.maps.Marker;
-  content: string | HTMLElement;
+  content?: string | HTMLElement;
   lat: number;
   lng: number;
 };
 const props = defineProps<infoWindowProps>();
 const infoWindow = ref<kakao.maps.InfoWindow | null>();
+const contentSlot = ref<HTMLElement>();
 
 watch(
   () => isKakaoMapApiLoaded.value,
@@ -32,15 +33,20 @@ const initInfoWindow = (): void => {
   const infoWindowPosition = new kakao.maps.LatLng(props.lat, props.lng);
   infoWindow.value = new kakao.maps.InfoWindow({
     position: infoWindowPosition,
-    content: props.content
+    content: contentSlot.value ?? props.content ?? ''
   });
+  console.log(contentSlot.value);
 
   infoWindow.value.open(props.map, props.markerElement);
 };
 </script>
 
 <template>
-  <div ref="infoWindowElement"></div>
+  <div ref="infoWindowElement">
+    <div ref="contentSlot">
+      <slot></slot>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss"></style>
