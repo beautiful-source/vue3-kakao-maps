@@ -1,16 +1,32 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { isKakaoMapApiLoaded } from '@/util/useKakao';
+import { onBeforeUnmount, ref, watch } from 'vue';
 
 const props = defineProps<{
   map: kakao.maps.Map;
   lat: number;
   lng: number;
+  infoWindow?: string;
 }>();
 
 const marker = ref<null | kakao.maps.Marker>(null);
 const markerElement = ref<HTMLDivElement>();
 const lat = ref<number>(props.lat);
 const lng = ref<number>(props.lng);
+
+watch(
+  () => isKakaoMapApiLoaded.value,
+  (isKakaoMapApiLoaded) => {
+    console.log(isKakaoMapApiLoaded);
+    if (isKakaoMapApiLoaded) {
+      initMarker(props.map);
+    }
+  }
+);
+
+onBeforeUnmount(() => {
+  marker.value?.setMap(null); // 컴포넌트 삭제될 때 map에서 marker 삭제
+});
 
 const initMarker = (map: kakao.maps.Map): void => {
   if (lat.value === undefined || lng.value === undefined) {
@@ -23,13 +39,6 @@ const initMarker = (map: kakao.maps.Map): void => {
 
   marker.value.setMap(map);
 };
-onMounted(() => {
-  initMarker(props.map);
-});
-
-onBeforeUnmount(() => {
-  marker.value?.setMap(null); // 컴포넌트 삭제될 때 map에서 marker 삭제
-});
 </script>
 
 <template>
