@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 const map = ref<null | kakao.maps.Map>(null);
-
 export interface KakaoMapProps extends /* @vue-ignore */ Omit<kakao.maps.MapOptions, 'center'> {
   width?: number | string;
   height?: number | string;
@@ -26,13 +25,16 @@ watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
 
 // 기본지도 생성
 
-type MapTheme = {
+type MapStyle = {
   width: number | string;
   height: number | string;
 };
-const theme = ref<MapTheme>({
-  width: typeof props.width === 'number' ? props.width + 'px' : props.width,
-  height: typeof props.height === 'number' ? props.height + 'px' : props.height
+
+const mapStyle = computed<MapStyle>(() => {
+  return {
+    width: typeof props.width === 'number' ? props.width + 'px' : props.width,
+    height: typeof props.height === 'number' ? props.height + 'px' : props.height
+  };
 });
 
 const kakaoMapRef = ref<null | HTMLElement>(null);
@@ -59,14 +61,9 @@ const initMap = (): void => {
 </script>
 
 <template>
-  <div class="kakao-map" ref="kakaoMapRef">
+  <div ref="kakaoMapRef" :style="mapStyle">
     <slot></slot>
   </div>
 </template>
 
-<style scoped>
-.kakao-map {
-  width: v-bind('theme.width');
-  height: v-bind('theme.height');
-}
-</style>
+<style scoped></style>
