@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { isKakaoMapApiLoaded } from '@/util/useKakao';
+import { ref, watch } from 'vue';
 const map = ref<null | kakao.maps.Map>(null);
 
 export interface KakaoMapProps extends /* @vue-ignore */ Omit<kakao.maps.MapOptions, 'center'> {
   width?: number | string;
   height?: number | string;
-  appKey: string;
   markerList?: any;
   // x, y로 받는건 안해서 추후 요청이 있다면 수정 필요
   lat: number;
@@ -37,20 +37,14 @@ const theme = ref<MapTheme>({
 
 const kakaoMapRef = ref<null | HTMLElement>(null);
 
-onMounted(() => {
-  if (window.kakao?.maps !== undefined) {
-    initMap();
-  } else {
-    const script = document.getElementById('kakao-map-api-script');
-    if (script != null) {
-      script.onload = () => {
-        kakao.maps.load(() => {
-          initMap();
-        });
-      };
+watch(
+  () => isKakaoMapApiLoaded.value,
+  (isKakaoMapApiLoaded) => {
+    if (isKakaoMapApiLoaded) {
+      initMap();
     }
   }
-});
+);
 
 const initMap = (): void => {
   const options = {
