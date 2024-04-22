@@ -1,6 +1,6 @@
 {
   "name": "ryutest",
-  "version": "0.1.9",
+  "version": "0.1.11",
   "private": false,
   "type": "module",
   "main": "./dist/index.umd.cjs",

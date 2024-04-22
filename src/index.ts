@@ -1,5 +1,6 @@
 import type { App, Plugin } from 'vue';
 import { KakaoMap, MapMarker } from './components';
+import useKakao from './util/useKakao';
 
 // `app.use()`에 쓰일 수 있는 플러그인
 const Vue3KakaoMaps: Plugin = {
@@ -9,4 +10,4 @@ const Vue3KakaoMaps: Plugin = {
   }
 };
 
-export { Vue3KakaoMaps, KakaoMap, MapMarker };
+export { Vue3KakaoMaps, KakaoMap, MapMarker, useKakao };
