@@ -9,7 +9,15 @@ const meta = {
   parameters: {
     componentSubtitle: '카카오 기본 지도 컴포넌트입니다.'
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
+  argTypes: {
+    mapTypeId: {
+      control: 'number'
+    },
+    keyboardShortcuts: {
+      control: 'boolean'
+    }
+  }
 } satisfies Meta<typeof KakaoMap>;
 
 export default meta;
@@ -25,30 +33,30 @@ const renderKakaoMap: any = (args: KakaoMapProps) => ({
   <KakaoMap
   :width=width
   :height=height
-  :appKey=appKey
   :markerList=[]
   :lat=lat
   :lng=lng
-  :draggable='draggable'
+  :draggable=draggable
+  :level=level
+  :scrollwheel=scrollwheel
+  :mapTypeId=mapTypeId
+  :tileAnimation=tileAnimation
+  :keyboardShortcuts=keyboardShortcuts
   />
 `
 });
 
-export const Default: Story = {
+export const 기본_지도: Story = {
   render: renderKakaoMap,
   args: {
-    lat: 37.566826,
-    lng: 126.9786567
-  }
-};
-
-export const Other: Story = {
-  render: renderKakaoMap,
-  args: {
-    width: '80rem',
-    height: 300,
     lat: 37.566826,
     lng: 126.9786567,
-    draggable: true
+    width: '40rem',
+    height: '50rem',
+    draggable: true,
+    level: 3,
+    scrollwheel: true,
+    tileAnimation: true,
+    keyboardShortcuts: false
   }
 };

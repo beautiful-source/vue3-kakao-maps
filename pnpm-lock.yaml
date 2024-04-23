@@ -2845,6 +2845,7 @@ packages:
       ts-dedent: 2.2.0
       type-fest: 2.19.0
       vue: 3.4.24(typescript@5.4.5)
+
       vue-component-type-helpers: 2.0.14
     transitivePeerDependencies:
       - encoding

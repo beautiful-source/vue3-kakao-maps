@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, onMounted } from 'vue';
 const map = ref<null | kakao.maps.Map>(null);
 
 export interface KakaoMapProps {
@@ -30,7 +30,7 @@ export interface KakaoMapProps {
   level?: number;
 
   /**
-   * 지도 종류 (기본값: 일반 지도)
+   *  지도 종류를 설정합니다. 기본값은 일반 지도(1), (베이스) 일반 지도: 1, (베이스) 스카이뷰:2, (베이스) 하이브리드(스카이뷰 + 레이블): 3, (오버레이) 레이블: 4, (오버레이) 로드뷰: 5, (오버레이) 교통정보: 6, (오버레이) 지형도: 7, (오버레이) 자전거: 8, (오버레이) 스카이뷰를 위한 자전거 (어두운 지도에서 활용): 9, (오버레이) 지적편집도: 10
    */
   mapTypeId?: kakao.maps.MapTypeId;
 
@@ -45,12 +45,12 @@ export interface KakaoMapProps {
   scrollwheel?: boolean;
 
   /**
-   * 더블클릭 이벤트 및 더블클릭 확대 가능 여부
+   * 더블클릭 이벤트 및 더블클릭 확대 가능 여부, 최초 생성시에만 적용됩니다.
    */
   disableDoubleClick?: boolean;
 
   /**
-   * 더블클릭 확대 가능 여부
+   * 더블클릭 확대 가능 여부, 최초 생성시에만 적용됩니다.
    */
   disableDoubleClickZoom?: boolean;
 
@@ -65,14 +65,11 @@ export interface KakaoMapProps {
   tileAnimation?: boolean;
 
   /**
-   * 키보드의 방향키와 +, – 키로 지도 이동,확대,축소 가능 여부 (기본값: false)
+   * 키보드의 방향키와 +,-키로 지도 이동,확대,축소 가능여부를 설정한다. speed 속성은 지도의 이동속도이며, 처음 생성시에만 적용된다.
    */
   keyboardShortcuts?:
     | boolean
     | {
-        /**
-         * 지도 이동 속도
-         */
         speed: number;
       };
 }
@@ -84,12 +81,25 @@ const props = withDefaults(defineProps<KakaoMapProps>(), {
 });
 const emits = defineEmits(['onLoadMap']);
 
-// LatLng 변경감지
-watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
-  map.value?.panTo(new kakao.maps.LatLng(newLat, newLng));
+const kakaoMapRef = ref<null | HTMLElement>(null);
+
+onMounted(() => {
+  if (isKakaoMapApiLoaded.value) {
+    initMap();
+  }
 });
 
-// 기본지도 생성
+/**
+ * Kakao map api script가 로드되었는지 확인 후 init Map 한다.
+ */
+watch(
+  () => isKakaoMapApiLoaded.value,
+  (isKakaoMapApiLoaded) => {
+    if (isKakaoMapApiLoaded) {
+      initMap();
+    }
+  }
+);
 
 type MapStyle = {
   width: number | string;
@@ -103,17 +113,116 @@ const mapStyle = computed<MapStyle>(() => {
   };
 });
 
-const kakaoMapRef = ref<null | HTMLElement>(null);
-
+/**
+ * width, height 변경감지
+ */
 watch(
-  () => isKakaoMapApiLoaded.value,
-  (isKakaoMapApiLoaded) => {
-    if (isKakaoMapApiLoaded) {
-      initMap();
+  [() => props.width, () => props.height],
+  ([newWidth, newHeight]) => {
+    mapStyle.value.width = newWidth;
+    mapStyle.value.height = newHeight;
+  },
+  {
+    deep: true
+  }
+);
+
+/**
+ * LatLng 변경감지
+ */
+watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
+  map.value?.panTo(new kakao.maps.LatLng(newLat, newLng));
+});
+
+/**
+ * draggable 변경 감지
+ */
+watch(
+  () => props.draggable,
+  (draggable) => {
+    if (draggable === undefined || draggable) {
+      map.value?.setDraggable(true);
+    } else {
+      map.value?.setDraggable(false);
     }
   }
 );
 
+/**
+ * level 변경 감지
+ */
+watch(
+  () => props.level,
+  (level) => {
+    if (level === undefined) {
+      map.value?.setLevel(3);
+    } else {
+      map.value?.setLevel(level);
+    }
+  }
+);
+
+/**
+ * mapTypeId 변경 감지
+ */
+watch(
+  () => props.mapTypeId,
+  (mapTypeId) => {
+    if (mapTypeId === undefined) {
+      map.value?.setMapTypeId(3);
+    } else {
+      map.value?.setMapTypeId(mapTypeId);
+    }
+  }
+);
+
+/**
+ * scrollwheel 변경 감지
+ */
+watch(
+  () => props.scrollwheel,
+  (scrollwheel) => {
+    if (scrollwheel === undefined) {
+      map.value?.setZoomable(true);
+    } else {
+      map.value?.setZoomable(scrollwheel);
+    }
+  }
+);
+
+/**
+ * projectionId 변경 감지
+ */
+watch(
+  () => props.projectionId,
+  (projectionId) => {
+    if (projectionId === undefined) {
+      map.value?.setProjectionId(kakao.maps.ProjectionId.WCONG);
+    } else {
+      map.value?.setProjectionId(projectionId);
+    }
+  }
+);
+
+/**
+ * keyboardShortcuts 변경 감지
+ */
+watch(
+  () => props.keyboardShortcuts,
+  (keyboardShortcuts) => {
+    if (keyboardShortcuts === undefined) {
+      map.value?.setKeyboardShortcuts(false);
+    } else {
+      if (typeof keyboardShortcuts === 'boolean') {
+        map.value?.setKeyboardShortcuts(keyboardShortcuts);
+      }
+    }
+  }
+);
+
+/**
+ * 지도를 생성하는 함수
+ */
 const initMap = (): void => {
   const options = {
     center: new kakao.maps.LatLng(props.lat, props.lng),
