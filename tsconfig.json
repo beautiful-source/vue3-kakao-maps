@@ -12,6 +12,17 @@
     }
   ],
   "compilerOptions": {
-    "types": ["kakao.maps.d.ts"]
+    "paths": {
+      "@/*": ["./src/*"],
+      "@public/*": ["./public/*"]
+    },
+    "types": ["kakao.maps.d.ts"],
+    // Modules
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+
+    // Interop Constraints
+    // https://vitejs.dev/guide/features.html#isolatedmodules
+    "isolatedModules": true
   }
 }
