@@ -3,7 +3,7 @@ import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { ref, watch, computed } from 'vue';
 const map = ref<null | kakao.maps.Map>(null);
 
-export interface KakaoMapProps {
+export type KakaoMapProps = {
   /**
    * 지도의 가로 길이
    */
@@ -75,7 +75,7 @@ export interface KakaoMapProps {
          */
         speed: number;
       };
-}
+};
 
 const props = withDefaults(defineProps<KakaoMapProps>(), {
   width: '40rem',
