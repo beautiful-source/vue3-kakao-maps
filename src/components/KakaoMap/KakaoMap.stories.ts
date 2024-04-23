@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 import { KakaoMap } from '@/components';
 import type { KakaoMapProps } from './KakaoMap.vue';
+import useKakao from '@/util/useKakao';
 
 const meta = {
   title: 'Components/KakaoMap',
@@ -61,6 +62,7 @@ type Story = StoryObj<typeof KakaoMap>;
 const renderKakaoMap: any = (args: KakaoMapProps) => ({
   components: { KakaoMap },
   setup() {
+    useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
     return args;
   },
   template: `
