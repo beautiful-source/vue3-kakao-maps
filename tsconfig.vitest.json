@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.app.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", ".eslintrc.cjs", "src/**/*.ts", ".storybook/main.ts", ".storybook/main.ts"],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", ".eslintrc.cjs", "src/**/*.ts"],
   "exclude": [],
   "compilerOptions": {
     "composite": true,
