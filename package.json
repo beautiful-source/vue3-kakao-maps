@@ -1,6 +1,6 @@
 {
-  "name": "ryutest",
-  "version": "0.1.11",
+  "name": "vue3-kakao-maps",
+  "version": "0.0.2",
   "private": false,
   "type": "module",
   "main": "./dist/index.umd.cjs",
