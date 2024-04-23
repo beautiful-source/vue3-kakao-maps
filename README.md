@@ -16,27 +16,79 @@
 </p>
 
 ## 📦 설치
+
 - npm
+
 ```
 npm i vue3-kakao-maps
 ```
+
 - yarn
+
 ```
 yarn add vue3-kakao-maps
 ```
+
 - pnpm
+
 ```
 pnpm add vue3-kakao-maps
 ```
 
+## ⚙️ 설정방법
+
+### 1. 스크립트 로드하기
+
+`main.{js|ts}`에서 아래와 같이 설정합니다.
+
+```ts
+// typescript
+import { createApp, type Component, type ComputedOptions, type MethodOptions } from 'vue';
+import App from './App.vue';
+import useKakao from './util/useKakao';
+
+useKakao('kakao api key'); // kakao map api에서 발급받은 키를 입력합니다.
+const TypedAssertedApp = App as Component<any, any, any, ComputedOptions, MethodOptions, any, any>;
+createApp(TypedAssertedApp).mount('#app');
+```
+
+### 2. 컴포넌트 사용하기
+
+App.vue에 아래와같이 KakaoMap을 추가합니다.
+
+```ts
+<script setup lang="ts">
+import { ref } from 'vue';
+import { KakaoMap, MapMarker, InfoWindow } from './components';
+const map = ref<kakao.maps.Map>();
+
+const onLoadMap = (newMap: kakao.maps.Map): void => {
+  map.value = newMap;
+};
+</script>
+
+<template>
+  <KakaoMap ref="map" :lat="33.450701" :lng="126.570667" @onLoadMap="onLoadMap" :draggable="false">
+    <MapMarker v-if="map" :lat="33.450701" :lng="126.570667" :map="map"></MapMarker>
+    <InfoWindow v-if="map" :map="map" :lat="33.450701" :lng="126.570667">
+      <div>Hello World!</div>
+    </InfoWindow>
+  </KakaoMap>
+</template>
+
+<style scoped></style>
+```
+
 ## 🏃‍♂️ 기능 추가 일정 안내
-### 2024.04.19 (v1.0.0)
+
+### 2024.04.23 (v1.0.0)
+
 - 지도 생성하기
 - 지도 이동시키기
-- 지도 객체 export
 - 마커 생성하기
 
 ### 2024.04.26
+
 - 지도 정보 얻어오기
 - 여러개 마커 표시하기
 - 여러개 마커 제어하기
@@ -47,6 +99,7 @@ pnpm add vue3-kakao-maps
 - 이미지 마커와 커스텀 오버레이
 
 ### 2024.05.03
+
 - 화면에 보이는 마커만 렌더링 최적화
 - 마커 선으로 연결하기
 - 좌표 주소로 변환하기
@@ -57,6 +110,7 @@ pnpm add vue3-kakao-maps
 - 클릭 이벤트 등록하기
 
 ### 2024.05.10
+
 - 클릭한 위치에 마커 표시하기
 - 이동 이벤트 등록하기
 - 확대, 축소 이벤트 등록하기
@@ -64,11 +118,14 @@ pnpm add vue3-kakao-maps
 - geolocation으로 마커 표시하기
 
 ### 2024.05.17
+
 - 카테고리로 장소 검색하기
 - 중심좌표 변경 이벤트 등록하기
 - 타일로드 이벤트 등록하기
 - 로딩 스피너
 
-## 📧 Contact 
+## 📧 Contact
+
 문의사항이 있거나 도움이 필요한 경우 하단의 이메일로 연락주시기 바립니다.
-- jayula107@gmail.com 
+
+- jayula107@gmail.com
