@@ -46,7 +46,7 @@ const renderKakaoMap: any = (args: KakaoMapProps) => ({
 `
 });
 
-export const Default: Story = {
+export const 기본_지도: Story = {
   render: renderKakaoMap,
   args: {
     lat: 37.566826,
@@ -58,16 +58,5 @@ export const Default: Story = {
     scrollwheel: true,
     tileAnimation: true,
     keyboardShortcuts: false
-  }
-};
-
-export const Other: Story = {
-  render: renderKakaoMap,
-  args: {
-    width: '80rem',
-    height: 300,
-    lat: 37.566826,
-    lng: 126.9786567,
-    draggable: true
   }
 };
