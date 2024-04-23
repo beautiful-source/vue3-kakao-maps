@@ -131,5 +131,3 @@ const initMap = (): void => {
     <slot></slot>
   </div>
 </template>
-
-<style scoped></style>
