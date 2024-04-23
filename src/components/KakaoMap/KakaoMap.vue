@@ -65,14 +65,11 @@ export interface KakaoMapProps {
   tileAnimation?: boolean;
 
   /**
-   * 키보드의 방향키와 +,-키로 지도 이동,확대,축소 가능여부를 설정한다. speed 속성은 처음 생성시에만 적용된다.
+   * 키보드의 방향키와 +,-키로 지도 이동,확대,축소 가능여부를 설정한다. speed 속성은 지도의 이동속도이며, 처음 생성시에만 적용된다.
    */
   keyboardShortcuts?:
     | boolean
     | {
-        /**
-         * 지도 이동 속도
-         */
         speed: number;
       };
 }
@@ -109,15 +106,10 @@ type MapStyle = {
   height: number | string;
 };
 
-const mapStyleProps = ref<MapStyle>({
-  width: props.width,
-  height: props.height
-});
-
 const mapStyle = computed<MapStyle>(() => {
   return {
-    width: typeof mapStyleProps.value.width === 'number' ? mapStyleProps.value.width + 'px' : mapStyleProps.value.width,
-    height: typeof mapStyleProps.value.height === 'number' ? mapStyleProps.value.height + 'px' : mapStyleProps.value.height
+    width: typeof props.width === 'number' ? props.width + 'px' : props.width,
+    height: typeof props.height === 'number' ? props.height + 'px' : props.height
   };
 });
 
@@ -127,9 +119,8 @@ const mapStyle = computed<MapStyle>(() => {
 watch(
   [() => props.width, () => props.height],
   ([newWidth, newHeight]) => {
-    console.log(newWidth, newHeight);
-    mapStyleProps.value.width = newWidth;
-    mapStyleProps.value.height = newHeight;
+    mapStyle.value.width = newWidth;
+    mapStyle.value.height = newHeight;
   },
   {
     deep: true
@@ -140,7 +131,6 @@ watch(
  * LatLng 변경감지
  */
 watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
-  console.log(newLat, newLng);
   map.value?.panTo(new kakao.maps.LatLng(newLat, newLng));
 });
 
