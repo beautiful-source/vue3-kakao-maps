@@ -24,13 +24,6 @@ const meta = {
         defaultValue: { summary: '50rem' }
       }
     },
-    appKey: {
-      description: '카카오 맵의 API Key입니다.',
-      table: {
-        type: { summary: 'string' }
-      },
-      control: false
-    },
     lat: {
       description: '초기 center 위도 좌표입니다.',
       table: {
@@ -86,7 +79,6 @@ const renderKakaoMap: any = (args: KakaoMapProps) => ({
 export const Default: Story = {
   render: renderKakaoMap,
   args: {
-    appKey: import.meta.env.VITE_KAKAO_APP_KEY,
     lat: 37.566826,
     lng: 126.9786567
   }
@@ -97,7 +89,6 @@ export const Other: Story = {
   args: {
     width: '80rem',
     height: 300,
-    appKey: import.meta.env.VITE_KAKAO_APP_KEY,
     lat: 37.566826,
     lng: 126.9786567,
     draggable: true

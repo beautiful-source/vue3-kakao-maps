@@ -1,15 +1,80 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { isKakaoMapApiLoaded } from '@/util/useKakao';
+import { ref, watch } from 'vue';
 const map = ref<null | kakao.maps.Map>(null);
 
-export interface KakaoMapProps extends /* @vue-ignore */ Omit<kakao.maps.MapOptions, 'center'> {
+export interface KakaoMapProps {
+  /**
+   * 지도의 가로 길이
+   */
   width?: number | string;
+  /**
+   * 지도의 세로 길이
+   */
   height?: number | string;
-  appKey: string;
+  /**
+   * 지도에 표시할 marker 데이터의 리스트
+   */
   markerList?: any;
-  // x, y로 받는건 안해서 추후 요청이 있다면 수정 필요
+  /**
+   * 지도의 위도 값
+   */
   lat: number;
+  /**
+   * 지도의 경도 값
+   */
   lng: number;
+  /**
+   * 확대 수준 (기본값: 3)
+   */
+  level?: number;
+
+  /**
+   * 지도 종류 (기본값: 일반 지도)
+   */
+  mapTypeId?: kakao.maps.MapTypeId;
+
+  /**
+   * 마우스 드래그, 휠, 모바일 터치를 이용한 시점 변경(이동, 확대, 축소) 가능 여부
+   */
+  draggable?: boolean;
+
+  /**
+   * 마우스 휠, 모바일 터치를 이용한 확대 및 축소 가능 여부
+   */
+  scrollwheel?: boolean;
+
+  /**
+   * 더블클릭 이벤트 및 더블클릭 확대 가능 여부
+   */
+  disableDoubleClick?: boolean;
+
+  /**
+   * 더블클릭 확대 가능 여부
+   */
+  disableDoubleClickZoom?: boolean;
+
+  /**
+   * 투영법 지정 (기본값: kakao.maps.ProjectionId.WCONG)
+   */
+  projectionId?: string;
+
+  /**
+   * 지도 타일 애니메이션 설정 여부 (기본값: true)
+   */
+  tileAnimation?: boolean;
+
+  /**
+   * 키보드의 방향키와 +, – 키로 지도 이동,확대,축소 가능 여부 (기본값: false)
+   */
+  keyboardShortcuts?:
+    | boolean
+    | {
+        /**
+         * 지도 이동 속도
+         */
+        speed: number;
+      };
 }
 
 const props = withDefaults(defineProps<KakaoMapProps>(), {
@@ -17,6 +82,7 @@ const props = withDefaults(defineProps<KakaoMapProps>(), {
   height: '30rem',
   level: 3
 });
+const emits = defineEmits(['onLoadMap']);
 
 // LatLng 변경감지
 watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
@@ -36,20 +102,14 @@ const theme = ref<MapTheme>({
 
 const kakaoMapRef = ref<null | HTMLElement>(null);
 
-onMounted(() => {
-  if (window.kakao?.maps !== undefined) {
-    initMap();
-  } else {
-    const script = document.createElement('script');
-    script.onload = () => {
-      kakao.maps.load(() => {
-        initMap();
-      });
-    };
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${props.appKey}&autoload=false`;
-    document.body.appendChild(script);
+watch(
+  () => isKakaoMapApiLoaded.value,
+  (isKakaoMapApiLoaded) => {
+    if (isKakaoMapApiLoaded) {
+      initMap();
+    }
   }
-});
+);
 
 const initMap = (): void => {
   const options = {
@@ -58,12 +118,15 @@ const initMap = (): void => {
   };
   if (kakaoMapRef.value !== null) {
     map.value = new window.kakao.maps.Map(kakaoMapRef.value, options);
+    emits('onLoadMap', map.value);
   }
 };
 </script>
 
 <template>
-  <div class="kakao-map" ref="kakaoMapRef"></div>
+  <div class="kakao-map" ref="kakaoMapRef">
+    <slot></slot>
+  </div>
 </template>
 
 <style scoped>

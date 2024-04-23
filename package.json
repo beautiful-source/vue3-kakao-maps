@@ -3,6 +3,25 @@
   "version": "0.0.2",
   "private": false,
   "type": "module",
+  "main": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.umd.cjs"
+      }
+    },
+    "./style.css": "./dist/style.css"
+  },
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -10,16 +29,15 @@
     "test:unit": "vitest",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
-    "postinstall": "husky install",
+    "prepare": "husky install",
     "format": "prettier --write src/",
     "lint": "eslint --cache --cache-location .eslintcache --fix --ext .ts,.vue src/",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "prepack": "vite build"
   },
   "dependencies": {
-    "kakao.maps.d.ts": "^0.1.39",
-    "sass": "^1.75.0",
-    "vue": "^3.4.21"
+    "kakao.maps.d.ts": "^0.1.39"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "1.3.2",
@@ -50,49 +68,16 @@
     "jsdom": "^24.0.0",
     "npm-run-all2": "^6.1.2",
     "prettier": "^3.2.5",
+    "sass": "^1.75.0",
     "storybook": "^8.0.8",
     "typescript": "~5.4.0",
     "vite": "^5.2.8",
+    "vite-plugin-dts": "^3.8.2",
     "vite-plugin-vue-devtools": "^7.0.25",
     "vitest": "^1.4.0",
+    "vue": "^3.4.23",
     "vue-tsc": "^2.0.11"
   },
-  "resolutions": {
-    "strip-ansi": "6.0.1"
-  },
-  "description": "kakao maps component library with vue3 and TS ",
-  "main": "index.js",
-  "contributors": [
-    {
-      "name": "lire-eruel",
-      "email": "jsh001505@naver.com",
-      "url": "https://github.com/lireEruel"
-    },
-    {
-      "name": "ahjin",
-      "email": "chris2761@naver.com",
-      "url": "https://github.com/ahjinU"
-    },
-    {
-      "name": "yangsoyoung",
-      "email": "maysoyoung@gmail.com",
-      "url ": "https://github.com/YangSSo51"
-    },
-    {
-      "name": "khryu0610",
-      "email": "khryu0610@gmail.com",
-      "url ": "https://github.com/geekseal"
-    },
-    {
-      "name": "eunjinkim",
-      "email": "asd0755@naver.com",
-      "url": "https://github.com/aeroej"
-    },
-    {
-      "name": "goflvhxj96",
-      "email": "goflvhxj96@naver.com",
-      "url ": "https://github.com/goflvhxj96"
-    }
-  ],
+  "description": "kakao maps component library with vue3 and TS",
   "license": "MIT"
 }
