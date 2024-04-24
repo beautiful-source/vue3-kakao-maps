@@ -249,7 +249,7 @@ const initMap = (): void => {
       <MapMarker
         v-for="(marker, index) in props.markerList"
         :id="index"
-        :key="index"
+        :key="marker.key == undefined ? index : marker.key"
         :map="map"
         :lat="marker.lat"
         :lng="marker.lng"

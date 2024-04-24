@@ -3,6 +3,10 @@
  */
 export type KakaoMapMarkerListItem = {
   /**
+   * 마커의 고유한 key
+   */
+  key?: number | string;
+  /**
    * 마커를 표시할 지도의 위도 값
    */
   lat: number;
