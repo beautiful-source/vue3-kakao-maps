@@ -2,7 +2,7 @@
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { ref, watch, computed, onMounted } from 'vue';
 import { MapMarker } from '../';
-import type { MapMarkerOptions } from '../MapMarker';
+import type { KakaoMapMarkerListItem } from '../MapMarker';
 const map = ref<null | kakao.maps.Map>(null);
 
 export type KakaoMapProps = {
@@ -17,7 +17,7 @@ export type KakaoMapProps = {
   /**
    * 지도에 표시할 marker 데이터의 리스트
    */
-  markerList?: MapMarkerOptions[];
+  markerList?: KakaoMapMarkerListItem[];
   /**
    * 지도의 위도 값
    */
