@@ -1,5 +1,5 @@
 /**
- * 지도의 마커를 추가하기 위한 옵션 타입
+ * KakaoMap의 markerList의 아이템 타입
  */
 export type KakaoMapMarkerListItem = {
   /**
@@ -11,7 +11,7 @@ export type KakaoMapMarkerListItem = {
    */
   lat: number;
   /**
-   * 마커의 위도 값
+   * 마커의 경도 값
    */
   lng: number;
   /**
@@ -29,7 +29,7 @@ export type MapMarkerProps = {
    */
   lat: number;
   /**
-   * 마커의 위도 값
+   * 마커의 경도 값
    */
   lng: number;
   /**
@@ -37,7 +37,7 @@ export type MapMarkerProps = {
    */
   infoWindow?: string;
   /**
-   * 카카오 맵 지도 객체, KakaoMap 컴포넌트의 onLoadMap 이벤트의 반환값
+   * kakao map api의 kakao.maps.Map, KakaoMap 컴포넌트의 onLoadMap 이벤트의 반환값
    */
   map: kakao.maps.Map;
 };
