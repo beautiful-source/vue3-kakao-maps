@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { ref, watch, computed, onMounted } from 'vue';
-import { MapMarker } from '../';
-import type { KakaoMapMarkerListItem } from '../MapMarker';
+import { MapMarker } from '@/components';
+import type { KakaoMapMarkerListItem } from '@/components';
 const map = ref<null | kakao.maps.Map>(null);
 
 export type KakaoMapProps = {
@@ -245,11 +245,11 @@ const initMap = (): void => {
 
 <template>
   <div ref="kakaoMapRef" :style="mapStyle">
-    <div v-if="props.markerList && map != null">
+    <div v-if="props.markerList && map !== null">
       <MapMarker
         v-for="(marker, index) in props.markerList"
         :id="index"
-        :key="marker.key == undefined ? index : marker.key"
+        :key="marker.key === undefined ? index : marker.key"
         :map="map"
         :lat="marker.lat"
         :lng="marker.lng"
