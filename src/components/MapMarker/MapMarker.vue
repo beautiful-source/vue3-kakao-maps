@@ -68,7 +68,9 @@ watch([() => props.map], ([newMap]) => {
  * lat, lng 변경감지
  */
 watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
-  marker.value?.setPosition(new kakao.maps.LatLng(newLat, newLng));
+  if (isKakaoMapApiLoaded.value) {
+    marker.value?.setPosition(new kakao.maps.LatLng(newLat, newLng));
+  }
 });
 
 // TODO: 나머지 `props` 에 대한 watch 작성
