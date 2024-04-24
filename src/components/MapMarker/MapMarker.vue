@@ -2,7 +2,7 @@
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { onBeforeUnmount, ref, watch } from 'vue';
 
-type MapMarkerProps = {
+export type MapMarkerProps = {
   /**
    * 마커가 추가될 카카오맵
    */
