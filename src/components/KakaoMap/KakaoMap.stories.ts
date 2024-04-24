@@ -46,7 +46,8 @@ const renderKakaoMap: any = (args: KakaoMapProps) => ({
 `
 });
 
-export const 기본_지도: Story = {
+export const Default: Story = {
+  name: '기본 지도',
   render: renderKakaoMap,
   args: {
     lat: 37.566826,
@@ -74,7 +75,8 @@ const markerList = [
   { lat: 33.451393, lng: 126.570738 }
 ];
 
-export const 마커가_있는_지도: Story = {
+export const MapWithMarkerList: Story = {
+  name: '마커가 있는 지도',
   render: renderKakaoMap,
   args: {
     lat: 33.450705,
