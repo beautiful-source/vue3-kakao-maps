@@ -10,35 +10,7 @@ const meta = {
   parameters: {
     componentSubtitle: '카카오 맵 마커 컴포넌트입니다.'
   },
-  tags: ['autodocs'],
-  argTypes: {
-    map: {
-      description: '마커가 표시될 맵입니다.',
-      table: {
-        type: { summary: 'kakao.maps.Map' }
-      }
-    },
-    lat: {
-      description: '위도 좌표입니다.',
-      table: {
-        type: { summary: 'number' },
-        defaultValue: { summary: 37.566826 }
-      }
-    },
-    lng: {
-      description: '경도 좌표입니다.',
-      table: {
-        type: { summary: 'number' },
-        defaultValue: { summary: 126.9786567 }
-      }
-    },
-    infoWindow: {
-      description: '마커의 인포윈도우에 표시될 문자열입니다.',
-      table: {
-        type: { summary: 'string' }
-      }
-    }
-  }
+  tags: ['autodocs']
 } satisfies Meta<typeof MapMarker>;
 
 export default meta;
