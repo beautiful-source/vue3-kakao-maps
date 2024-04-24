@@ -7,15 +7,15 @@ export type KakaoMapMarkerListItem = {
    */
   key?: number | string;
   /**
-   * 마커를 표시할 지도의 위도 값
+   * 마커의 위도 값
    */
   lat: number;
   /**
-   * 마커를 표시할 지도의 경도 값
+   * 마커의 위도 값
    */
   lng: number;
   /**
-   * 마커에 추가할 InfoWindow comtent
+   * 마커에 추가할 InfoWindow content
    */
   infoWindow?: string;
 };
@@ -25,15 +25,15 @@ export type KakaoMapMarkerListItem = {
  */
 export type MapMarkerProps = {
   /**
-   * 마커를 표시할 지도의 위도 값
+   * 마커의 위도 값
    */
   lat: number;
   /**
-   * 마커를 표시할 지도의 경도 값
+   * 마커의 위도 값
    */
   lng: number;
   /**
-   * 마커에 추가할 InfoWindow comtent
+   * 마커에 추가할 InfoWindow content
    */
   infoWindow?: string;
   /**
