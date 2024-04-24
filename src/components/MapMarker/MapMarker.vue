@@ -8,19 +8,19 @@ type MapMarkerProps = {
    */
   map: kakao.maps.Map;
   /**
-   * 마커가 추가될 위도 좌표
+   * 마커의 위도 좌표
    */
   lat: number;
   /**
-   * 마커가 추가될 경도 좌표
+   * 마커의 경도 좌표
    */
   lng: number;
   /**
-   * 마커에 추가될 인포윈도우
+   * 마커와 함께 쓰이는 인포윈도우
    */
   infoWindow?: any;
   /**
-   * 마커에 추가될 커스텀오버레이
+   * 마커와 함께 쓰이는 커스텀 오버레이
    */
   customOverlay?: any;
 };
