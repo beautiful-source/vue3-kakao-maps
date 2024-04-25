@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
-import { KakaoMap } from '@/components';
-import type { KakaoMapProps } from './KakaoMap.vue';
+import { KakaoMap, CustomOverlay } from '@/components';
+import type { KakaoMapProps } from '../KakaoMap/KakaoMap.vue';
 import useKakao from '@/util/useKakao';
 
 const meta = {
-  title: 'Components/KakaoMap',
+  title: 'Components/CustomOverlay',
   component: KakaoMap,
   parameters: {
     componentSubtitle: '카카오 기본 지도 컴포넌트입니다.'
@@ -24,16 +24,17 @@ export default meta;
 type Story = StoryObj<typeof KakaoMap>;
 
 const renderKakaoMap: any = (args: KakaoMapProps) => ({
-  components: { KakaoMap },
+  components: { KakaoMap, CustomOverlay },
   setup() {
     useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
+
     return args;
   },
   template: `
   <KakaoMap
   :width=width
   :height=height
-  :markerList=markerList
+  :markerList=[]
   :lat=lat
   :lng=lng
   :draggable=draggable
@@ -42,16 +43,34 @@ const renderKakaoMap: any = (args: KakaoMapProps) => ({
   :mapTypeId=mapTypeId
   :tileAnimation=tileAnimation
   :keyboardShortcuts=keyboardShortcuts
-  />
+  >
+  <CustomOverlay v-if="map" :map="map" :lat="33.450701" :lng="126.570667" removable>
+  <div
+    style="
+      background-color: #ffc107;
+      color: #333;
+      padding: 0.5rem 1rem;
+      border-radius: 50%;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      font-size: 1rem;
+      font-weight: bold;
+      display: inline-block;
+      cursor: pointer;
+      transition: transform 0.2s;
+    "
+  >
+    카카오
+  </div>
+</CustomOverlay>
+  </KakaoMap>
 `
 });
 
-export const Default: Story = {
-  name: '기본 지도',
+export const 기본_지도: Story = {
   render: renderKakaoMap,
   args: {
-    lat: 37.566826,
-    lng: 126.9786567,
+    lat: 33.450701,
+    lng: 126.570667,
     width: '40rem',
     height: '50rem',
     draggable: true,
@@ -59,35 +78,5 @@ export const Default: Story = {
     scrollwheel: true,
     tileAnimation: true,
     keyboardShortcuts: false
-  }
-};
-
-const markerList = [
-  {
-    lat: 33.450705,
-    lng: 126.570667
-  },
-  {
-    lat: 33.450936,
-    lng: 126.569477
-  },
-  { lat: 33.450879, lng: 126.56994 },
-  { lat: 33.451393, lng: 126.570738 }
-];
-
-export const MapWithMarkerList: Story = {
-  name: '마커가 있는 지도',
-  render: renderKakaoMap,
-  args: {
-    lat: 33.450705,
-    lng: 126.570667,
-    width: '20rem',
-    height: '20rem',
-    draggable: true,
-    level: 3,
-    scrollwheel: true,
-    tileAnimation: true,
-    keyboardShortcuts: false,
-    markerList
   }
 };

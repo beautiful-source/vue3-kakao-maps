@@ -19,9 +19,9 @@ type InfoWindowProps = {
   lng: number;
 
   /**
-   * InfoWindwo가 marker위에 올라가는지 여부, 최초 생성시에만 적용됩니다.
+   * InfoWindow가 올라갈 marker 객체
    */
-  isMarkerElement?: boolean;
+  marker?: kakao.maps.Marker;
 
   /**
    * 엘리먼트 또는 HTML 문자열 형태의 인포윈도우의 내용
@@ -56,18 +56,17 @@ type InfoWindowProps = {
   range?: number;
 };
 
-const props = withDefaults(defineProps<InfoWindowProps>(), {
-  isMarkerElement: false
-});
+const props = defineProps<InfoWindowProps>();
 const infoWindow = ref<kakao.maps.InfoWindow | null>();
-const marker = ref<kakao.maps.Marker | null>();
 const contentSlot = ref<HTMLElement>();
-const isMarker = ref<boolean>(props.isMarkerElement);
 
 onMounted(() => {
   isKakaoMapApiLoaded.value && initInfoWindow();
 });
 
+/**
+ * Kakao map api script가 로드되었는지 확인 후 init Map 한다.
+ */
 watch(
   () => isKakaoMapApiLoaded.value,
   (isKakaoMapApiLoaded) => {
@@ -78,15 +77,30 @@ watch(
 onBeforeUnmount(() => {
   if (infoWindow.value != null) {
     infoWindow.value.close(); // 컴포넌트 삭제될 때 map에서 infoWindow 삭제
-    marker.value?.setMap(null);
   }
 });
 
+/**
+ * marker 변경 감지
+ */
+watch(
+  () => props.marker,
+  (newMarker) => {
+    infoWindow.value?.close();
+    newMarker !== undefined ? infoWindow?.value?.open(props.map, newMarker) : infoWindow?.value?.open(props.map);
+  }
+);
+
+/**
+ * LatLng 변경감지
+ */
 watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
-  marker.value?.setPosition(new kakao.maps.LatLng(newLat, newLng));
   infoWindow.value?.setPosition(new kakao.maps.LatLng(newLat, newLng));
 });
 
+/**
+ * content 변경 감지
+ */
 watch(
   () => props.content,
   (newContent) => {
@@ -94,6 +108,9 @@ watch(
   }
 );
 
+/**
+ * zIndex 변경 감지
+ */
 watch(
   () => props.zIndex,
   (newZIndex) => {
@@ -101,6 +118,9 @@ watch(
   }
 );
 
+/**
+ * altitude 변경 감지
+ */
 watch(
   () => props.altitude,
   (newAltitude) => {
@@ -108,6 +128,9 @@ watch(
   }
 );
 
+/**
+ * range 변경 감지
+ */
 watch(
   () => props.range,
   (newRange) => {
@@ -116,14 +139,11 @@ watch(
 );
 
 const initInfoWindow = (): void => {
-  const position = new kakao.maps.LatLng(props.lat, props.lng);
+  if (props.lat === undefined || props.lng === undefined) {
+    throw new Error('infoWindow의 위치가 없습니다.');
+  }
 
-  marker.value = isMarker.value
-    ? new kakao.maps.Marker({
-        position
-      })
-    : undefined;
-  marker.value?.setMap(props.map);
+  const position = new kakao.maps.LatLng(props.lat, props.lng);
 
   infoWindow.value = new kakao.maps.InfoWindow({
     position,
@@ -134,8 +154,6 @@ const initInfoWindow = (): void => {
     altitude: props.altitude,
     range: props.range
   });
-
-  infoWindow.value.open(props.map, marker.value);
 };
 </script>
 

@@ -2,7 +2,7 @@
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { ref, watch, onBeforeUnmount, onMounted } from 'vue';
 
-type CustomOverlayProps = {
+export type CustomOverlayProps = {
   /**
    * CustomOverlay가 올라갈 지도 또는 로드뷰
    */
@@ -17,12 +17,6 @@ type CustomOverlayProps = {
    * 지도의 경도 값
    */
   lng: number;
-
-  /**
-   * CustomOverlay가 marker위에 올라가는지 여부, 기본값은 false
-   */
-  isMarkerElement?: boolean;
-
   /**
    * 커스텀 CustomOverlay 컴포넌트
    */
@@ -50,20 +44,20 @@ type CustomOverlayProps = {
 };
 
 const props = withDefaults(defineProps<CustomOverlayProps>(), {
-  markerElement: false,
   yAnchor: 0.5,
   xAnchor: 0.5,
   clickable: false
 });
 const customOverlay = ref<kakao.maps.CustomOverlay | null>();
-const marker = ref<kakao.maps.Marker | null>();
 const contentSlot = ref<HTMLElement>();
-const isMarker = ref<boolean>(props.isMarkerElement);
 
 onMounted(() => {
   isKakaoMapApiLoaded.value && initCustomOverlay();
 });
 
+/**
+ * Kakao map api script가 로드되었는지 확인 후 init Map 한다.
+ */
 watch(
   () => isKakaoMapApiLoaded.value,
   (isKakaoMapApiLoaded) => {
@@ -74,15 +68,19 @@ watch(
 onBeforeUnmount(() => {
   if (customOverlay.value != null) {
     customOverlay.value?.setMap(null); // 컴포넌트 삭제될 때 커스텀 오버레이를 닫기
-    marker.value?.setMap(null);
   }
 });
 
+/**
+ * LatLng 변경 감지
+ */
 watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
-  marker.value?.setPosition(new kakao.maps.LatLng(newLat, newLng));
   customOverlay.value?.setPosition(new kakao.maps.LatLng(newLat, newLng));
 });
 
+/**
+ * content 변경 감지
+ */
 watch(
   () => props.content,
   (newContent) => {
@@ -90,6 +88,9 @@ watch(
   }
 );
 
+/**
+ * zIndex 변경 감지
+ */
 watch(
   () => props.zIndex,
   (newZIndex) => {
@@ -98,14 +99,11 @@ watch(
 );
 
 const initCustomOverlay = (): void => {
-  const position = new kakao.maps.LatLng(props.lat, props.lng);
+  if (props.lat === undefined || props.lng === undefined) {
+    throw new Error('CustomOverlay의 위치가 없습니다.');
+  }
 
-  marker.value = isMarker.value
-    ? new kakao.maps.Marker({
-        position
-      })
-    : undefined;
-  marker.value?.setMap(props.map);
+  const position = new kakao.maps.LatLng(props.lat, props.lng);
 
   customOverlay.value = new kakao.maps.CustomOverlay({
     position,
