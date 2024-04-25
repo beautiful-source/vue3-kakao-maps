@@ -64,6 +64,10 @@ const marker = ref<null | kakao.maps.Marker>(null);
 // 마커가 표시될 지도의 객체
 const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
 
+/**
+ * 카카오맵 위에 마커를 생성합니다.
+ * @param map 마커가 생성될 카카오맵
+ */
 const initMarker = (map: kakao.maps.Map): void => {
   if (props.lat === undefined || props.lng === undefined) {
     throw new Error('marker의 위치가 없습니다.');
@@ -75,6 +79,16 @@ const initMarker = (map: kakao.maps.Map): void => {
   marker.value.setMap(map);
 };
 
+/**
+ * 컴포넌트 언마운트 시 map에서 marker 삭제
+ */
+onBeforeUnmount(() => {
+  marker.value?.setMap(null);
+});
+
+/**
+ * 상위 컴포넌트에서 `map`을 주입받으면 마커를 생성
+ */
 watch(
   [() => isKakaoMapApiLoaded.value, () => mapRef],
   ([isKakaoMapApiLoaded, mapRef]) => {
@@ -84,10 +98,6 @@ watch(
   },
   { immediate: true }
 );
-
-onBeforeUnmount(() => {
-  marker.value?.setMap(null); // 컴포넌트 삭제될 때 map에서 marker 삭제
-});
 
 /**
  * lat, lng 변경감지
