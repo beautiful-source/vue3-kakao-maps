@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
-import { onBeforeUnmount, ref, watch } from 'vue';
+import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
 
 const infoWindowElement = ref<HTMLDivElement>();
 type infoWindowProps = {
-  map: kakao.maps.Map;
   markerElement?: kakao.maps.Marker;
   content?: string | HTMLElement;
   lat: number;
@@ -13,12 +12,13 @@ type infoWindowProps = {
 const props = defineProps<infoWindowProps>();
 const infoWindow = ref<kakao.maps.InfoWindow | null>();
 const contentSlot = ref<HTMLElement>();
-
+// 마커가 표시될 지도의 객체
+const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
 watch(
   () => isKakaoMapApiLoaded.value,
   (isKakaoMapApiLoaded) => {
-    if (isKakaoMapApiLoaded) {
-      initInfoWindow();
+    if (isKakaoMapApiLoaded && mapRef?.value !== undefined) {
+      initInfoWindow(mapRef.value);
     }
   }
 );
@@ -29,14 +29,14 @@ onBeforeUnmount(() => {
   }
 });
 
-const initInfoWindow = (): void => {
+const initInfoWindow = (map: kakao.maps.Map): void => {
   const infoWindowPosition = new kakao.maps.LatLng(props.lat, props.lng);
   infoWindow.value = new kakao.maps.InfoWindow({
     position: infoWindowPosition,
     content: contentSlot.value ?? props.content ?? ''
   });
 
-  infoWindow.value.open(props.map, props.markerElement);
+  infoWindow.value.open(map, props.markerElement);
 };
 </script>
 
