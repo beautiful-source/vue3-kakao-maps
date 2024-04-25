@@ -96,7 +96,7 @@ onBeforeUnmount(() => {
 watch(
   [() => isKakaoMapApiLoaded.value, () => mapRef],
   ([isKakaoMapApiLoaded, mapRef]) => {
-    if (isKakaoMapApiLoaded && mapRef !== undefined) {
+    if (isKakaoMapApiLoaded && mapRef?.value !== undefined) {
       initMarker(mapRef.value);
     }
   },
