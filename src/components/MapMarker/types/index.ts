@@ -40,4 +40,12 @@ export type MapMarkerProps = {
    * kakao map api의 kakao.maps.Map, KakaoMap 컴포넌트의 onLoadMap 이벤트의 반환값
    */
   map: kakao.maps.Map;
+  image?: KakaoMarkerImage;
+};
+
+export type KakaoMarkerImage = {
+  imageSrc: string;
+  imageWidth: number;
+  imageHeight: number;
+  imageOption: kakao.maps.MarkerImageOptions;
 };
