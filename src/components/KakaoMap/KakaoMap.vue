@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
-import { ref, watch, computed, onMounted } from 'vue';
+import { ref, watch, computed, onMounted, provide } from 'vue';
 import { MapMarker } from '@/components';
 import type { KakaoMapMarkerListItem } from '@/components';
-const map = ref<null | kakao.maps.Map>(null);
 
 export type KakaoMapProps = {
   /**
@@ -90,7 +89,8 @@ const props = withDefaults(defineProps<KakaoMapProps>(), {
 const emits = defineEmits(['onLoadMap']);
 
 const kakaoMapRef = ref<null | HTMLElement>(null);
-
+const map = ref<null | kakao.maps.Map>(null);
+provide('mapRef', map);
 onMounted(() => {
   if (isKakaoMapApiLoaded.value) {
     initMap();
