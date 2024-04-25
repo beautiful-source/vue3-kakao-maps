@@ -1,14 +1,14 @@
 import { KakaoMap, MapMarker } from '@/components';
+import { 서울특별시청좌표 } from '@/constants/coordinate';
 import useKakao from '@/util/useKakao';
 import type { Meta, StoryObj } from '@storybook/vue3';
-import { ref } from 'vue';
 import type { MapMarkerProps } from './MapMarker.vue';
 
 const meta = {
   title: 'Components/MapMarker',
   component: MapMarker,
   parameters: {
-    componentSubtitle: '카카오 맵 마커 컴포넌트입니다.'
+    componentSubtitle: '카카오맵 마커 컴포넌트입니다.'
   },
   tags: ['autodocs']
 } satisfies Meta<typeof MapMarker>;
@@ -20,43 +20,19 @@ const renderKakaoMap: any = (args: MapMarkerProps) => ({
   components: { MapMarker, KakaoMap },
   setup() {
     useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
-    const map = ref<kakao.maps.Map>();
-
-    const onLoadMap = (newMap: kakao.maps.Map): void => {
-      map.value = newMap;
-    };
-    return { args, map, onLoadMap };
+    return { args };
   },
   template: `
-  <KakaoMap
-    ref="map"
-    :lat="33.450701"
-    :lng="126.570667"
-    @onLoadMap="onLoadMap"
-    :draggable="false"
-  >
-    <MapMarker
-      v-if="map"
-      :map="map"
-      :lat="33.450701"
-      :lng="126.570667"
-    ></MapMarker>
-  </KakaoMap>
-`
+    <KakaoMap :lat="args.lat" :lng="args.lng" :draggable="true">
+      <MapMarker :lat="args.lat" :lng="args.lng"></MapMarker>
+    </KakaoMap>
+  `
 });
 
 export const Default: Story = {
   render: renderKakaoMap,
+  name: '기본 마커',
   args: {
-    lat: 37.566826,
-    lng: 126.9786567
-  }
-};
-
-export const Other: Story = {
-  render: renderKakaoMap,
-  args: {
-    lat: 37.566826,
-    lng: 126.9786567
+    ...서울특별시청좌표
   }
 };
