@@ -1,29 +1,7 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { onBeforeUnmount, ref, watch } from 'vue';
-
-export type MapMarkerProps = {
-  /**
-   * 마커가 추가될 카카오맵
-   */
-  map: kakao.maps.Map;
-  /**
-   * 마커의 위도 좌표
-   */
-  lat: number;
-  /**
-   * 마커의 경도 좌표
-   */
-  lng: number;
-  /**
-   * 마커와 함께 쓰이는 인포윈도우
-   */
-  infoWindow?: any;
-  /**
-   * 마커와 함께 쓰이는 커스텀 오버레이
-   */
-  customOverlay?: any;
-};
+import type { MapMarkerProps } from './types';
 
 const props = defineProps<MapMarkerProps>();
 

@@ -33,7 +33,7 @@ const renderKakaoMap: any = (args: KakaoMapProps) => ({
   <KakaoMap
   :width=width
   :height=height
-  :markerList=[]
+  :markerList=markerList
   :lat=lat
   :lng=lng
   :draggable=draggable
@@ -46,7 +46,8 @@ const renderKakaoMap: any = (args: KakaoMapProps) => ({
 `
 });
 
-export const 기본_지도: Story = {
+export const Default: Story = {
+  name: '기본 지도',
   render: renderKakaoMap,
   args: {
     lat: 37.566826,
@@ -58,5 +59,35 @@ export const 기본_지도: Story = {
     scrollwheel: true,
     tileAnimation: true,
     keyboardShortcuts: false
+  }
+};
+
+const markerList = [
+  {
+    lat: 33.450705,
+    lng: 126.570667
+  },
+  {
+    lat: 33.450936,
+    lng: 126.569477
+  },
+  { lat: 33.450879, lng: 126.56994 },
+  { lat: 33.451393, lng: 126.570738 }
+];
+
+export const MapWithMarkerList: Story = {
+  name: '마커가 있는 지도',
+  render: renderKakaoMap,
+  args: {
+    lat: 33.450705,
+    lng: 126.570667,
+    width: '20rem',
+    height: '20rem',
+    draggable: true,
+    level: 3,
+    scrollwheel: true,
+    tileAnimation: true,
+    keyboardShortcuts: false,
+    markerList
   }
 };
