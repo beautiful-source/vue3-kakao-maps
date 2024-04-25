@@ -59,9 +59,13 @@ export type MapMarkerProps = {
 };
 
 const props = defineProps<MapMarkerProps>();
-// kakao api로 생성한 marker 객체
+/**
+ * kakao api로 생성한 marker 객체
+ */
 const marker = ref<null | kakao.maps.Marker>(null);
-// 마커가 표시될 지도의 객체
+/**
+ * 마커가 표시될 지도의 객체
+ */
 const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
 
 /**
