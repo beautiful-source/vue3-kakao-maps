@@ -1,5 +1,5 @@
 import { KakaoMap, MapMarker } from '@/components';
-import { 서울특별시청좌표 } from '@/constants/coordinate';
+import { 서울특별시청_좌표 } from '@/constants/coordinate';
 import useKakao from '@/util/useKakao';
 import type { Meta, StoryObj } from '@storybook/vue3';
 import type { MapMarkerProps } from './MapMarker.vue';
@@ -33,6 +33,6 @@ export const Default: Story = {
   render: renderKakaoMap,
   name: '기본 마커',
   args: {
-    ...서울특별시청좌표
+    ...서울특별시청_좌표
   }
 };
