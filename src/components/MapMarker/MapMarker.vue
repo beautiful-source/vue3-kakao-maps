@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { onBeforeUnmount, ref, watch, onMounted, inject, type Ref } from 'vue';
+
 /**
  * MapMarker 컴포넌트 생성을 위한 타입
  */
@@ -26,7 +27,7 @@ const marker = ref<null | kakao.maps.Marker>(null);
 const lat = ref<number>(props.lat);
 // 마커가 위치할 지도의 경도
 const lng = ref<number>(props.lng);
-// 마커가 표시될 지도의
+// 마커가 표시될 지도의 객체
 const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
 
 watch([() => isKakaoMapApiLoaded.value, () => mapRef], ([isKakaoMapApiLoaded, mapRef]) => {
