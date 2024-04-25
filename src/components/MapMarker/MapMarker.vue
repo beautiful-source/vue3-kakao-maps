@@ -94,10 +94,10 @@ onBeforeUnmount(() => {
  * 상위 컴포넌트에서 `map`을 주입받으면 마커를 생성
  */
 watch(
-  [() => isKakaoMapApiLoaded.value, () => mapRef],
-  ([isKakaoMapApiLoaded, mapRef]) => {
-    if (isKakaoMapApiLoaded && mapRef?.value !== undefined) {
-      initMarker(mapRef.value);
+  [() => isKakaoMapApiLoaded.value, () => mapRef, () => mapRef?.value],
+  ([isKakaoMapApiLoaded, mapRef, newMap]) => {
+    if (isKakaoMapApiLoaded && mapRef !== undefined && newMap !== undefined) {
+      initMarker(newMap);
     }
   },
   { immediate: true }
