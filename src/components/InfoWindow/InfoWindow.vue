@@ -1,16 +1,9 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
-import { onBeforeUnmount, ref, onMounted, watch } from 'vue';
+import { onBeforeUnmount, ref, watch } from 'vue';
 
 type InfoWindowProps = {
-  /**
-   * InfoWindow가 올라갈 지도 또는 로드뷰
-   */
   map: kakao.maps.Map;
-
-  /**
-   * 지도의 위도 값
-   */
   lat: number;
 
   /**
@@ -60,17 +53,12 @@ const props = defineProps<InfoWindowProps>();
 const infoWindow = ref<kakao.maps.InfoWindow | null>();
 const contentSlot = ref<HTMLElement>();
 
-onMounted(() => {
-  isKakaoMapApiLoaded.value && initInfoWindow();
-});
-
-/**
- * Kakao map api script가 로드되었는지 확인 후 init Map 한다.
- */
 watch(
   () => isKakaoMapApiLoaded.value,
   (isKakaoMapApiLoaded) => {
-    isKakaoMapApiLoaded && initInfoWindow();
+    if (isKakaoMapApiLoaded) {
+      initInfoWindow();
+    }
   }
 );
 
@@ -109,6 +97,17 @@ watch(
 );
 
 /**
+ * marker 변경 감지
+ */
+watch(
+  () => props.marker,
+  (newMarker) => {
+    infoWindow.value != null && infoWindow.value?.close();
+    newMarker !== undefined ? infoWindow?.value?.open(props.map, newMarker) : infoWindow?.value?.open(props.map);
+  }
+);
+
+/**
  * zIndex 변경 감지
  */
 watch(
@@ -139,21 +138,13 @@ watch(
 );
 
 const initInfoWindow = (): void => {
-  if (props.lat === undefined || props.lng === undefined) {
-    throw new Error('infoWindow의 위치가 없습니다.');
-  }
-
-  const position = new kakao.maps.LatLng(props.lat, props.lng);
-
+  const infoWindowPosition = new kakao.maps.LatLng(props.lat, props.lng);
   infoWindow.value = new kakao.maps.InfoWindow({
-    position,
-    content: contentSlot.value ?? props.content ?? '',
-    removable: props.removable,
-    disableAutoPan: props.disableAutoPan,
-    zIndex: props.zIndex,
-    altitude: props.altitude,
-    range: props.range
+    position: infoWindowPosition,
+    content: contentSlot.value ?? props.content ?? ''
   });
+
+  props.marker !== undefined ? infoWindow?.value?.open(props.map, props.marker) : infoWindow?.value?.open(props.map);
 };
 </script>
 
