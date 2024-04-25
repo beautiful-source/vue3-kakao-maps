@@ -1,30 +1,51 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
-import { onBeforeUnmount, ref, watch } from 'vue';
-import type { MapMarkerProps } from './types';
+import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
+
+/**
+ * MapMarker 컴포넌트 생성을 위한 타입
+ */
+export type MapMarkerProps = {
+  /**
+   * 마커의 위도 값
+   */
+  lat: number;
+  /**
+   * 마커의 경도 값
+   */
+  lng: number;
+  /**
+   * 마커에 추가할 InfoWindow content
+   */
+  infoWindow?: string;
+};
 
 const props = defineProps<MapMarkerProps>();
-
+// kakao api로 생성한 marker 객체
 const marker = ref<null | kakao.maps.Marker>(null);
-const markerElement = ref<HTMLDivElement>();
+// 마커가 위치할 지도의 위도
+const lat = ref<number>(props.lat);
+// 마커가 위치할 지도의 경도
+const lng = ref<number>(props.lng);
+// 마커가 표시될 지도의 객체
+const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
 
 const initMarker = (map: kakao.maps.Map): void => {
-  if (props.lat === undefined || props.lng === undefined) {
+  if (lat.value === undefined || lng.value === undefined) {
     throw new Error('marker의 위치가 없습니다.');
   }
-  const markerPosition = new kakao.maps.LatLng(props.lat, props.lng);
+  const markerPosition = new kakao.maps.LatLng(lat.value, lng.value);
   marker.value = new kakao.maps.Marker({
     position: markerPosition
   });
-
   marker.value.setMap(map);
 };
 
 watch(
-  () => isKakaoMapApiLoaded.value,
-  (isKakaoMapApiLoaded) => {
-    if (isKakaoMapApiLoaded) {
-      initMarker(props.map);
+  [() => isKakaoMapApiLoaded.value, () => mapRef],
+  ([isKakaoMapApiLoaded, mapRef]) => {
+    if (isKakaoMapApiLoaded && mapRef !== undefined) {
+      initMarker(mapRef.value);
     }
   },
   { immediate: true }
@@ -37,7 +58,7 @@ onBeforeUnmount(() => {
 /**
  * map 변경감지
  */
-watch([() => props.map], ([newMap]) => {
+watch([() => mapRef], ([newMap]) => {
   // TODO: provide/inject 후 사라질 예정입니다.
   console.log('new map', newMap);
 });
@@ -53,7 +74,7 @@ watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
 </script>
 
 <template>
-  <div ref="markerElement">
+  <div>
     <slot></slot>
   </div>
 </template>
