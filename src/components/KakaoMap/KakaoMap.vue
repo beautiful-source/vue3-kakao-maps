@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { ref, watch, computed, onMounted } from 'vue';
+import { MapMarker } from '@/components';
+import type { KakaoMapMarkerListItem } from '@/components';
 const map = ref<null | kakao.maps.Map>(null);
 
 export type KakaoMapProps = {
@@ -15,7 +17,7 @@ export type KakaoMapProps = {
   /**
    * 지도에 표시할 marker 데이터의 리스트
    */
-  markerList?: any;
+  markerList?: KakaoMapMarkerListItem[];
   /**
    * 지도의 위도 값
    */
@@ -77,7 +79,13 @@ export type KakaoMapProps = {
 const props = withDefaults(defineProps<KakaoMapProps>(), {
   width: '40rem',
   height: '30rem',
-  level: 3
+  level: 3,
+  draggable: true,
+  scrollwheel: true,
+  disableDoubleClick: false,
+  disableDoubleClickZoom: false,
+  projectionId: 'kakao.maps.ProjectionId.WCONG',
+  tileAnimation: true
 });
 const emits = defineEmits(['onLoadMap']);
 
@@ -237,6 +245,17 @@ const initMap = (): void => {
 
 <template>
   <div ref="kakaoMapRef" :style="mapStyle">
+    <div v-if="props.markerList && map !== null">
+      <MapMarker
+        v-for="(marker, index) in props.markerList"
+        :id="index"
+        :key="marker.key === undefined ? index : marker.key"
+        :map="map"
+        :lat="marker.lat"
+        :lng="marker.lng"
+      >
+      </MapMarker>
+    </div>
     <slot></slot>
   </div>
 </template>
