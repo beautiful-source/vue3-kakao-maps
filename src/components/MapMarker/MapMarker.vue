@@ -61,18 +61,14 @@ export type MapMarkerProps = {
 const props = defineProps<MapMarkerProps>();
 // kakao api로 생성한 marker 객체
 const marker = ref<null | kakao.maps.Marker>(null);
-// 마커가 위치할 지도의 위도
-const lat = ref<number>(props.lat);
-// 마커가 위치할 지도의 경도
-const lng = ref<number>(props.lng);
 // 마커가 표시될 지도의 객체
 const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
 
 const initMarker = (map: kakao.maps.Map): void => {
-  if (lat.value === undefined || lng.value === undefined) {
+  if (props.lat === undefined || props.lng === undefined) {
     throw new Error('marker의 위치가 없습니다.');
   }
-  const markerPosition = new kakao.maps.LatLng(lat.value, lng.value);
+  const markerPosition = new kakao.maps.LatLng(props.lat, props.lng);
   marker.value = new kakao.maps.Marker({
     position: markerPosition
   });
