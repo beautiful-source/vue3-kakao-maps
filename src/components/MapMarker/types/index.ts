@@ -20,7 +20,7 @@ export type KakaoMapMarkerListItem = {
   infoWindow?: string;
 };
 
-export type KakaoMarkerImage = {
+export type KakaoMapMarkerImage = {
   imageSrc: string;
   imageWidth: number;
   imageHeight: number;

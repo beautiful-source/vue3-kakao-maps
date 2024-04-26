@@ -1,4 +1,4 @@
-import { KakaoMap, MapMarker, type KakaoMarkerImage } from '@/components';
+import { KakaoMap, MapMarker, type KakaoMapMarkerImage } from '@/components';
 import { 서울특별시청_좌표, DEFAULT_MARKER_IMAGE } from '@/constants/coordinate';
 import useKakao from '@/util/useKakao';
 import type { Meta, StoryObj } from '@storybook/vue3';
@@ -46,7 +46,7 @@ export const Default: Story = {
 /**
  * 마커의 다른 이미지
  */
-const anotherImage: KakaoMarkerImage = {
+const anotherImage: KakaoMapMarkerImage = {
   imageSrc: `https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png`,
   imageWidth: 64,
   imageHeight: 64,

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
-import type { KakaoMarkerImage } from './types';
+import type { KakaoMapMarkerImage } from './types';
 import { DEFAULT_MARKER_IMAGE } from '@/constants/coordinate';
 
 /**
@@ -23,8 +23,9 @@ export type MapMarkerProps = {
 
   /**
    * 마커 이미지
+   * 이미지를 설정하지 않으면 기본 마커 이미지로 보임
    */
-  image?: KakaoMarkerImage;
+  image?: KakaoMapMarkerImage;
 
   /**
    * 마커의 타이틀 속성 값 (툴팁)
@@ -78,7 +79,7 @@ const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
  * 마커 이미지를 변경함
  * @param image 기본 마커 대신 표시될 이미지
  */
-const changeMarkerImage = (image: KakaoMarkerImage | undefined): void => {
+const changeMarkerImage = (image: KakaoMapMarkerImage | undefined): void => {
   if (image !== undefined && image !== null) {
     if (image.imageSrc === undefined) {
       throw new Error('이미지 경로가 존재하지 않습니다.');
