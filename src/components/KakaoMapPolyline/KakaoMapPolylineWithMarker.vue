@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
-import type { KakaoMapMarkerListItem } from '../MapMarker/types';
 import { inject, watch, type Ref } from 'vue';
+import MapMarker from '../MapMarker/MapMarker.vue';
+import type { KakaoMapMarkerListItem } from '../MapMarker/types';
 
-export type KakaoMapPolylineProps = {
-  pathList: KakaoMapMarkerListItem[];
+type KakaoMapPolylineWithMarkerProps = {
+  markerList: KakaoMapMarkerListItem[];
 };
 
-const props = defineProps<KakaoMapPolylineProps>();
+const props = defineProps<KakaoMapPolylineWithMarkerProps>();
 
 const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
 
@@ -24,7 +25,7 @@ watch(
 );
 
 const initPolyline = (map: kakao.maps.Map): void => {
-  const linePath = props.pathList.map((e) => {
+  const linePath = props.markerList.map((e) => {
     return new kakao.maps.LatLng(e.lat, e.lng);
   });
 
@@ -41,5 +42,16 @@ const initPolyline = (map: kakao.maps.Map): void => {
 </script>
 
 <template>
-  <div></div>
+  <div v-if="props.markerList && mapRef !== null">
+    <MapMarker
+      v-for="(marker, index) in props.markerList"
+      :id="index"
+      :key="marker.key === undefined ? index : marker.key"
+      :map="mapRef"
+      :lat="marker.lat"
+      :lng="marker.lng"
+    >
+    </MapMarker>
+    <slot></slot>
+  </div>
 </template>
