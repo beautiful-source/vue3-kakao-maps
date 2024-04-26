@@ -86,7 +86,7 @@ const props = withDefaults(defineProps<KakaoMapProps>(), {
   projectionId: 'kakao.maps.ProjectionId.WCONG',
   tileAnimation: true
 });
-const emits = defineEmits(['onLoadMap']);
+const emits = defineEmits(['onLoadKakaoMap']);
 
 const kakaoMapRef = ref<null | HTMLElement>(null);
 const map = ref<null | kakao.maps.Map>(null);
@@ -238,7 +238,7 @@ const initMap = (): void => {
   };
   if (kakaoMapRef.value !== null) {
     map.value = new window.kakao.maps.Map(kakaoMapRef.value, options);
-    emits('onLoadMap', map.value);
+    emits('onLoadKakaoMap', map.value);
   }
 };
 </script>

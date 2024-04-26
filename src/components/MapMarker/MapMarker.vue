@@ -59,6 +59,8 @@ export type MapMarkerProps = {
   range?: number;
 };
 
+const emits = defineEmits(['onLoadKakaoMapMarker']);
+
 const props = defineProps<MapMarkerProps>();
 /**
  * kakao api로 생성한 marker 객체
@@ -81,6 +83,7 @@ const initMarker = (map: kakao.maps.Map): void => {
   marker.value = new kakao.maps.Marker({
     position: markerPosition
   });
+  emits('onLoadKakaoMapMarker', marker.value);
   marker.value.setMap(map);
 };
 
@@ -95,10 +98,10 @@ onBeforeUnmount(() => {
  * 상위 컴포넌트에서 `map`을 주입받으면 마커를 생성
  */
 watch(
-  [() => isKakaoMapApiLoaded.value, () => mapRef],
-  ([isKakaoMapApiLoaded, mapRef]) => {
-    if (isKakaoMapApiLoaded && mapRef?.value !== undefined) {
-      initMarker(mapRef.value);
+  [() => isKakaoMapApiLoaded.value, () => mapRef, () => mapRef?.value],
+  ([isKakaoMapApiLoaded, mapRef, newMap]) => {
+    if (isKakaoMapApiLoaded && mapRef !== undefined && newMap !== undefined) {
+      initMarker(newMap);
     }
   },
   { immediate: true }

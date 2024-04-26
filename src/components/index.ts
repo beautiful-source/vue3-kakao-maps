@@ -1,6 +1,7 @@
 import KakaoMap from './KakaoMap/KakaoMap.vue';
 import MapMarker from './MapMarker/MapMarker.vue';
-import InfoWindow from './InfoWindow/InfoWindow.vue';
+import KakaoMapInfoWindow from './KakaoMapInfoWindow/KakaoMapInfoWindow.vue';
+import KakaoMapCustomOverlay from './KakaoMapCustomOverlay/KakaoMapCustomOverlay.vue';
 export * from './MapMarker/types';
 
-export { KakaoMap, MapMarker, InfoWindow };
+export { KakaoMap, MapMarker, KakaoMapInfoWindow, KakaoMapCustomOverlay };
