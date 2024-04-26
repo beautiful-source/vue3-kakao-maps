@@ -1,20 +1,20 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
-import { ref, watch } from 'vue';
+import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
 
 /**
  * MarkerCluster 컴포넌트 생성을 위한 타입
  */
-export type MarkerClusterProps = {
-  /**
-   * 클러스터링 마커를 표시할 지도 객체
-   */
-  map?: kakao.maps.Map;
+export type MarkerClustererProps = {
+  // /**
+  //  * 클러스터링 마커를 표시할 지도 객체
+  //  */
+  // map?: kakao.maps.Map;
 
-  /**
-   * 클러스터링 할 마커 배열
-   */
-  markers?: Array<kakao.maps.Marker | kakao.maps.CustomOverlay>;
+  // /**
+  //  * 클러스터링 할 마커 배열
+  //  */
+  // markers?: Array<kakao.maps.Marker | kakao.maps.CustomOverlay>;
 
   /**
    * 클러스터의 격자 크기 (기본값: 60)
@@ -70,28 +70,51 @@ export type MarkerClusterProps = {
 };
 
 const props = defineProps<MarkerClusterProps>();
-
+/**
+ * kakao api로 생성한 clusterer 객체
+ */
 const clusterer = ref<null | kakao.maps.MarkerClusterer>(null);
+/**
+ * 마커가 표시될 지도의 객체
+ */
+const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
+const markerList = inject<kakao.maps.Marker[]>('markerList');
 
-const initCluster = (): void => {
-  if (props.markers === undefined) {
+const initCluster = (map: kakao.maps.Map, markers: Array<kakao.maps.Marker | kakao.maps.CustomOverlay>): void => {
+  if (markers === undefined) {
     throw new Error('MarkerList가 없습니다.');
   }
   clusterer.value = new kakao.maps.MarkerClusterer({
-    map: props.map,
-    markers: props.markers
+    map,
+    markers
   });
 };
 
+/**
+ * 컴포넌트 언마운트 시 map에서 clusterer 삭제
+ */
+onBeforeUnmount(() => {
+  clusterer.value?.setMap(null);
+});
+
 watch(
-  () => isKakaoMapApiLoaded.value,
-  (isKakaoMapApiLoaded) => {
-    if (isKakaoMapApiLoaded) {
-      initCluster();
+  [() => isKakaoMapApiLoaded.value, () => mapRef, () => markerList],
+  ([isKakaoMapApiLoaded, mapRef, markers]) => {
+    if (isKakaoMapApiLoaded && mapRef?.value !== undefined && markers !== null && markers !== undefined) {
+      initCluster(mapRef.value, markers);
     }
-  }
+  },
+  { immediate: true }
 );
 </script>
+
+<template>
+  <div></div>
+</template>
+
+<style scoped></style> -->
+
+<script setup lang="ts"></script>
 
 <template>
   <div></div>
