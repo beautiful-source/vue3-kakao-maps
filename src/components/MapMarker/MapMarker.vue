@@ -57,6 +57,7 @@ export type MapMarkerProps = {
    */
   range?: number;
 };
+const emits = defineEmits(['onLoadMarker']);
 
 const props = defineProps<MapMarkerProps>();
 /**
@@ -80,6 +81,7 @@ const initMarker = (map: kakao.maps.Map): void => {
   marker.value = new kakao.maps.Marker({
     position: markerPosition
   });
+  emits('onLoadMarker', marker.value);
   marker.value.setMap(map);
 };
 

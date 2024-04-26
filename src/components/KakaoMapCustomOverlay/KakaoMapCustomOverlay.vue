@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
-import { ref, watch, onBeforeUnmount, onMounted } from 'vue';
+import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
 
-export type CustomOverlayProps = {
-  /**
-   * CustomOverlay가 올라갈 지도 또는 로드뷰
-   */
-  map: kakao.maps.Map;
-
+export type KakaoMapCustomOverlayProps = {
   /**
    * 지도의 위도 값
    */
@@ -18,7 +13,7 @@ export type CustomOverlayProps = {
    */
   lng: number;
   /**
-   * 커스텀 CustomOverlay 컴포넌트
+   * 커스텀 KakaoMapCustomOverlay 컴포넌트
    */
   content?: string | HTMLElement;
 
@@ -43,33 +38,69 @@ export type CustomOverlayProps = {
   clickable?: boolean;
 };
 
-const props = withDefaults(defineProps<CustomOverlayProps>(), {
+const props = withDefaults(defineProps<KakaoMapCustomOverlayProps>(), {
   yAnchor: 0.5,
   xAnchor: 0.5,
   clickable: false
 });
+/**
+ * kakao api로 생성한 customOverlay 객체
+ */
 const customOverlay = ref<kakao.maps.CustomOverlay | null>();
+
+/**
+ * KakaoMapCustomOverlay content 표시될 sloe 객체
+ */
 const contentSlot = ref<HTMLElement>();
 
-onMounted(() => {
-  isKakaoMapApiLoaded.value && initCustomOverlay();
+/**
+ * KakaoMapCustomOverlay가 표시될 지도의 객체
+ */
+const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
+
+/**
+ * 카카오맵 위에 CustomOverlay를 생성합니다.
+ * @param map CustomOverlay가 생성될 카카오맵
+ */
+const initKakaoMapCustomOverlay = (map: kakao.maps.Map): void => {
+  if (props.lat === undefined || props.lng === undefined) {
+    throw new Error('KakaoMapCustomOverlay의 위치가 없습니다.');
+  }
+
+  const position = new kakao.maps.LatLng(props.lat, props.lng);
+
+  customOverlay.value = new kakao.maps.CustomOverlay({
+    position,
+    content: contentSlot.value ?? props.content ?? '',
+    xAnchor: props.xAnchor,
+    yAnchor: props.yAnchor,
+    zIndex: props.zIndex,
+    clickable: props.clickable
+  });
+
+  customOverlay.value.setMap(map);
+};
+/**
+ * 컴포넌트 언마운트 시 map에서 customOverlay 삭제
+ */
+onBeforeUnmount(() => {
+  if (customOverlay.value != null) {
+    customOverlay.value?.setMap(null);
+  }
 });
 
 /**
- * Kakao map api script가 로드되었는지 확인 후 init Map 한다.
+ * Kakao map api script가 로드되었는지 확인 후 initKakaoMapCustomOverlay한다.
  */
 watch(
-  () => isKakaoMapApiLoaded.value,
-  (isKakaoMapApiLoaded) => {
-    isKakaoMapApiLoaded && initCustomOverlay();
-  }
+  [() => isKakaoMapApiLoaded.value, () => mapRef?.value, () => isKakaoMapApiLoaded, () => mapRef],
+  ([isKakaoMapApiLoaded, mapRef]) => {
+    if (isKakaoMapApiLoaded && mapRef !== undefined && mapRef !== null) {
+      initKakaoMapCustomOverlay(mapRef);
+    }
+  },
+  { immediate: true }
 );
-
-onBeforeUnmount(() => {
-  if (customOverlay.value != null) {
-    customOverlay.value?.setMap(null); // 컴포넌트 삭제될 때 커스텀 오버레이를 닫기
-  }
-});
 
 /**
  * LatLng 변경 감지
@@ -97,25 +128,6 @@ watch(
     customOverlay.value?.setZIndex(newZIndex ?? 0);
   }
 );
-
-const initCustomOverlay = (): void => {
-  if (props.lat === undefined || props.lng === undefined) {
-    throw new Error('CustomOverlay의 위치가 없습니다.');
-  }
-
-  const position = new kakao.maps.LatLng(props.lat, props.lng);
-
-  customOverlay.value = new kakao.maps.CustomOverlay({
-    position,
-    content: contentSlot.value ?? props.content ?? '',
-    xAnchor: props.xAnchor,
-    yAnchor: props.yAnchor,
-    zIndex: props.zIndex,
-    clickable: props.clickable
-  });
-
-  customOverlay.value.setMap(props.map);
-};
 </script>
 
 <template>
