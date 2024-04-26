@@ -22,7 +22,7 @@ export type KakaoMapMarkerListItem = {
 
 export type KakaoMapMarkerImage = {
   imageSrc: string;
-  imageWidth: number;
-  imageHeight: number;
+  imageWidth?: number;
+  imageHeight?: number;
   imageOption: kakao.maps.MarkerImageOptions;
 };

@@ -2,7 +2,7 @@
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
 import type { KakaoMapMarkerImage } from './types';
-import { DEFAULT_MARKER_IMAGE } from '@/constants/coordinate';
+import { DEFAULT_MARKER_IMAGE, DEFAULT_MARKER_IMAGE_HEIGHT, DEFAULT_MARKER_IMAGE_WIDTH } from '@/constants/coordinate';
 
 /**
  * MapMarker 컴포넌트 생성을 위한 타입
@@ -84,18 +84,13 @@ const changeMarkerImage = (image: KakaoMapMarkerImage | undefined): void => {
     if (image.imageSrc === undefined) {
       throw new Error('이미지 경로가 존재하지 않습니다.');
     }
-
-    if (image.imageWidth === undefined || image.imageHeight === undefined) {
-      image.imageWidth = 30;
-      image.imageHeight = 30;
-    }
   } else {
     image = DEFAULT_MARKER_IMAGE;
   }
 
   const markerImage = new kakao.maps.MarkerImage(
     image.imageSrc,
-    new kakao.maps.Size(image.imageWidth, image.imageHeight),
+    new kakao.maps.Size(image.imageWidth ?? DEFAULT_MARKER_IMAGE_HEIGHT, image.imageWidth ?? DEFAULT_MARKER_IMAGE_WIDTH),
     image.imageOption
   );
 
