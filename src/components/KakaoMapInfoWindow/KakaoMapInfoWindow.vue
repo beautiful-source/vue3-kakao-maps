@@ -158,7 +158,6 @@ watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
 watch(
   () => props.content,
   (newContent) => {
-    console.log('hi');
     infoWindow.value?.setContent(newContent ?? '');
   }
 );
