@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
-import { KakaoMap, KakaoMapInfoWindow, MapMarker } from '@/components';
+import { KakaoMap, KakaoMapInfoWindow, KakaoMapMarker } from '@/components';
 import type { KakaoMapInfoWindowProps } from './KakaoMapInfoWindow.vue';
 import { ref } from 'vue';
 import { 서울특별시청_좌표 } from '@/constants/coordinate';
@@ -101,7 +101,7 @@ export const ContentDefault: Story = {
 export const WithMarker: Story = {
   name: '인포윈도우 마커에 연결하기',
   render: (args: KakaoMapInfoWindowProps) => ({
-    components: { KakaoMap, KakaoMapInfoWindow, MapMarker },
+    components: { KakaoMap, KakaoMapInfoWindow, KakaoMapMarker },
     tags: ['autodocs'],
     setup() {
       useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
@@ -111,12 +111,14 @@ export const WithMarker: Story = {
         marker.value = newMarker;
       };
 
-      return { args, KakaoMapInfoWindow, MapMarker, onLoadKakaoMapMarker, marker };
+      return { args, onLoadKakaoMapMarker, marker };
     },
     template: `
     <KakaoMap :lat="37.566826" :lng="126.9786567" :draggable="true">
-    <MapMarker :lat="37.566826" :lng="126.9786567" @onLoadKakaoMapMarker="onLoadKakaoMapMarker" />
+    <KakaoMapMarker :lat="37.566826" :lng="126.9786567" @onLoadKakaoMapMarker="onLoadKakaoMapMarker" />
     <KakaoMapInfoWindow :marker="marker" :lat="args.lat" :lng="args.lng" removable>
+    <KakaoMapMarker :lat="37.566826" :lng="126.9786567" @onLoadKakaoMarker="onLoadKakaoMarker" />
+    <KakaoMapInfoWindow :marker="marker" :lat="33.450701" :lng="126.570667" removable>
       <div>
         Hello World!
       </div>

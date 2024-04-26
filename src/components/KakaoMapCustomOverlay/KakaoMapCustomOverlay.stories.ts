@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
-import { KakaoMap, KakaoMapCustomOverlay, MapMarker } from '@/components';
+import { KakaoMap, KakaoMapCustomOverlay, KakaoMapMarker } from '@/components';
 import type { KakaoMapCustomOverlayProps } from './KakaoMapCustomOverlay.vue';
 import { 서울특별시청_좌표 } from '@/constants/coordinate';
 import useKakao from '@/util/useKakao';
@@ -104,18 +104,18 @@ export const ContentDefault: Story = {
 export const WithMarker: Story = {
   name: '커스텀오버레이 마커에 연결하기',
   render: (args: KakaoMapCustomOverlayProps) => ({
-    components: { KakaoMap, KakaoMapCustomOverlay, MapMarker },
+    components: { KakaoMap, KakaoMapCustomOverlay, KakaoMapMarker },
     tags: ['autodocs'],
     setup() {
       useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
-      return { args, KakaoMapCustomOverlay, MapMarker };
+      return { args, KakaoMapCustomOverlay, KakaoMapMarker };
     },
     template: `
     <KakaoMap
   :lat='37.566826'
   :lng='126.9786567'
   >
-  <MapMarker :lat="37.566826" :lng="126.9786567" />
+  <KakaoMapMarker :lat="37.566826" :lng="126.9786567" />
   <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" :yAnchor="args.yAnchor">
   <div style="padding: 10px; background-color: white; border: 1px solid #ccc; border-radius: 5px; ">
   <div style="font-weight: bold; margin-bottom: 5px;">
@@ -145,7 +145,7 @@ export const WithMarker: Story = {
 export const CloseCustomOverlay: Story = {
   name: '닫기가 가능한 커스텀 오버레이',
   render: (args: KakaoMapCustomOverlayProps, { argTypes }) => ({
-    components: { KakaoMap, KakaoMapCustomOverlay, MapMarker },
+    components: { KakaoMap, KakaoMapCustomOverlay, KakaoMapMarker },
     tags: ['autodocs'],
     methods: {
       closeOverlay() {
@@ -160,14 +160,14 @@ export const CloseCustomOverlay: Story = {
         overlay.value = newCustomOverlay;
       };
 
-      return { args, overlay, KakaoMapCustomOverlay, MapMarker, onLoadKakaoMapCustomOverlay };
+      return { args, overlay, KakaoMapCustomOverlay, KakaoMapMarker, onLoadKakaoMapCustomOverlay };
     },
     template: `
     <KakaoMap
       :lat='37.566826'
       :lng='126.9786567'
     >
-      <MapMarker :lat="37.566826" :lng="126.9786567" />
+      <KakaoMapMarker :lat="37.566826" :lng="126.9786567" />
       <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" :yAnchor="args.yAnchor" @onLoadKakaoMapCustomOverlay="onLoadKakaoMapCustomOverlay">
         <div style="padding: 10px; background-color: white; border: 1px solid #ccc; border-radius: 5px; ">
             <div style="font-weight: bold; margin-bottom: 5px;">

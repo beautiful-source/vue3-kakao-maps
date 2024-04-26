@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { ref, watch, computed, onMounted, provide } from 'vue';
-import { MapMarker } from '@/components';
+import { KakaoMapMarker } from '@/components';
 import type { KakaoMapMarkerListItem } from '@/components';
 
 export type KakaoMapProps = {
@@ -246,7 +246,7 @@ const initMap = (): void => {
 <template>
   <div ref="kakaoMapRef" :style="mapStyle">
     <div v-if="props.markerList && map !== null">
-      <MapMarker
+      <KakaoMapMarker
         v-for="(marker, index) in props.markerList"
         :id="index"
         :key="marker.key === undefined ? index : marker.key"
@@ -254,7 +254,7 @@ const initMap = (): void => {
         :lat="marker.lat"
         :lng="marker.lng"
       >
-      </MapMarker>
+      </KakaoMapMarker>
     </div>
     <slot></slot>
   </div>
