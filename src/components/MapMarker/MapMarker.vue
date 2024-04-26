@@ -22,7 +22,7 @@ export type MapMarkerProps = {
   infoWindow?: string;
 
   /**
-   * 마커 이미지
+   * 마커 이미지,
    * 이미지를 설정하지 않으면 기본 마커 이미지로 보임
    */
   image?: KakaoMapMarkerImage;
