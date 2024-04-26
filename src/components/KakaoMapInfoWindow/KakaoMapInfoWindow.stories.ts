@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3';
 import { KakaoMap, KakaoMapInfoWindow, MapMarker } from '@/components';
 import type { KakaoMapInfoWindowProps } from './KakaoMapInfoWindow.vue';
 import { ref } from 'vue';
+import { 서울특별시청_좌표 } from '@/constants/coordinate';
 import useKakao from '@/util/useKakao';
 
 const meta = {
@@ -55,8 +56,8 @@ const renderKakaoMap: any = (
   },
   template: `
   <KakaoMap
-  :lat='33.450701'
-  :lng='126.570667'
+  :lat='37.566826'
+  :lng='126.9786567'
   >
   <KakaoMapInfoWindow :lat="args.lat" :lng="args.lng" :removable="args.removable">
   ${args.default}
@@ -69,8 +70,7 @@ export const Default: Story = {
   name: '인포윈도우 생성하기',
   render: renderKakaoMap,
   args: {
-    lat: 33.450701,
-    lng: 126.570667,
+    ...서울특별시청_좌표,
     removable: true,
     default: '<div>Hello World!</div>'
   }
@@ -85,15 +85,15 @@ export const WithMarker: Story = {
       useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
 
       const marker = ref<kakao.maps.Marker>();
-      const onLoadMarker = (newMarker: kakao.maps.Marker): void => {
+      const onLoadKakaoMarker = (newMarker: kakao.maps.Marker): void => {
         marker.value = newMarker;
       };
 
-      return { args, KakaoMapInfoWindow, MapMarker, onLoadMarker, marker };
+      return { args, KakaoMapInfoWindow, MapMarker, onLoadKakaoMarker, marker };
     },
     template: `
-    <KakaoMap :lat="33.450701" :lng="126.570667" :draggable="true">
-    <MapMarker :lat="33.450701" :lng="126.570667" @onLoadMarker="onLoadMarker" />
+    <KakaoMap :lat="37.566826" :lng="126.9786567" :draggable="true">
+    <MapMarker :lat="37.566826" :lng="126.9786567" @onLoadKakaoMarker="onLoadKakaoMarker" />
     <KakaoMapInfoWindow :marker="marker" :lat="33.450701" :lng="126.570667" removable>
       <div>
         Hello World!
@@ -103,7 +103,6 @@ export const WithMarker: Story = {
   `
   }),
   args: {
-    lat: 33.450701,
-    lng: 126.570667
+    ...서울특별시청_좌표
   }
 };

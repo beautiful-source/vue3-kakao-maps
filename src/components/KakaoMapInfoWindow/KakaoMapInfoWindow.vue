@@ -51,6 +51,8 @@ export type KakaoMapInfoWindowProps = {
   range?: number;
 };
 
+const emits = defineEmits(['onLoadKakaoMapInfoWindow']);
+
 const props = withDefaults(defineProps<KakaoMapInfoWindowProps>(), {
   removable: false,
   range: 500
@@ -93,6 +95,7 @@ const initKakaoMapInfoWindow = (map: kakao.maps.Map): void => {
   });
 
   infoWindow?.value?.open(map, props.marker);
+  emits('onLoadKakaoMapInfoWindow', infoWindow.value);
 };
 
 /**

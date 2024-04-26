@@ -45,13 +45,13 @@ import { ref } from 'vue';
 import { KakaoMap, MapMarker, InfoWindow } from './components';
 const map = ref<kakao.maps.Map>();
 
-const onLoadMap = (newMap: kakao.maps.Map): void => {
+const onLoadKakaoMap = (newMap: kakao.maps.Map): void => {
   map.value = newMap;
 };
 </script>
 
 <template>
-  <KakaoMap ref="map" :lat="33.450701" :lng="126.570667" @onLoadMap="onLoadMap" :draggable="false">
+  <KakaoMap ref="map" :lat="33.450701" :lng="126.570667" @onLoadKakaoMap="onLoadKakaoMap" :draggable="false">
     <MapMarker v-if="map" :lat="33.450701" :lng="126.570667" :map="map"></MapMarker>
     <InfoWindow v-if="map" :map="map" :lat="33.450701" :lng="126.570667">
       <div>Hello World!</div>

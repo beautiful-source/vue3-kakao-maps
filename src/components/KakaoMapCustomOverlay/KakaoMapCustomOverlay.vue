@@ -39,6 +39,8 @@ export type KakaoMapCustomOverlayProps = {
   clickable?: boolean;
 };
 
+const emits = defineEmits(['onLoadKakaoMapCustomOverlay']);
+
 const props = withDefaults(defineProps<KakaoMapCustomOverlayProps>(), {
   yAnchor: 0.5,
   xAnchor: 0.5,
@@ -80,6 +82,7 @@ const initKakaoMapCustomOverlay = (map: kakao.maps.Map): void => {
   });
 
   customOverlay.value.setMap(map);
+  emits('onLoadKakaoMapCustomOverlay', customOverlay.value);
 };
 
 /**

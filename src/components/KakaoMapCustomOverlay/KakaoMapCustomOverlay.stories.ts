@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 import { KakaoMap, KakaoMapCustomOverlay, MapMarker } from '@/components';
 import type { KakaoMapCustomOverlayProps } from './KakaoMapCustomOverlay.vue';
+import { 서울특별시청_좌표 } from '@/constants/coordinate';
 import useKakao from '@/util/useKakao';
 
 const meta = {
@@ -29,8 +30,8 @@ const renderKakaoMap: any = (args: KakaoMapCustomOverlayProps) => ({
   },
   template: `
   <KakaoMap
-  :lat='33.450701'
-  :lng='126.570667'
+  :lat='37.566826'
+  :lng='126.9786567'
   >
   <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" >
   <div
@@ -54,8 +55,7 @@ export const Default: Story = {
   name: '커스텀오버레이 생성하기',
   render: renderKakaoMap,
   args: {
-    lat: 33.450701,
-    lng: 126.570667
+    ...서울특별시청_좌표
   }
 };
 
@@ -92,7 +92,6 @@ export const WithMarker: Story = {
   `
   }),
   args: {
-    lat: 33.450701,
-    lng: 126.570667
+    ...서울특별시청_좌표
   }
 };
