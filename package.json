@@ -1,6 +1,6 @@
 {
   "name": "vue3-kakao-maps",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": false,
   "type": "module",
   "main": "./dist/index.umd.cjs",
@@ -81,5 +81,18 @@
   },
   "description": "kakao maps component library with vue3 and TS",
   "license": "MIT",
-  "homepage": "https://6620c768715fd00a32d656ec-uilycffpjo.chromatic.com/?path=/docs/stories-readme--docs"
+  "homepage": "https://6620c768715fd00a32d656ec-uilycffpjo.chromatic.com/?path=/docs/stories-readme--docs",
+  "keywords": [
+    "vue",
+    "vue3",
+    "kakao",
+    "kakao map",
+    "map",
+    "map api",
+    "카카오",
+    "카카오맵",
+    "카카오 맵",
+    "지도",
+    "지도 api"
+  ]
 }
