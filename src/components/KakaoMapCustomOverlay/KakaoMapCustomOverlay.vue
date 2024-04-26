@@ -16,7 +16,7 @@ export type KakaoMapCustomOverlayProps = {
   /**
    * KakaoMapCustomOverlay 컴포넌트
    */
-  content?: string | HTMLElement;
+  content?: string;
 
   /**
    * 컨텐츠의 x축 위치. 0_1 사이의 값을 가진다. 기본값은 0.5, 최초 생성시에만 적용됩니다.
@@ -57,13 +57,13 @@ const customOverlay = ref<kakao.maps.CustomOverlay | null>();
 const contentSlot = ref<HTMLElement>();
 
 /**
- * 커스텀오버레이가 표시될 지도의 객체
+ * 커스텀 오버레이가 표시될 지도의 객체
  */
 const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
 
 /**
- * 카카오맵 위에 커스텀오버레이를 생성합니다
- * @param map 커스텀오버레이가 생성될 카카오맵
+ * 카카오맵 위에 커스텀 오버레이를 생성합니다
+ * @param map 커스텀 오버레이가 생성될 카카오맵
  */
 const initKakaoMapCustomOverlay = (map: kakao.maps.Map): void => {
   if (props.lat === undefined || props.lng === undefined) {
@@ -136,8 +136,10 @@ watch(
 </script>
 
 <template>
-  <div v-if="$slots.default" ref="contentSlot">
-    <slot></slot>
+  <div v-if="(props.content && props.content.length > 0) || $slots.default">
+    <div v-if="$slots.default" ref="contentSlot">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
