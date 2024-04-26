@@ -6,9 +6,9 @@ import type { KakaoMapMarkerImage } from './types';
 import { DEFAULT_MARKER_IMAGE, DEFAULT_MARKER_IMAGE_HEIGHT, DEFAULT_MARKER_IMAGE_WIDTH } from '@/constants/coordinate';
 
 /**
- * MapMarker 컴포넌트 생성을 위한 타입
+ * KakaoMapMarker 컴포넌트 생성을 위한 타입
  */
-export type MapMarkerProps = {
+export type KakaoMapMarkerProps = {
   /**
    * 마커의 위도 값
    */
@@ -66,7 +66,7 @@ export type MapMarkerProps = {
 
 const emits = defineEmits(['onLoadKakaoMapMarker']);
 
-const props = defineProps<MapMarkerProps>();
+const props = defineProps<KakaoMapMarkerProps>();
 /**
  * kakao api로 생성한 marker 객체
  */
@@ -91,7 +91,7 @@ const changeMarkerImage = (image: KakaoMapMarkerImage | undefined): void => {
 
   const markerImage = new kakao.maps.MarkerImage(
     image.imageSrc,
-    new kakao.maps.Size(image.imageWidth ?? DEFAULT_MARKER_IMAGE_HEIGHT, image.imageWidth ?? DEFAULT_MARKER_IMAGE_WIDTH),
+    new kakao.maps.Size(image.imageWidth ?? DEFAULT_MARKER_IMAGE_WIDTH, image.imageHeight ?? DEFAULT_MARKER_IMAGE_HEIGHT),
     image.imageOption
   );
 

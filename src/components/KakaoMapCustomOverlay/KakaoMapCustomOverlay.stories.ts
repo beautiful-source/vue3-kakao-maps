@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
-import { KakaoMap, KakaoMapCustomOverlay, MapMarker } from '@/components';
+import { KakaoMap, KakaoMapCustomOverlay, KakaoMapMarker } from '@/components';
 import type { KakaoMapCustomOverlayProps } from './KakaoMapCustomOverlay.vue';
 import { 서울특별시청_좌표 } from '@/constants/coordinate';
 import useKakao from '@/util/useKakao';
@@ -62,18 +62,18 @@ export const Default: Story = {
 export const WithMarker: Story = {
   name: '마커에 커스텀오버레이 표시하기',
   render: (args: KakaoMapCustomOverlayProps) => ({
-    components: { KakaoMap, KakaoMapCustomOverlay, MapMarker },
+    components: { KakaoMap, KakaoMapCustomOverlay, KakaoMapMarker },
     tags: ['autodocs'],
     setup() {
       useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
-      return { args, KakaoMapCustomOverlay, MapMarker };
+      return { args, KakaoMapCustomOverlay, KakaoMapMarker };
     },
     template: `
     <KakaoMap
     :lat='33.450701'
     :lng='126.570667'
     >    
-    <MapMarker :lat="33.450701" :lng="126.570667" />
+    <KakaoMapMarker :lat="33.450701" :lng="126.570667" />
     <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" yAnchor='1.8'>
     <div
     style='
