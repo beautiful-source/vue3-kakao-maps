@@ -4,16 +4,17 @@ import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
 
 export type KakaoMapCustomOverlayProps = {
   /**
-   * 지도의 위도 값
+   * 커스텀 오버레이의 위도 값
    */
   lat: number;
 
   /**
-   * 지도의 경도 값
+   * 커스텀 오버레이의 경도 값
    */
   lng: number;
+
   /**
-   * 커스텀 KakaoMapCustomOverlay 컴포넌트
+   * KakaoMapCustomOverlay 컴포넌트
    */
   content?: string | HTMLElement;
 
@@ -44,23 +45,23 @@ const props = withDefaults(defineProps<KakaoMapCustomOverlayProps>(), {
   clickable: false
 });
 /**
- * kakao api로 생성한 customOverlay 객체
+ * kakao api로 생성한 KakaoMapCustomOverlay 객체
  */
 const customOverlay = ref<kakao.maps.CustomOverlay | null>();
 
 /**
- * KakaoMapCustomOverlay content 표시될 sloe 객체
+ * content가 표시될 slot 객체
  */
 const contentSlot = ref<HTMLElement>();
 
 /**
- * KakaoMapCustomOverlay가 표시될 지도의 객체
+ * 커스텀오버레이가 표시될 지도의 객체
  */
 const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
 
 /**
- * 카카오맵 위에 CustomOverlay를 생성합니다.
- * @param map CustomOverlay가 생성될 카카오맵
+ * 카카오맵 위에 커스텀오버레이를 생성합니다
+ * @param map 커스텀오버레이가 생성될 카카오맵
  */
 const initKakaoMapCustomOverlay = (map: kakao.maps.Map): void => {
   if (props.lat === undefined || props.lng === undefined) {
@@ -80,8 +81,9 @@ const initKakaoMapCustomOverlay = (map: kakao.maps.Map): void => {
 
   customOverlay.value.setMap(map);
 };
+
 /**
- * 컴포넌트 언마운트 시 map에서 customOverlay 삭제
+ * 컴포넌트 언마운트 시 map에서 KakaoMapCustomOverlay 삭제
  */
 onBeforeUnmount(() => {
   if (customOverlay.value != null) {

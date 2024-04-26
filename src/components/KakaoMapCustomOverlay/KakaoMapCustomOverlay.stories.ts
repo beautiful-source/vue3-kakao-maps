@@ -51,7 +51,7 @@ const renderKakaoMap: any = (args: KakaoMapCustomOverlayProps) => ({
 });
 
 export const Default: Story = {
-  name: '커스텀오버레이만 띄우기',
+  name: '커스텀오버레이 생성하기',
   render: renderKakaoMap,
   args: {
     lat: 33.450701,
@@ -60,7 +60,7 @@ export const Default: Story = {
 };
 
 export const WithMarker: Story = {
-  name: '마커와 띄우기',
+  name: '마커에 커스텀오버레이 표시하기',
   render: (args: KakaoMapCustomOverlayProps) => ({
     components: { KakaoMap, KakaoMapCustomOverlay, MapMarker },
     tags: ['autodocs'],

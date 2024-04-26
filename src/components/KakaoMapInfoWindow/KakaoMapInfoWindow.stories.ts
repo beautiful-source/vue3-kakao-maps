@@ -66,7 +66,7 @@ const renderKakaoMap: any = (
 });
 
 export const Default: Story = {
-  name: '인포윈도우만 띄우기',
+  name: '인포윈도우 생성하기',
   render: renderKakaoMap,
   args: {
     lat: 33.450701,
@@ -77,7 +77,7 @@ export const Default: Story = {
 };
 
 export const WithMarker: Story = {
-  name: '마커와 띄우기',
+  name: '마커에 인포윈도우 표시하기1',
   render: (args: KakaoMapInfoWindowProps) => ({
     components: { KakaoMap, KakaoMapInfoWindow, MapMarker },
     tags: ['autodocs'],

@@ -4,17 +4,17 @@ import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
 
 export type KakaoMapInfoWindowProps = {
   /**
-   * 지도의 위도 값
+   * InfoWindow의 위도 값
    */
   lat: number;
 
   /**
-   * 지도의 경도 값
+   * 인포윈도우의 경도 값
    */
   lng: number;
 
   /**
-   * KakaoMapInfoWindow가 올라갈 marker 객체
+   * 인포윈도우가 올라갈 marker 객체
    */
   marker?: kakao.maps.Marker;
 
