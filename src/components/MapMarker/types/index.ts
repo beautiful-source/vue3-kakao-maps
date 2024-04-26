@@ -19,3 +19,10 @@ export type KakaoMapMarkerListItem = {
    */
   infoWindow?: string;
 };
+
+export type KakaoMapMarkerImage = {
+  imageSrc: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  imageOption: kakao.maps.MarkerImageOptions;
+};
