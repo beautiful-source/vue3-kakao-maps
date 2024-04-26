@@ -2,6 +2,7 @@
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
 import type { KakaoMarkerImage } from './types';
+import { DEFAULT_MARKER_IMAGE } from '@/constants/coordinate';
 
 /**
  * MapMarker 컴포넌트 생성을 위한 타입
@@ -19,10 +20,12 @@ export type MapMarkerProps = {
    * 마커에 추가할 InfoWindow content
    */
   infoWindow?: string;
+
   /**
-   * 마커의 이미지
+   * 마커 이미지
    */
-  // TODO: 마커 이미지 타입 추가
+  image?: KakaoMarkerImage;
+
   /**
    * 마커의 타이틀 속성 값 (툴팁)
    */
@@ -57,8 +60,6 @@ export type MapMarkerProps = {
    * 로드뷰 상에서 마커의 가시반경(m 단위), 두 지점 사이의 거리가 지정한 값보다 멀어지면 마커는 로드뷰에서 보이지 않게 됨
    */
   range?: number;
-
-  image?: KakaoMarkerImage;
 };
 
 const props = defineProps<MapMarkerProps>();
@@ -72,13 +73,33 @@ const marker = ref<null | kakao.maps.Marker>(null);
 const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
 
 /**
- * 이미지 변경 감지
+ * 마커 이미지를 변경함
+ * @param image 기본 마커 대신 표시될 이미지
  */
-watch([() => props.image], (newImage) => {
-  if (isKakaoMapApiLoaded.value) {
-    marker.value?.setImage(newImage);
+const changeMarkerImage = (image: KakaoMarkerImage | undefined): void => {
+  if (image !== undefined && image !== null) {
+    if (image.imageSrc === undefined) {
+      throw new Error('이미지 경로가 존재하지 않습니다.');
+    }
+
+    if (image.imageWidth === undefined || image.imageHeight === undefined) {
+      image.imageWidth = 30;
+      image.imageHeight = 30;
+    }
+  } else {
+    image = DEFAULT_MARKER_IMAGE;
   }
-});
+
+  const markerImage = new kakao.maps.MarkerImage(
+    image.imageSrc,
+    new kakao.maps.Size(image.imageWidth, image.imageHeight),
+    image.imageOption
+  );
+
+  if (marker.value !== null) {
+    marker.value.setImage(markerImage);
+  }
+};
 
 /*
  * 카카오맵 위에 마커를 생성합니다.
@@ -93,23 +114,7 @@ const initMarker = (map: kakao.maps.Map): void => {
     position: markerPosition
   });
 
-  if (props.image !== undefined) {
-    if (props.image.imageSrc === undefined) {
-      throw new Error('이미지가 존재하지 않습니다.');
-    }
-
-    if (props.image.imageWidth === undefined || props.image.imageHeight === undefined) {
-      throw new Error('이미지 사이즈가 지정되지 않았습니다');
-    }
-
-    const MarkerImage = new kakao.maps.MarkerImage(
-      props.image.imageSrc,
-      new kakao.maps.Size(props.image.imageWidth, props.image.imageHeight),
-      props.image.imageOption
-    );
-
-    marker.value.setImage(MarkerImage);
-  }
+  changeMarkerImage(props.image);
 
   marker.value.setMap(map);
 };
@@ -141,6 +146,13 @@ watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
   if (isKakaoMapApiLoaded.value) {
     marker.value?.setPosition(new kakao.maps.LatLng(newLat, newLng));
   }
+});
+
+/**
+ * 이미지 변경 감지
+ */
+watch([() => props.image], () => {
+  changeMarkerImage(props.image);
 });
 </script>
 
