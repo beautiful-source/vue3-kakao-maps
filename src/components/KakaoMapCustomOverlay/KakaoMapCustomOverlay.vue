@@ -86,7 +86,7 @@ const initKakaoMapCustomOverlay = (map: kakao.maps.Map): void => {
  * 컴포넌트 언마운트 시 map에서 KakaoMapCustomOverlay 삭제
  */
 onBeforeUnmount(() => {
-  if (customOverlay.value != null) {
+  if (customOverlay.value !== null) {
     customOverlay.value?.setMap(null);
   }
 });

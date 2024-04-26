@@ -4,7 +4,7 @@ import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
 
 export type KakaoMapInfoWindowProps = {
   /**
-   * InfoWindow의 위도 값
+   * 인포윈도우의 위도 값
    */
   lat: number;
 
@@ -55,13 +55,14 @@ const props = withDefaults(defineProps<KakaoMapInfoWindowProps>(), {
   removable: false,
   range: 500
 });
+
 /**
  * kakao api로 생성한 KakaoMapInfoWindow 객체
  */
 const infoWindow = ref<kakao.maps.InfoWindow | null>();
 
 /**
- * KakaoMapInfoWindow content 표시될 slot 객체
+ * content 표시될 slot 객체
  */
 const contentSlot = ref<HTMLElement>();
 
@@ -71,8 +72,8 @@ const contentSlot = ref<HTMLElement>();
 const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
 
 /**
- * 카카오맵 위에 infoWindow를 생성합니다.
- * @param map infoWindow가 생성될 카카오맵
+ * 카카오맵 위에 인포윈도우를 생성합니다.
+ * @param map가 생성될 카카오맵
  */
 const initKakaoMapInfoWindow = (map: kakao.maps.Map): void => {
   if (props.lat === undefined || props.lng === undefined) {
@@ -98,9 +99,8 @@ const initKakaoMapInfoWindow = (map: kakao.maps.Map): void => {
  * 컴포넌트 언마운트 시 map에서 infoWindow 삭제
  */
 onBeforeUnmount(() => {
-  if (infoWindow?.value != null) {
-    infoWindow.value.close();
-  }
+  if (infoWindow?.value === null) return;
+  infoWindow.value !== undefined && infoWindow.value.close();
 });
 
 /**

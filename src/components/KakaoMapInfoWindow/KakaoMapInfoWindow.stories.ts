@@ -77,7 +77,7 @@ export const Default: Story = {
 };
 
 export const WithMarker: Story = {
-  name: '마커에 인포윈도우 표시하기1',
+  name: '인포윈도우 마커에 연결하기',
   render: (args: KakaoMapInfoWindowProps) => ({
     components: { KakaoMap, KakaoMapInfoWindow, MapMarker },
     tags: ['autodocs'],
