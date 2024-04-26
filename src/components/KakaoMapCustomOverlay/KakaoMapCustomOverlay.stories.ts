@@ -33,28 +33,28 @@ export const Default: Story = {
     },
     template: `
     <KakaoMap
-    :lat='37.566826'
-    :lng='126.9786567'
+      :lat='37.566826'
+      :lng='126.9786567'
     >
-    <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" >
-    <div style="padding: 10px; background-color: white; border: 1px solid #ccc; border-radius: 5px; ">
-  <div style="font-weight: bold; margin-bottom: 5px;">
-      카카오 스페이스닷원
-  </div>
-  <div style="display: flex;">
-      <div style="margin-right: 10px;">
-          <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">
-      </div>
-      <div style="flex-grow: 1;">
-          <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">제주특별자치도 제주시 첨단로 242</div>
-          <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">(우) 63309 (지번) 영평동 2181</div>
-          <div><a href="https://www.kakaocorp.com/main" target="_blank" style="color: blue;">홈페이지</a></div>
-      </div>
-  </div>
-</div>
-    </KakaoMapCustomOverlay>
+      <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" >
+        <div style="padding: 10px; background-color: white; border: 1px solid #ccc; border-radius: 5px; ">
+          <div style="font-weight: bold; margin-bottom: 5px;">
+            카카오 스페이스닷원
+          </div>
+          <div style="display: flex;">
+            <div style="margin-right: 10px;">
+              <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">
+            </div>
+            <div style="flex-grow: 1;">
+              <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">제주특별자치도 제주시 첨단로 242</div>
+              <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">(우) 63309 (지번) 영평동 2181</div>
+              <div><a href="https://www.kakaocorp.com/main" target="_blank" style="color: blue;">홈페이지</a></div>
+            </div>
+          </div>
+        </div>
+      </KakaoMapCustomOverlay>
     </KakaoMap>
-  `
+    `
   }),
   args: {
     ...서울특별시청_좌표
@@ -75,29 +75,28 @@ export const ContentDefault: Story = {
     :lat='37.566826'
     :lng='126.9786567'
     >
-    <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" 
-    :content="args.content">
-    </KakaoMapCustomOverlay>
+      <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" :content="args.content"/>
     </KakaoMap>
   `
   }),
   args: {
     ...서울특별시청_좌표,
-    content: `<div style="padding: 10px; background-color: white; border: 1px solid #ccc; border-radius: 5px; ">
-    <div style="font-weight: bold; margin-bottom: 5px;">
-        카카오 스페이스닷원
-    </div>
-    <div style="display: flex;">
+    content: `
+    <div style="padding: 10px; background-color: white; border: 1px solid #ccc; border-radius: 5px; ">
+      <div style="font-weight: bold; margin-bottom: 5px;">
+          카카오 스페이스닷원
+      </div>
+      <div style="display: flex;">
         <div style="margin-right: 10px;">
-            <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">
+          <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">
         </div>
         <div style="flex-grow: 1;">
-            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">제주특별자치도 제주시 첨단로 242</div>
-            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">(우) 63309 (지번) 영평동 2181</div>
-            <div><a href="https://www.kakaocorp.com/main" target="_blank" style="color: blue;">홈페이지</a></div>
+          <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">제주특별자치도 제주시 첨단로 242</div>
+          <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">(우) 63309 (지번) 영평동 2181</div>
+          <div><a href="https://www.kakaocorp.com/main" target="_blank" style="color: blue;">홈페이지</a></div>
         </div>
-    </div>
-  </div>`
+      </div>
+    </div>`
   }
 };
 
@@ -112,28 +111,28 @@ export const WithMarker: Story = {
     },
     template: `
     <KakaoMap
-  :lat='37.566826'
-  :lng='126.9786567'
-  >
-  <KakaoMapMarker :lat="37.566826" :lng="126.9786567" />
-  <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" :yAnchor="args.yAnchor">
-  <div style="padding: 10px; background-color: white; border: 1px solid #ccc; border-radius: 5px; ">
-  <div style="font-weight: bold; margin-bottom: 5px;">
-      카카오 스페이스닷원
-  </div>
-  <div style="display: flex;">
-      <div style="margin-right: 10px;">
-          <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">
-      </div>
-      <div style="flex-grow: 1;">
-          <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">제주특별자치도 제주시 첨단로 242</div>
-          <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">(우) 63309 (지번) 영평동 2181</div>
-          <div><a href="https://www.kakaocorp.com/main" target="_blank" style="color: blue;">홈페이지</a></div>
-      </div>
-  </div>
-</div>
-  </KakaoMapCustomOverlay>
-  </KakaoMap>
+      :lat='37.566826'
+      :lng='126.9786567'
+    >
+    <KakaoMapMarker :lat="37.566826" :lng="126.9786567" />
+      <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" :yAnchor="args.yAnchor">
+        <div style="padding: 10px; background-color: white; border: 1px solid #ccc; border-radius: 5px; ">
+        <div style="font-weight: bold; margin-bottom: 5px;">
+            카카오 스페이스닷원
+        </div>
+        <div style="display: flex;">
+            <div style="margin-right: 10px;">
+                <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">
+            </div>
+            <div style="flex-grow: 1;">
+                <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">제주특별자치도 제주시 첨단로 242</div>
+                <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">(우) 63309 (지번) 영평동 2181</div>
+                <div><a href="https://www.kakaocorp.com/main" target="_blank" style="color: blue;">홈페이지</a></div>
+            </div>
+          </div>
+        </div>
+      </KakaoMapCustomOverlay>
+    </KakaoMap>
   `
   }),
   args: {
@@ -170,20 +169,20 @@ export const CloseCustomOverlay: Story = {
       <KakaoMapMarker :lat="37.566826" :lng="126.9786567" />
       <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" :yAnchor="args.yAnchor" @onLoadKakaoMapCustomOverlay="onLoadKakaoMapCustomOverlay">
         <div style="padding: 10px; background-color: white; border: 1px solid #ccc; border-radius: 5px; ">
-            <div style="font-weight: bold; margin-bottom: 5px;">
-                카카오 스페이스닷원
-                <span style="float: right; cursor: pointer;" @click="closeOverlay" title="닫기">X</span>
+          <div style="font-weight: bold; margin-bottom: 5px;">
+            카카오 스페이스닷원
+            <span style="float: right; cursor: pointer;" @click="closeOverlay" title="닫기">X</span>
+          </div>
+          <div style="display: flex;">
+            <div style="margin-right: 10px;">
+              <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">
             </div>
-            <div style="display: flex;">
-                <div style="margin-right: 10px;">
-                    <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70">
-                </div>
-                <div style="flex-grow: 1;">
-                    <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">제주특별자치도 제주시 첨단로 242</div>
-                    <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">(우) 63309 (지번) 영평동 2181</div>
-                    <div><a href="https://www.kakaocorp.com/main" target="_blank" style="color: blue;">홈페이지</a></div>
-                </div>
+            <div style="flex-grow: 1;">
+              <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">제주특별자치도 제주시 첨단로 242</div>
+              <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">(우) 63309 (지번) 영평동 2181</div>
+              <div><a href="https://www.kakaocorp.com/main" target="_blank" style="color: blue;">홈페이지</a></div>
             </div>
+          </div>
         </div>
       </KakaoMapCustomOverlay>
     </KakaoMap>
