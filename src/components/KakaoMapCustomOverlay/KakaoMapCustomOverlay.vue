@@ -57,13 +57,13 @@ const customOverlay = ref<kakao.maps.CustomOverlay | null>();
 const contentSlot = ref<HTMLElement>();
 
 /**
- * 커스텀오버레이가 표시될 지도의 객체
+ * 커스텀 오버레이가 표시될 지도의 객체
  */
 const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
 
 /**
- * 카카오맵 위에 커스텀오버레이를 생성합니다
- * @param map 커스텀오버레이가 생성될 카카오맵
+ * 카카오맵 위에 커스텀 오버레이를 생성합니다
+ * @param map 커스텀 오버레이가 생성될 카카오맵
  */
 const initKakaoMapCustomOverlay = (map: kakao.maps.Map): void => {
   if (props.lat === undefined || props.lng === undefined) {

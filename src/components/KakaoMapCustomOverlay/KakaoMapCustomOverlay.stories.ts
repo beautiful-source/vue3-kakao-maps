@@ -23,7 +23,7 @@ export default meta;
 type Story = StoryObj<typeof KakaoMapCustomOverlay>;
 
 export const Default: Story = {
-  name: '커스텀오버레이 생성하기',
+  name: '커스텀 오버레이 생성하기',
   render: (args: KakaoMapCustomOverlayProps) => ({
     components: { KakaoMap, KakaoMapCustomOverlay },
     tags: ['autodocs'],
@@ -62,7 +62,7 @@ export const Default: Story = {
 };
 
 export const ContentDefault: Story = {
-  name: '커스텀오버레이 생성하기2',
+  name: '커스텀 오버레이 생성하기2',
   render: (args: KakaoMapCustomOverlayProps) => ({
     components: { KakaoMap, KakaoMapCustomOverlay },
     tags: ['autodocs'],
@@ -101,7 +101,7 @@ export const ContentDefault: Story = {
 };
 
 export const WithMarker: Story = {
-  name: '커스텀오버레이 마커에 연결하기',
+  name: '커스텀 오버레이 마커에 연결하기',
   render: (args: KakaoMapCustomOverlayProps) => ({
     components: { KakaoMap, KakaoMapCustomOverlay, KakaoMapMarker },
     tags: ['autodocs'],
