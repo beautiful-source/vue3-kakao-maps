@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
-import InfoWindow from '../InfoWindow/InfoWindow.vue';
+import KakaoMapInfoWindow from '../KakaoMapInfoWindow/KakaoMapInfoWindow.vue';
 
 /**
  * MapMarker 컴포넌트 생성을 위한 타입
@@ -119,10 +119,11 @@ watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
 
 <template>
   <div>
-    <InfoWindow :markerElement="marker" :lat="props.lat" :lng="props.lng" :content="props.infoWindow"> </InfoWindow>
+    <KakaoMapInfoWindow :markerElement="marker" :lat="props.lat" :lng="props.lng" :content="props.infoWindow">
+    </KakaoMapInfoWindow>
 
-    <InfoWindow v-if="$slots.infoWindow" :markerElement="marker" :lat="props.lat" :lng="props.lng">
+    <KakaoMapInfoWindow v-if="$slots.infoWindow" :markerElement="marker" :lat="props.lat" :lng="props.lng">
       <slot name="infoWindow"> </slot>
-    </InfoWindow>
+    </KakaoMapInfoWindow>
   </div>
 </template>
