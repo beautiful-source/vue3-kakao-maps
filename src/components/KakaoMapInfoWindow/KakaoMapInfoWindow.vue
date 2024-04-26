@@ -86,7 +86,7 @@ const initKakaoMapInfoWindow = (map: kakao.maps.Map): void => {
 
   infoWindow.value = new kakao.maps.InfoWindow({
     position,
-    content: contentSlot.value,
+    content: contentSlot.value ?? props.content ?? '',
     removable: props.removable,
     disableAutoPan: props.disableAutoPan,
     zIndex: props.zIndex,
@@ -192,7 +192,6 @@ watch(
 
 <template>
   <div v-if="$slots.default" ref="contentSlot">
-    <div v-html="props?.content"></div>
     <slot></slot>
   </div>
 </template>

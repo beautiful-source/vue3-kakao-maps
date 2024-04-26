@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
+import KakaoMapInfoWindow from '../KakaoMapInfoWindow/KakaoMapInfoWindow.vue';
 import type { KakaoMapMarkerImage } from './types';
 import { DEFAULT_MARKER_IMAGE, DEFAULT_MARKER_IMAGE_HEIGHT, DEFAULT_MARKER_IMAGE_WIDTH } from '@/constants/coordinate';
 
 /**
- * MapMarker 컴포넌트 생성을 위한 타입
+ * KakaoMapMarker 컴포넌트 생성을 위한 타입
  */
-export type MapMarkerProps = {
+export type KakaoMapMarkerProps = {
   /**
    * 마커의 위도 값
    */
@@ -65,11 +66,11 @@ export type MapMarkerProps = {
 
 const emits = defineEmits(['onLoadKakaoMapMarker']);
 
-const props = defineProps<MapMarkerProps>();
+const props = defineProps<KakaoMapMarkerProps>();
 /**
  * kakao api로 생성한 marker 객체
  */
-const marker = ref<null | kakao.maps.Marker>(null);
+const marker = ref<kakao.maps.Marker | undefined>();
 /**
  * 마커가 표시될 지도의 객체
  */
@@ -90,11 +91,11 @@ const changeMarkerImage = (image: KakaoMapMarkerImage | undefined): void => {
 
   const markerImage = new kakao.maps.MarkerImage(
     image.imageSrc,
-    new kakao.maps.Size(image.imageWidth ?? DEFAULT_MARKER_IMAGE_HEIGHT, image.imageWidth ?? DEFAULT_MARKER_IMAGE_WIDTH),
+    new kakao.maps.Size(image.imageWidth ?? DEFAULT_MARKER_IMAGE_WIDTH, image.imageHeight ?? DEFAULT_MARKER_IMAGE_HEIGHT),
     image.imageOption
   );
 
-  if (marker.value !== null) {
+  if (marker.value !== undefined) {
     marker.value.setImage(markerImage);
   }
 };
@@ -156,6 +157,17 @@ watch([() => props.image], () => {
 
 <template>
   <div>
-    <slot></slot>
+    <KakaoMapInfoWindow
+      v-if="props.infoWindow && props.infoWindow.length > 0"
+      :marker="marker"
+      :lat="props.lat"
+      :lng="props.lng"
+      :content="props.infoWindow"
+    >
+    </KakaoMapInfoWindow>
+
+    <KakaoMapInfoWindow v-if="$slots.infoWindow" :marker="marker" :lat="props.lat" :lng="props.lng">
+      <slot name="infoWindow"> </slot>
+    </KakaoMapInfoWindow>
   </div>
 </template>
