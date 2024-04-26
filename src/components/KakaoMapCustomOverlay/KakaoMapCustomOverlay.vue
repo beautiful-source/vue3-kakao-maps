@@ -16,7 +16,7 @@ export type KakaoMapCustomOverlayProps = {
   /**
    * KakaoMapCustomOverlay 컴포넌트
    */
-  content?: string | HTMLElement;
+  content?: string;
 
   /**
    * 컨텐츠의 x축 위치. 0_1 사이의 값을 가진다. 기본값은 0.5, 최초 생성시에만 적용됩니다.
@@ -136,8 +136,10 @@ watch(
 </script>
 
 <template>
-  <div v-if="$slots.default" ref="contentSlot">
-    <slot></slot>
+  <div v-if="(props.content && props.content.length > 0) || $slots.default">
+    <div v-if="$slots.default" ref="contentSlot">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
