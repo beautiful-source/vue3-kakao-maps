@@ -58,6 +58,8 @@ export type MapMarkerProps = {
   range?: number;
 };
 
+const emits = defineEmits(['onLoadKakaoMapMarker']);
+
 const props = defineProps<MapMarkerProps>();
 /**
  * kakao api로 생성한 marker 객체
@@ -80,6 +82,7 @@ const initMarker = (map: kakao.maps.Map): void => {
   marker.value = new kakao.maps.Marker({
     position: markerPosition
   });
+  emits('onLoadKakaoMapMarker', marker.value);
   marker.value.setMap(map);
 };
 
