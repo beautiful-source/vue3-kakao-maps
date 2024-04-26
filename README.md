@@ -13,9 +13,9 @@
 
 사용 예시 및 컴포넌트 별 세부 속성값은 [Docs](https://6620c768715fd00a32d656ec-uilycffpjo.chromatic.com/?path=/docs/components-kakaomap--docs)에서 확인하실 수 있습니다.
 
-**:bangbang: 현재 24년 5월 중순 완성을 목표로 개발 중입니다. 하단 [기능 추가 일정](#기능-추가-일정) 확인하시어 [다운로드](https://www.npmjs.com/package/vue3-kakao-maps) 하시기 바랍니다.**
+**!! 현재 24년 5월 중순 완성을 목표로 개발 중입니다. 하단 [기능 추가 일정](#기능-추가-일정) 확인하시어 [다운로드](https://www.npmjs.com/package/vue3-kakao-maps) 하시기 바랍니다.**
 
-[`vue3-kakao-maps` 관한 소중한 생각을 남겨주세요!](https://forms.gle/qZty6EQDRD8Q3b3i9)
+[`vue3-kakao-maps`에 관한 소중한 생각을 남겨주세요!](https://forms.gle/qZty6EQDRD8Q3b3i9)
 
 <p align="center">
 <!--   <a href="https://circleci.com/gh/vuejs/vue/tree/dev"><img src="https://img.shields.io/circleci/project/github/vuejs/vue/dev.svg?sanitize=true" alt="Build Status"></a>
@@ -70,7 +70,7 @@ createApp(App).mount('#app');
 
 ```vue
 <script setup>
-import { KakaoMap, MapMarker } from 'vue3-kakao-maps';
+import { KakaoMap, KakaoMapMarker } from 'vue3-kakao-maps';
 const coordinate = {
   lat: 37.566826,
   lng: 126.9786567
@@ -79,7 +79,7 @@ const coordinate = {
 
 <template>
   <KakaoMap :lat="coordinate.lat" :lng="coordinate.lng" :draggable="true">
-    <MapMarker :lat="coordinate.lat" :lng="coordinate.lng"></MapMarker>
+    <KakaoMapMarker :lat="coordinate.lat" :lng="coordinate.lng"></KakaoMapMarker>
   </KakaoMap>
 </template>
 ```
@@ -100,11 +100,11 @@ const coordinate = {
 - 마커 리스트 관리하기
 - 다른 이미지로 마커 생성하기
 - 마커에 인포윈도우 표시하기
-- 마커 클러스터
 - 이미지 마커와 커스텀 오버레이
 
 ### 2024.05.03
 
+- 마커 클러스터
 - 화면에 보이는 마커만 렌더링 최적화
 - 마커 선으로 연결하기
 - 좌표 주소로 변환하기
