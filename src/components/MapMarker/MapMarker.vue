@@ -128,7 +128,7 @@ watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
     >
     </KakaoMapInfoWindow>
 
-    <KakaoMapInfoWindow v-if="$slots.infoWindow" :markerElement="marker" :lat="props.lat" :lng="props.lng">
+    <KakaoMapInfoWindow v-if="$slots.infoWindow" :marker="marker" :lat="props.lat" :lng="props.lng">
       <slot name="infoWindow"> </slot>
     </KakaoMapInfoWindow>
   </div>
