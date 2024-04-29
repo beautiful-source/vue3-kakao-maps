@@ -59,6 +59,7 @@ export type MapMarkerProps = {
 };
 
 const props = defineProps<MapMarkerProps>();
+const emits = defineEmits(['initMarker', 'dragEndMarker']);
 /**
  * kakao api로 생성한 marker 객체
  */
@@ -78,9 +79,20 @@ const initMarker = (map: kakao.maps.Map): void => {
   }
   const markerPosition = new kakao.maps.LatLng(props.lat, props.lng);
   marker.value = new kakao.maps.Marker({
-    position: markerPosition
+    position: markerPosition,
+    draggable: props.draggable
   });
   marker.value.setMap(map);
+
+  draggableMarkerEvent(map, marker.value);
+  emits('initMarker', marker.value);
+};
+
+const draggableMarkerEvent = (map: kakao.maps.Map, marker: kakao.maps.Marker): void => {
+  kakao.maps.event.addListener(marker, 'dragend', function (mouseEvent: any) {
+    console.log('dragend\n', marker?.getPosition());
+    emits('dragEndMarker', marker);
+  });
 };
 
 /**
