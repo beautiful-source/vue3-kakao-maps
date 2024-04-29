@@ -1,8 +1,9 @@
 import { KakaoMap, KakaoMapMarker, type KakaoMapMarkerImage } from '@/components';
-import { 서울특별시청_좌표, DEFAULT_MARKER_IMAGE } from '@/constants/coordinate';
+import { 서울특별시청_좌표 } from '@/constants/coordinate';
 import useKakao from '@/util/useKakao';
 import type { Meta, StoryObj } from '@storybook/vue3';
 import type { KakaoMapMarkerProps } from './KakaoMapMarker.vue';
+import { DEFAULT_MARKER_IMAGE } from '@/constants/markerImage';
 
 const meta = {
   title: 'Components/KakaoMapMarker',
