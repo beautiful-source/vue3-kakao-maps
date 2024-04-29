@@ -19,8 +19,7 @@
         "types": "./dist/index.d.cts",
         "default": "./dist/index.umd.cjs"
       }
-    },
-    "./style.css": "./dist/style.css"
+    }
   },
   "scripts": {
     "dev": "vite",

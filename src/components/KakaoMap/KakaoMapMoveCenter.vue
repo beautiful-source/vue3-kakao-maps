@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { KakaoMap } from '@/components';
-import useKakao from '@/util/useKakao';
+import useKakao from '@/utils/useKakao';
 import { ref } from 'vue';
 
 useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
