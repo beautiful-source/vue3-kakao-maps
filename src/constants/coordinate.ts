@@ -4,6 +4,17 @@ type coordinate = {
   lat: number;
   lng: number;
 };
+
+type size = {
+  width: string;
+  height: string;
+};
+
+export const DEFAULT_MAP_SIZE: size = {
+  width: '40rem',
+  height: '50rem'
+};
+
 export const 서울특별시청_좌표: coordinate = {
   lat: 37.566826,
   lng: 126.9786567

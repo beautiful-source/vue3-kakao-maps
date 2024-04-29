@@ -3,7 +3,7 @@ import { KakaoMap } from '@/components';
 import type { KakaoMapProps } from './KakaoMap.vue';
 import useKakao from '@/util/useKakao';
 import { computed, ref } from 'vue';
-import { 서울특별시청_좌표 } from '@/constants/coordinate';
+import { DEFAULT_MAP_SIZE, 서울특별시청_좌표 } from '@/constants/coordinate';
 
 const meta = {
   title: 'Components/KakaoMap',
@@ -52,10 +52,8 @@ export const Default: Story = {
   name: '지도 생성하기',
   render: renderKakaoMap,
   args: {
-    lat: 37.566826,
-    lng: 126.9786567,
-    width: '40rem',
-    height: '50rem',
+    ...서울특별시청_좌표,
+    ...DEFAULT_MAP_SIZE,
     draggable: true,
     level: 3,
     scrollwheel: true,
