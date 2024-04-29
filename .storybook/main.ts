@@ -18,4 +18,5 @@ const config: StorybookConfig = {
     defaultName: 'Component'
   }
 };
+
 export default config;
