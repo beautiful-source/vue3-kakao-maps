@@ -3,7 +3,7 @@ import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
 import KakaoMapInfoWindow from '../KakaoMapInfoWindow/KakaoMapInfoWindow.vue';
 import type { KakaoMapMarkerImage } from './types';
-import { DEFAULT_MARKER_IMAGE, DEFAULT_MARKER_IMAGE_HEIGHT, DEFAULT_MARKER_IMAGE_WIDTH } from '@/constants/coordinate';
+import { DEFAULT_MARKER_IMAGE, DEFAULT_MARKER_IMAGE_HEIGHT, DEFAULT_MARKER_IMAGE_WIDTH } from '@/constants/markerImage';
 
 /**
  * KakaoMapMarker 컴포넌트 생성을 위한 타입
