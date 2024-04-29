@@ -1,68 +1,96 @@
-## 📦 설치
+export function Header() {
+  return <h1>vue3-kakao-maps</h1>;
+}
 
-- npm
+export function ProjectInfo() {
+  return (
+    <p align="center">
+      <a href="https://npmcharts.com/compare/vue3-kakao-maps?minimal=true" />
+      <img src="https://img.shields.io/npm/dm/vue3-kakao-maps.svg?sanitize=true" alt="Downloads" />
+      <a href="https://www.npmjs.com/package/vue3-kakao-maps" />
+      <img src="https://img.shields.io/npm/v/vue3-kakao-maps.svg?sanitize=true" alt="Version" />
+      <a href="https://www.npmjs.com/package/vue" />
+      <img src="https://img.shields.io/npm/l/vue.svg?sanitize=true" alt="License" />
+    </p>
+  );
+}
+
+<Header />
+
+> **Vue3로 카카오맵을 가장 손쉽게 사용하는 법.**
+
+`vue3-kakao-maps`는 `Vue3`로 [Kakao Map API](https://apis.map.kakao.com/)를 손쉽게 사용할 수 있도록 개발된 컴포넌트 라이브러리입니다.
+
+카카오맵 API의 `지도`, `마커`, `인포윈도우`, `커스텀 오버레이`, `마커 클러스터`등을 컴포넌트 형태로 제공합니다.
+
+사용 예시 및 컴포넌트 별 세부 속성값은 [**Docs**](https://6620c768715fd00a32d656ec-mpdjongclw.chromatic.com/?path=/docs/stories-readme--component)에서 확인하실 수 있습니다.
+
+**!! 현재 24년 5월 중순 완성을 목표로 개발 중입니다. 하단 [개발 일정](#개발-일정) 확인하시어 [다운로드](https://www.npmjs.com/package/vue3-kakao-maps) 하시기 바랍니다.**
+
+[`vue3-kakao-maps`에 관한 소중한 생각을 남겨주세요!](https://forms.gle/qZty6EQDRD8Q3b3i9)
+
+<ProjectInfo />
+
+## 시작하기
+
+### 설치
+
+**NPM**
 
 ```
 npm i vue3-kakao-maps
 ```
 
-- yarn
+**Yarn**
 
 ```
 yarn add vue3-kakao-maps
 ```
 
-- pnpm
+**PNPM**
 
 ```
-pnpm add vue3-kakao-maps
+pnpm install vue3-kakao-maps
 ```
 
-## ⚙️ 설정방법
+### 첫 지도 그리기
 
-### 1. 스크립트 로드하기
+**1. 카카오맵 API 로드**
 
-`main.{js|ts}`에서 아래와 같이 설정합니다.
+`main.{js|ts}`에서 `useKakao('API key')` 호출을 통해 카카오맵 API를 로드합니다.
 
-```ts
-// typescript
-import { createApp, type Component, type ComputedOptions, type MethodOptions } from 'vue';
+참고: API key 발급 관련 내용은 [공식 문서](https://apis.map.kakao.com/web/guide/)을 참고해주세요.
+
+```js
+import { createApp } from 'vue';
 import App from './App.vue';
-import useKakao from './util/useKakao';
+import { useKakao } from 'vue3-kakao-maps';
 
-useKakao('kakao api key'); // kakao map api에서 발급받은 키를 입력합니다.
-const TypedAssertedApp = App as Component<any, any, any, ComputedOptions, MethodOptions, any, any>;
-createApp(TypedAssertedApp).mount('#app');
+useKakao('API key');
+createApp(App).mount('#app');
 ```
 
-### 2. 컴포넌트 사용하기
+**2. 지도 컴포넌트 호출**
 
-App.vue에 아래와같이 KakaoMap을 추가합니다.
+카카오맵 지도를 띄우기 위해서 `KakaoMap` 컴포넌트를 사용합니다. `props`를 통해 카카오맵 API에서 제공하는 다양한 [`option`](https://apis.map.kakao.com/web/documentation/#Map)을 전달할 수 있습니다.
 
-```ts
-<script setup lang="ts">
-import { ref } from 'vue';
-import { KakaoMap, MapMarker, InfoWindow } from './components';
-const map = ref<kakao.maps.Map>();
-
-const onLoadKakaoMap = (newMap: kakao.maps.Map): void => {
-  map.value = newMap;
+```vue
+<script setup>
+import { KakaoMap, KakaoMapMarker } from 'vue3-kakao-maps';
+const coordinate = {
+  lat: 37.566826,
+  lng: 126.9786567
 };
 </script>
 
 <template>
-  <KakaoMap ref="map" :lat="33.450701" :lng="126.570667" @onLoadKakaoMap="onLoadKakaoMap" :draggable="false">
-    <MapMarker v-if="map" :lat="33.450701" :lng="126.570667" :map="map"></MapMarker>
-    <InfoWindow v-if="map" :map="map" :lat="33.450701" :lng="126.570667">
-      <div>Hello World!</div>
-    </InfoWindow>
+  <KakaoMap :lat="coordinate.lat" :lng="coordinate.lng" :draggable="true">
+    <KakaoMapMarker :lat="coordinate.lat" :lng="coordinate.lng"></KakaoMapMarker>
   </KakaoMap>
 </template>
-
-<style scoped></style>
 ```
 
-## 🏃‍♂️ 기능 추가 일정 안내
+## 개발 일정
 
 ### 2024.04.23 (v1.0.0)
 
@@ -78,11 +106,11 @@ const onLoadKakaoMap = (newMap: kakao.maps.Map): void => {
 - 마커 리스트 관리하기
 - 다른 이미지로 마커 생성하기
 - 마커에 인포윈도우 표시하기
-- 마커 클러스터
 - 이미지 마커와 커스텀 오버레이
 
 ### 2024.05.03
 
+- 마커 클러스터
 - 화면에 보이는 마커만 렌더링 최적화
 - 마커 선으로 연결하기
 - 좌표 주소로 변환하기

@@ -2,7 +2,9 @@ import type { Meta, StoryObj } from '@storybook/vue3';
 import { KakaoMap } from '@/components';
 import type { KakaoMapProps } from './KakaoMap.vue';
 import useKakao from '@/util/useKakao';
-import { ref } from 'vue';
+import KakaoMapMoveCenter from './KakaoMapMoveCenter.vue';
+import { computed, ref } from 'vue';
+import { 서울특별시청_좌표 } from '@/constants/coordinate';
 
 const meta = {
   title: 'Components/KakaoMap',
@@ -96,27 +98,113 @@ export const MapWithMarkerList: Story = {
 export const MoveCenter: Story = {
   name: '지도 이동시키기',
   render: (args: any) => ({
-    components: { KakaoMap },
+    components: { KakaoMapMoveCenter },
     setup() {
-      useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
-      const curLat = ref(33.450701);
-      const curLng = ref(126.570667);
-
-      const move = (newLat: number, newLng: number): void => {
-        curLat.value = newLat;
-        curLng.value = newLng;
-      };
-
-      return {
-        curLat,
-        curLng,
-        move
-      };
+      return { args };
     },
-    template: `
-      <KakaoMap :lat="curLat" :lng="curLng"></KakaoMap>
-      <button @click="move(33.452613, 126.570888)">moveTo1</button>
-      <button @click="move(33.45058, 126.574942)">moveTo2</button>
+    template: '<KakaoMapMoveCenter />'
+  }),
+  parameters: {
+    docs: {
+      source: {
+        type: 'dynamic',
+        code: `
+        <script setup lang="ts">
+          import { KakaoMap } from '@/components';
+          import useKakao from '@/util/useKakao';
+          import { ref } from 'vue';
+
+          useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
+
+          const curLat = ref(33.450701);
+          const curLng = ref(126.570667);
+
+          const move = (newLat: number, newLng: number): void => {
+            curLat.value = newLat;
+            curLng.value = newLng;
+          };
+          </script>
+
+          <template>
+            <KakaoMap :lat="curLat" :lng="curLng"></KakaoMap>
+            <button @click="move(33.452613, 126.570888)">moveTo1</button>
+            <button @click="move(33.45058, 126.574942)">moveTo2</button>
+          </template>
+        `
+      },
+      showSource: true
+    }
+  }
+};
+
+const renderGetMapInfo: any = (args: KakaoMapProps) => ({
+  components: { KakaoMap },
+  setup() {
+    useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
+    const ourKakaoMap = ref<kakao.maps.Map>();
+    const isKakaoMapLoaded = ref<boolean>(false);
+    const buttonMessage = computed<string>(() => (isKakaoMapLoaded.value ? '지도 정보 얻어오기' : '지도 로딩중'));
+    const mapInfo = ref<string>('');
+    const getMapInfo = (map: kakao.maps.Map): void => {
+      if (map === undefined) return;
+
+      // 지도의 현재 중심좌표를 얻어옵니다
+      const center = map.getCenter();
+
+      // 지도의 현재 레벨을 얻어옵니다
+      const level = map.getLevel();
+
+      // 지도타입을 얻어옵니다
+      const mapTypeId = map.getMapTypeId();
+
+      // 지도의 현재 영역을 얻어옵니다
+      const bounds = map.getBounds();
+
+      // 영역의 남서쪽 좌표를 얻어옵니다
+      const swLatLng = bounds.getSouthWest();
+
+      // 영역의 북동쪽 좌표를 얻어옵니다
+      const neLatLng = bounds.getNorthEast();
+
+      // 영역정보를 문자열로 얻어옵니다. ((남,서), (북,동)) 형식입니다
+      const boundsStr = bounds.toString();
+
+      mapInfo.value = `지도 중심좌표는 위도 ${center.getLat()}, <br /> 경도 ${center.getLng()} 이고,
+        지도 레벨은 ${level} 입니다. <br />
+        지도 타입은 ${mapTypeId} 이고
+        지도의 남서쪽 좌표는 ${swLatLng.getLat()}, ${swLatLng.getLng()} 이고 <br />
+        북동쪽 좌표는 ${neLatLng.getLat()}, ${neLatLng.getLng()} 입니다. <br />
+        영역 정보는 ${boundsStr} 입니다.`;
+    };
+
+    return {
+      args,
+      ourKakaoMap,
+      buttonMessage,
+      isKakaoMapLoaded,
+      mapInfo,
+      getMapInfo
+    };
+  },
+  template: `
+      <KakaoMap
+        @onLoadKakaoMap="(map) => {isKakaoMapLoaded = true; ourKakaoMap = map}"
+        :lat="args.lat"
+        :lng="args.lng"
+        :draggable="true"
+      >
+      </KakaoMap>
+      <button @click="getMapInfo(ourKakaoMap)" :disabled="!isKakaoMapLoaded">
+        {{ buttonMessage }}
+      </button>
+      <p v-html="mapInfo"></p>
     `
-  })
+});
+
+export const GetMapInfo: Story = {
+  name: '지도 정보 얻어오기',
+  render: renderGetMapInfo,
+  args: {
+    ...서울특별시청_좌표
+  }
 };

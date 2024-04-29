@@ -22,7 +22,7 @@ export type KakaoMapInfoWindowProps = {
    * 엘리먼트 또는 HTML 문자열 형태의 인포윈도우의 내용
    * slot으로도 전달 가능합니다.
    */
-  content?: string | HTMLElement;
+  content?: string;
 
   /**
    * 인포윈도우를 열 때 지도가 자동으로 패닝하지 않을지의 여부 (기본값: false), 최초 생성시에만 적용됩니다.
@@ -86,7 +86,7 @@ const initKakaoMapInfoWindow = (map: kakao.maps.Map): void => {
 
   infoWindow.value = new kakao.maps.InfoWindow({
     position,
-    content: contentSlot.value,
+    content: contentSlot.value ?? props.content ?? '',
     removable: props.removable,
     disableAutoPan: props.disableAutoPan,
     zIndex: props.zIndex,
@@ -94,8 +94,8 @@ const initKakaoMapInfoWindow = (map: kakao.maps.Map): void => {
     range: props.range
   });
 
-  infoWindow?.value?.open(map, props.marker);
   emits('onLoadKakaoMapInfoWindow', infoWindow.value);
+  props.marker !== undefined ? infoWindow?.value?.open(map, props.marker) : infoWindow?.value?.open(map);
 };
 
 /**
@@ -128,6 +128,9 @@ watch(
     if (mapRef?.value === undefined) return;
     infoWindow.value != null && infoWindow.value?.close();
     newMarker !== undefined ? infoWindow?.value?.open(mapRef?.value, newMarker) : infoWindow?.value?.open(mapRef?.value);
+  },
+  {
+    immediate: true
   }
 );
 
@@ -191,9 +194,10 @@ watch(
 </script>
 
 <template>
-  <div v-if="$slots.default" ref="contentSlot">
-    <div v-html="props?.content"></div>
-    <slot></slot>
+  <div v-if="(props.content && props.content.length > 0) || $slots.default">
+    <div v-if="$slots.default" ref="contentSlot">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
