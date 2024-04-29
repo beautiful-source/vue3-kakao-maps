@@ -22,7 +22,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof KakaoMapCustomOverlay>;
 
-const content = `
+const customOverlayContent = `
 <div style='padding: 10px; background-color: white; border: 1px solid #ccc; border-radius: 5px; '>
   <div style='font-weight: bold; margin-bottom: 5px;'>
     카카오 스페이스닷원
@@ -55,7 +55,7 @@ export const BasicCustomOverlay: Story = {
       :lat='37.566826'
       :lng='126.9786567'>
       <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" >` +
-      content +
+      customOverlayContent +
       `</KakaoMapCustomOverlay>
     </KakaoMap>
     `
@@ -119,7 +119,7 @@ export const WithMarker: Story = {
     >
     <KakaoMapMarker :lat="37.566826" :lng="126.9786567" />
       <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" :yAnchor="args.yAnchor">` +
-      content +
+      customOverlayContent +
       `</KakaoMapCustomOverlay>
     </KakaoMap>
   `
