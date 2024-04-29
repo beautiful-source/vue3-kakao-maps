@@ -24,7 +24,7 @@ export default defineConfig({
       }
     }
   },
-  plugins: [vue(), VueDevTools(), dts({ include: ['src/components', 'src/utils'] })],
+  plugins: [vue(), VueDevTools(), dts({ exclude: ['src/constants'] })],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
