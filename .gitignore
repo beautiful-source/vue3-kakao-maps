@@ -76,7 +76,7 @@ VUE3-KAKAO-MAPS/*
 !VUE3-KAKAO-MAPS/.gitkeep
 # 화면표시
 App.vue
-main.ts
+src/main.ts
 .env
 
 
