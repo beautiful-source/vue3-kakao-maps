@@ -115,16 +115,12 @@ export const WithMarker: Story = {
     },
     template: `
     <KakaoMap :lat="37.566826" :lng="126.9786567" :draggable="true">
-    <KakaoMapMarker :lat="37.566826" :lng="126.9786567" @onLoadKakaoMapMarker="onLoadKakaoMapMarker" />
-    <KakaoMapInfoWindow :marker="marker" :lat="args.lat" :lng="args.lng" removable>
-    <KakaoMapMarker :lat="37.566826" :lng="126.9786567" @onLoadKakaoMarker="onLoadKakaoMarker" />
-    <KakaoMapInfoWindow :marker="marker" :lat="33.450701" :lng="126.570667" removable>
-      <div>
-        Hello World!
-      </div>
-    </KakaoMapInfoWindow>
-  </KakaoMap>
-  `
+      <KakaoMapMarker :lat="37.566826" :lng="126.9786567" @onLoadKakaoMapMarker="onLoadKakaoMapMarker" />
+      <KakaoMapInfoWindow :marker="marker" :lat="args.lat" :lng="args.lng" removable>
+        <div>Hello World!</div>
+      </KakaoMapInfoWindow>
+    </KakaoMap>
+    `
   }),
   args: {
     ...서울특별시청_좌표
