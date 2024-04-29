@@ -300,8 +300,8 @@ const initCluster = (info: markerClusterInfo): void => {
         :map="map"
         :lat="marker.lat"
         :lng="marker.lng"
-      >
-      </KakaoMapMarker>
+        :info-window="marker.infoWindow"
+      />
     </div>
     <slot></slot>
   </div>
