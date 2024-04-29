@@ -59,22 +59,27 @@ const updateMarkerList = (marker: kakao.maps.Marker): void => {
   const targetIndex = realMarkerList.value.indexOf(marker);
   realMarkerList.value.splice(targetIndex, 1, marker);
 
+  // customOverlay 교체 로직 작성
+  customOverlayList[targetIndex].setPosition(realLinePath.value[targetIndex]);
+
   polyline?.setPath(realLinePath.value);
   if (mapRef !== undefined) {
     polyline?.setMap(mapRef.value);
   }
 };
 
+const customOverlayList: kakao.maps.CustomOverlay[] = [];
+
 const initCustomOverlay = (map: kakao.maps.Map): void => {
-  props.markerList.map((e, index) => {
+  props.markerList.forEach((e, index) => {
     const position = new kakao.maps.LatLng(e.lat, e.lng);
-    const test = new kakao.maps.CustomOverlay({
+    const customOverlay = new kakao.maps.CustomOverlay({
       map,
       position,
       content: content(e.key !== undefined ? e.key + '' : index + 1 + ''),
       yAnchor: 0
     });
-    return test;
+    customOverlayList.push(customOverlay);
   });
 };
 
