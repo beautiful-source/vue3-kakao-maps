@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3';
 import { KakaoMap } from '@/components';
 import type { KakaoMapProps } from './KakaoMap.vue';
 import useKakao from '@/util/useKakao';
+import KakaoMapMoveCenter from './KakaoMapMoveCenter.vue';
 import { computed, ref } from 'vue';
 import { DEFAULT_MAP_SIZE, 서울특별시청_좌표 } from '@/constants/coordinate';
 
@@ -92,34 +93,46 @@ export const MapWithMarkerList: Story = {
   }
 };
 
-const renderMoveCenter: any = (args: KakaoMapProps) => ({
-  components: { KakaoMap },
-  setup() {
-    useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
-    const curLat = ref(33.450701);
-    const curLng = ref(126.570667);
-
-    const move = (newLat: number, newLng: number): void => {
-      curLat.value = newLat;
-      curLng.value = newLng;
-    };
-
-    return {
-      curLat,
-      curLng,
-      move
-    };
-  },
-  template: `
-      <KakaoMap :lat="curLat" :lng="curLng"></KakaoMap>
-      <button @click="move(33.452613, 126.570888)">moveTo1</button>
-      <button @click="move(33.45058, 126.574942)">moveTo2</button>
-    `
-});
-
 export const MoveCenter: Story = {
   name: '지도 이동시키기',
-  render: renderMoveCenter
+  render: (args: any) => ({
+    components: { KakaoMapMoveCenter },
+    setup() {
+      return { args };
+    },
+    template: '<KakaoMapMoveCenter />'
+  }),
+  parameters: {
+    docs: {
+      source: {
+        type: 'dynamic',
+        code: `
+        <script setup lang="ts">
+          import { KakaoMap } from '@/components';
+          import useKakao from '@/util/useKakao';
+          import { ref } from 'vue';
+
+          useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
+
+          const curLat = ref(33.450701);
+          const curLng = ref(126.570667);
+
+          const move = (newLat: number, newLng: number): void => {
+            curLat.value = newLat;
+            curLng.value = newLng;
+          };
+          </script>
+
+          <template>
+            <KakaoMap :lat="curLat" :lng="curLng"></KakaoMap>
+            <button @click="move(33.452613, 126.570888)">moveTo1</button>
+            <button @click="move(33.45058, 126.574942)">moveTo2</button>
+          </template>
+        `
+      },
+      showSource: true
+    }
+  }
 };
 
 const renderGetMapInfo: any = (args: KakaoMapProps) => ({
