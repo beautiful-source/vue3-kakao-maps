@@ -12,4 +12,5 @@ const Vue3KakaoMaps: Plugin = {
   }
 };
 
-export { Vue3KakaoMaps, KakaoMap, KakaoMapMarker, useKakao, KakaoMapCustomOverlay, KakaoMapInfoWindow };
+export * from './components';
+export { Vue3KakaoMaps, useKakao };
