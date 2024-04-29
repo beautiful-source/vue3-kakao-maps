@@ -19,6 +19,7 @@ watch(
   ([isKakaoMapApiLoaded, mapRef, newMap]) => {
     if (isKakaoMapApiLoaded && mapRef !== undefined && newMap !== undefined) {
       initPolyline(newMap);
+      initCustomOverlay(newMap);
     }
   },
   { immediate: true }
@@ -62,6 +63,23 @@ const updateMarkerList = (marker: kakao.maps.Marker): void => {
   if (mapRef !== undefined) {
     polyline?.setMap(mapRef.value);
   }
+};
+
+const initCustomOverlay = (map: kakao.maps.Map): void => {
+  props.markerList.map((e, index) => {
+    const position = new kakao.maps.LatLng(e.lat, e.lng);
+    const test = new kakao.maps.CustomOverlay({
+      map,
+      position,
+      content: content(e.key !== undefined ? e.key + '' : index + 1 + ''),
+      yAnchor: 0
+    });
+    return test;
+  });
+};
+
+const content = (order: string): string => {
+  return `<div class="customoverlay"> ${order}</div>`;
 };
 </script>
 
