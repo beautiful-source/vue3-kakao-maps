@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
-import { ref, watch, computed, onMounted, provide } from 'vue';
+import { ref, watch, computed, onMounted, provide, toRaw } from 'vue';
 import { KakaoMapMarker } from '@/components';
 import type { KakaoMapMarkerListItem } from '@/components';
 import type { markerClusterInfo } from './types';
@@ -96,10 +96,12 @@ const emits = defineEmits(['onLoadKakaoMap']);
 const kakaoMapRef = ref<null | HTMLElement>(null);
 const map = ref<kakao.maps.Map>();
 provide('mapRef', map);
-provide('marerkList', props.markerCluster);
 onMounted(() => {
   if (isKakaoMapApiLoaded.value) {
     initMap();
+    if (props.markerCluster !== undefined) {
+      initCluster(props.markerCluster);
+    }
   }
 });
 
@@ -111,6 +113,9 @@ watch(
   (isKakaoMapApiLoaded) => {
     if (isKakaoMapApiLoaded) {
       initMap();
+      if (props.markerCluster !== undefined) {
+        initCluster(props.markerCluster);
+      }
     }
   }
 );
@@ -196,6 +201,7 @@ watch(
 watch(
   () => props.scrollwheel,
   (scrollwheel) => {
+    console.log('scrollwheel');
     if (scrollwheel === undefined) {
       map.value?.setZoomable(true);
     } else {
@@ -246,9 +252,6 @@ const initMap = (): void => {
     map.value = new window.kakao.maps.Map(kakaoMapRef.value, options);
     emits('onLoadKakaoMap', map.value);
   }
-  if (props.markerCluster !== undefined) {
-    initCluster(props.markerCluster);
-  }
 };
 
 /**
@@ -266,7 +269,6 @@ const initCluster = (info: markerClusterInfo): void => {
     const markers = ref<kakao.maps.Marker[]>([]);
     info.markers.forEach((markerInfo) => {
       const marker = new kakao.maps.Marker({
-        map: map.value,
         position: new kakao.maps.LatLng(markerInfo.lat, markerInfo.lng),
         image: markerInfo.image ?? undefined,
         title: markerInfo.title ?? undefined,
@@ -280,7 +282,7 @@ const initCluster = (info: markerClusterInfo): void => {
       markers.value?.push(marker);
     });
     clusterer.value = new kakao.maps.MarkerClusterer({
-      map: map.value,
+      map: toRaw(map.value),
       ...info,
       markers: markers.value
     });
