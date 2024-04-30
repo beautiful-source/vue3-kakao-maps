@@ -1,4 +1,4 @@
-import type { KakaoMapMarkerImage } from '@/components';
+import type { KakaoMapMarkerImage } from '@/types';
 
 type coordinate = {
   lat: number;

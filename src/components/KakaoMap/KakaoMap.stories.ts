@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3';
 import { KakaoMap } from '@/components';
 import type { KakaoMapProps } from './KakaoMap.vue';
 import useKakao from '@/utils/useKakao';
-import KakaoMapMoveCenter from './KakaoMapMoveCenter.vue';
+import KakaoMapMoveCenter from '@/stories/KakaoMap/KakaoMapMoveCenter.vue';
 import { computed, ref } from 'vue';
 import { 서울특별시청_좌표 } from '@/constants/coordinate';
 

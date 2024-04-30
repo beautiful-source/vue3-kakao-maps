@@ -2,7 +2,7 @@
 import { isKakaoMapApiLoaded } from '@/utils/useKakao';
 import { ref, watch, computed, onMounted, provide } from 'vue';
 import { KakaoMapMarker } from '@/components';
-import type { KakaoMapMarkerListItem } from '@/components';
+import type { KakaoMapMarkerListItem } from '@/types';
 
 export type KakaoMapProps = {
   /**
