@@ -33,7 +33,7 @@ const mapMarkerList: Ref<kakao.maps.Marker[]> = ref([]);
 let customOverlayList: kakao.maps.CustomOverlay[] = [];
 
 /**
- * 폴리라인을 구성하는 좌표 리스트
+ * 폴리라인이 지나갈 경로
  */
 const linePath: ComputedRef<kakao.maps.LatLng[]> = computed(() => {
   return props.markerList.map((item) => {
@@ -42,7 +42,7 @@ const linePath: ComputedRef<kakao.maps.LatLng[]> = computed(() => {
 });
 
 /**
- * 마커 객체를 리스트에 추가함
+ * 마커 객체를 리스트에 추가하는 함수
  * @param marker
  */
 const addMapMarkerList = (marker: kakao.maps.Marker): void => {
@@ -50,7 +50,7 @@ const addMapMarkerList = (marker: kakao.maps.Marker): void => {
 };
 
 /**
- * 마커 객체를 리스트에서 삭제함
+ * 마커 객체를 리스트에서 삭제하는 함수
  * @param marker
  */
 const deleteMapMarker = (marker: kakao.maps.Marker): void => {
@@ -58,17 +58,29 @@ const deleteMapMarker = (marker: kakao.maps.Marker): void => {
   mapMarkerList.value.splice(targetIndex, 1);
 };
 
-const updateMarkerList = (marker: kakao.maps.Marker): void => {
+/**
+ * 드래그한 마커의 lat, lng을 변경하는 함수
+ * @param marker
+ */
+const updateMarkerLatLng = (marker: kakao.maps.Marker): void => {
+  const markerListProps = props.markerList;
   const targetIndex = mapMarkerList.value.indexOf(marker);
 
-  props.markerList[targetIndex].lat = marker.getPosition().getLat();
-  props.markerList[targetIndex].lng = marker.getPosition().getLng();
+  markerListProps[targetIndex].lat = marker.getPosition().getLat();
+  markerListProps[targetIndex].lng = marker.getPosition().getLng();
 };
 
+/**
+ * 커스텀오버레이의 content
+ * @param order
+ */
 const content = (order: string): string => {
   return `<div>${order}</div>`;
 };
 
+/**
+ * 커스텀오버레이 생성
+ */
 const initCustomOverlay = (): void => {
   props.markerList.forEach((item) => {
     const position = new kakao.maps.LatLng(item.lat, item.lng);
@@ -83,6 +95,9 @@ const initCustomOverlay = (): void => {
   });
 };
 
+/**
+ * 커스텀오버레이 삭제
+ */
 const resetCustomOverlay = (): void => {
   customOverlayList.forEach((item) => {
     item.setMap(null);
@@ -90,6 +105,9 @@ const resetCustomOverlay = (): void => {
   customOverlayList = [];
 };
 
+/**
+ * 상위 컴포넌트에서 map을 주입받으면 커스텀오버레이 생성
+ */
 watch(
   [() => isKakaoMapApiLoaded.value, () => mapRef, () => mapRef?.value],
   ([isKakaoMapApiLoaded, mapRef, newMap]) => {
@@ -100,12 +118,14 @@ watch(
   { immediate: true }
 );
 
+/**
+ * props의 markerList 변경 감지
+ */
 watch(
   () => props.markerList,
   () => {
     resetCustomOverlay();
     initCustomOverlay();
-    // MapMarkerList도 갱신되어야 함
   },
   { deep: true }
 );
@@ -122,7 +142,7 @@ watch(
       :lng="marker.lng"
       :draggable="true"
       @on-load-kakao-map-marker="addMapMarkerList"
-      @drag-end-kakao-map-marker="updateMarkerList"
+      @drag-end-kakao-map-marker="updateMarkerLatLng"
       @delete-kakao-map-marker="deleteMapMarker"
     >
     </KakaoMapMarker>
