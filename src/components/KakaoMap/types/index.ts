@@ -1,5 +1,5 @@
 import type { KakaoMapMarkerListItem } from '@/components';
-export type markerClusterInfo = {
+export type MarkerClusterInfo = {
   /**
    * 클러스터링 할 마커 배열
    */

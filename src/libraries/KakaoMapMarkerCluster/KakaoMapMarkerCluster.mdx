@@ -1,0 +1,42 @@
+import { Meta, Title, Primary, Controls, Stories, Subtitle, Source, Canvas } from '@storybook/blocks';
+import * as KakaoMapMarkerClusterStories from './KakaoMapMarkerCluster.stories.ts';
+
+<Meta of={KakaoMapMarkerClusterStories} />
+
+<Title />
+
+# <Subtitle />
+
+```js
+<script>
+    import { KakaoMap, type KakaoMapMarkerListItem } from '@/components';
+    import useKakao from '@/util/useKakao';
+    import markers from './markers.json';
+    useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '', ['clusterer']);
+
+    const list: KakaoMapMarkerListItem[] = [];
+    markers.positions.forEach((marker) => {
+    list?.push({ lat: marker.lat, lng: marker.lng });
+    });
+</script>
+
+<template>
+    <KakaoMap :lat="36.34" :lng="127.77" :level="14" :markerCluster="{ markers: list }" />
+</template>
+```
+
+<Canvas of={KakaoMapMarkerClusterStories.MarkerCluster} />
+
+## `props`
+
+컴포넌트는 다음과 같은 `props`를 전달받을 수 있습니다:
+
+<Controls />
+
+---
+
+## 컴포넌트를 활용한 기능
+
+컴포넌트를 활용해 다음과 같은 기능을 구현할 수 있습니다.
+
+<Stories />

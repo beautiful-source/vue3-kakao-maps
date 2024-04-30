@@ -3,7 +3,7 @@ import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { ref, watch, computed, onMounted, provide, toRaw } from 'vue';
 import { KakaoMapMarker } from '@/components';
 import type { KakaoMapMarkerListItem } from '@/components';
-import type { markerClusterInfo } from './types';
+import type { MarkerClusterInfo } from './types';
 
 export type KakaoMapProps = {
   /**
@@ -21,7 +21,7 @@ export type KakaoMapProps = {
   /**
    * 지도에 표시할 marker cluster의 속성 및 데이터 리스트
    */
-  markerCluster?: markerClusterInfo;
+  markerCluster?: MarkerClusterInfo;
   /**
    * 지도의 위도 값
    */
@@ -258,7 +258,7 @@ const initMap = (): void => {
  * Marker Cluster 기능
  */
 const clusterer = ref<kakao.maps.MarkerClusterer>();
-const initCluster = (info: markerClusterInfo): void => {
+const initCluster = (info: MarkerClusterInfo): void => {
   if (info.markers === undefined) {
     throw new Error('MarkerList가 없습니다.');
   }
