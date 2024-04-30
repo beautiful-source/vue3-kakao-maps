@@ -9,7 +9,7 @@ const meta = {
   title: 'Components/KakaoMapCustomOverlay',
   component: KakaoMapCustomOverlay,
   parameters: {
-    componentSubtitle: '카카오 기본 KakaoMapInfoWindow 컴포넌트입니다.',
+    componentSubtitle: '기본 커스텀 오버레이 컴포넌트입니다.',
     slots: {
       default: {
         description: 'content는 slot으로도 전달 가능합니다'
@@ -67,22 +67,7 @@ export const ContentDefault: Story = {
     components: { KakaoMap, KakaoMapCustomOverlay },
     tags: ['autodocs'],
     setup() {
-      const content = `
-      <div style="padding: 10px; background-color: white; border: 1px solid #ccc; border-radius: 5px; ">
-        <div style="font-weight: bold; margin-bottom: 5px;">
-          카카오 스페이스닷원
-        </div>
-        <div style="display: flex;">
-          <div style="margin-right: 10px;">
-            <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png" width="73" height="70"/>
-          </div>
-          <div style="flex-grow: 1;">
-            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">제주특별자치도 제주시 첨단로 242</div>
-            <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">(우) 63309 (지번) 영평동 2181</div>
-            <div><a href="https://www.kakaocorp.com/main" target="_blank" style="color: blue;">홈페이지</a></div>
-          </div>
-        </div>
-      </div>`;
+      const content = `<div style='padding: 10px; background-color: white; border: 1px solid #ccc; border-radius: 5px;'><div style='font-weight: bold; margin-bottom: 5px;'>카카오 스페이스닷원</div><div style='display: flex;'><div style='margin-right: 10px;'><img src='https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/thumnail.png' width='73' height='70'/></div><div style='flex-grow: 1;'><div style='overflow: hidden; text-overflow: ellipsis; white-space: nowrap;'>제주특별자치도 제주시 첨단로 242</div><div style='overflow: hidden; text-overflow: ellipsis; white-space: nowrap;'>(우) 63309 (지번) 영평동 2181</div><div><a href='https://www.kakaocorp.com/main' target='_blank' style='color: blue;'>홈페이지</a></div></div></div></div>`;
       useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
       return { args, KakaoMapCustomOverlay, content };
     },

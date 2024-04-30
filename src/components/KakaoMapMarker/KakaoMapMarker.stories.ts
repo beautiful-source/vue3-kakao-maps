@@ -1,4 +1,4 @@
-import { KakaoMap, KakaoMapMarker, type KakaoMapMarkerImage } from '@/components';
+import { KakaoMap, KakaoMapMarker, type KakaoMapMarkerImage, type KakaoMapMarkerInfoWindow } from '@/components';
 import { 서울특별시청_좌표, DEFAULT_MARKER_IMAGE } from '@/constants/coordinate';
 import useKakao from '@/util/useKakao';
 import type { Meta, StoryObj } from '@storybook/vue3';
@@ -74,12 +74,25 @@ export const MarkerImage: Story = {
 };
 
 export const MarkerWithInfoWindow: Story = {
-  render: renderKakaoMapMarker,
+  render: (args: any) => ({
+    components: { KakaoMapMarker, KakaoMap },
+    setup() {
+      useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
+      const infoWindow: KakaoMapMarkerInfoWindow = {
+        content: 'hi',
+        visible: true
+      };
+      return { args, infoWindow };
+    },
+    template: `
+      <KakaoMap :lat="args.lat" :lng="args.lng" :draggable="true">
+        <KakaoMapMarker :lat="args.lat" :lng="args.lng" :image="args.image" :infoWindow="infoWindow"></KakaoMapMarker>
+      </KakaoMap>
+    `
+  }),
   name: '인포윈도우가 있는 마커1',
-
   args: {
-    ...서울특별시청_좌표,
-    infoWindow: 'props로 추가'
+    ...서울특별시청_좌표
   }
 };
 
@@ -91,7 +104,7 @@ const renderKakaoMapMarkerSlot: any = (args: KakaoMapMarkerProps) => ({
   },
   template: `
     <KakaoMap :lat="args.lat" :lng="args.lng" :draggable="true" >
-      <KakaoMapMarker :lat="args.lat" :lng="args.lng" :infoWindow="args.infoWindow">
+      <KakaoMapMarker :lat="args.lat" :lng="args.lng">
         <template v-slot:infoWindow>
           <div>v-slot으로 추가</div>
         </template>

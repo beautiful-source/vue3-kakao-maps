@@ -15,9 +15,13 @@ export type KakaoMapMarkerListItem = {
    */
   lng: number;
   /**
-   * 마커에 추가할 InfoWindow content
+   * 마커에 추가할 인포윈도우 content
    */
-  infoWindow?: string;
+  infoWindow?: KakaoMapMarkerInfoWindow;
+  /**
+   * 마커 클릭 전 인포윈도우 표시 여부(기본값: true)
+   */
+  visible?: boolean;
 };
 
 export type KakaoMapMarkerImage = {
@@ -25,4 +29,9 @@ export type KakaoMapMarkerImage = {
   imageWidth?: number;
   imageHeight?: number;
   imageOption: kakao.maps.MarkerImageOptions;
+};
+
+export type KakaoMapMarkerInfoWindow = {
+  content: string | undefined;
+  visible?: boolean | undefined;
 };

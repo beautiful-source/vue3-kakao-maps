@@ -37,6 +37,11 @@ export type KakaoMapCustomOverlayProps = {
    * true 로 설정하면 컨텐츠 영역을 클릭했을 경우 지도 이벤트를 막아준다, 최초 생성시에만 적용됩니다.
 ,   */
   clickable?: boolean;
+
+  /**
+   * 사용자가 좌표를 클릭하기 전에 커스텀 오버레이를 표시할 것인지 여부 (기본값: true)
+   */
+  visible?: boolean;
 };
 
 const emits = defineEmits(['onLoadKakaoMapCustomOverlay']);
@@ -44,7 +49,8 @@ const emits = defineEmits(['onLoadKakaoMapCustomOverlay']);
 const props = withDefaults(defineProps<KakaoMapCustomOverlayProps>(), {
   yAnchor: 0.5,
   xAnchor: 0.5,
-  clickable: false
+  clickable: false,
+  visible: true
 });
 /**
  * kakao api로 생성한 KakaoMapCustomOverlay 객체
@@ -81,6 +87,7 @@ const initKakaoMapCustomOverlay = (map: kakao.maps.Map): void => {
     clickable: props.clickable
   });
 
+  if (!props.visible) return;
   customOverlay.value.setMap(map);
   emits('onLoadKakaoMapCustomOverlay', customOverlay.value);
 };
@@ -100,6 +107,7 @@ onBeforeUnmount(() => {
 watch(
   [() => isKakaoMapApiLoaded.value, () => mapRef?.value, () => isKakaoMapApiLoaded, () => mapRef],
   ([isKakaoMapApiLoaded, mapRef]) => {
+    if (!props.visible) return;
     if (isKakaoMapApiLoaded && mapRef !== undefined && mapRef !== null) {
       initKakaoMapCustomOverlay(mapRef);
     }

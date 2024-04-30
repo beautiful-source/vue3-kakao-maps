@@ -253,7 +253,7 @@ const initMap = (): void => {
         :map="map"
         :lat="marker.lat"
         :lng="marker.lng"
-        :info-window="marker.infoWindow"
+        :info-window="marker?.infoWindow"
       />
     </div>
     <slot></slot>

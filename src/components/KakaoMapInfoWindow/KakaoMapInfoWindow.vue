@@ -49,13 +49,19 @@ export type KakaoMapInfoWindowProps = {
    * 기본값은 500입니다.
    */
   range?: number;
+
+  /**
+   * 사용자가 좌표를 클릭하기 전에 인포윈도우를 표시할 것인지 여부 (기본값: true)
+   */
+  visible?: boolean;
 };
 
 const emits = defineEmits(['onLoadKakaoMapInfoWindow']);
 
 const props = withDefaults(defineProps<KakaoMapInfoWindowProps>(), {
   removable: false,
-  range: 500
+  range: 500,
+  visible: true
 });
 
 /**
@@ -94,6 +100,7 @@ const initKakaoMapInfoWindow = (map: kakao.maps.Map): void => {
     range: props.range
   });
 
+  if (!props.visible) return;
   emits('onLoadKakaoMapInfoWindow', infoWindow.value);
   props.marker !== undefined ? infoWindow?.value?.open(map, props.marker) : infoWindow?.value?.open(map);
 };
@@ -112,6 +119,7 @@ onBeforeUnmount(() => {
 watch(
   [() => isKakaoMapApiLoaded.value, () => mapRef?.value, () => isKakaoMapApiLoaded, () => mapRef],
   ([isKakaoMapApiLoaded, mapRef]) => {
+    if (!props.visible) return;
     if (isKakaoMapApiLoaded && mapRef !== undefined && mapRef !== null) {
       initKakaoMapInfoWindow(mapRef);
     }
@@ -125,7 +133,7 @@ watch(
 watch(
   () => props.marker,
   (newMarker) => {
-    if (mapRef?.value === undefined) return;
+    if (!props.visible || mapRef?.value === undefined) return;
     infoWindow.value != null && infoWindow.value?.close();
     newMarker !== undefined ? infoWindow?.value?.open(mapRef?.value, newMarker) : infoWindow?.value?.open(mapRef?.value);
   },
@@ -189,6 +197,20 @@ watch(
   () => props.range,
   (newRange) => {
     infoWindow.value?.setRange(newRange ?? 500);
+  }
+);
+
+/**
+ * visible 변경 감지
+ */
+watch(
+  () => props.visible,
+  (newVisible) => {
+    if (!newVisible) {
+      infoWindow?.value !== null && infoWindow.value !== undefined && infoWindow.value.close();
+    } else if (isKakaoMapApiLoaded?.value && mapRef?.value !== undefined && mapRef?.value !== null) {
+      initKakaoMapInfoWindow(mapRef.value);
+    }
   }
 );
 </script>

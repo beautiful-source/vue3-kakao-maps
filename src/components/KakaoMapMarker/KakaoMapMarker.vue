@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
 import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
-import KakaoMapInfoWindow from '../KakaoMapInfoWindow/KakaoMapInfoWindow.vue';
-import type { KakaoMapMarkerImage } from './types';
+import { KakaoMapInfoWindow } from '@/components';
+import type { KakaoMapMarkerImage, KakaoMapMarkerInfoWindow } from './types';
 import { DEFAULT_MARKER_IMAGE, DEFAULT_MARKER_IMAGE_HEIGHT, DEFAULT_MARKER_IMAGE_WIDTH } from '@/constants/coordinate';
 
 /**
@@ -13,14 +13,16 @@ export type KakaoMapMarkerProps = {
    * 마커의 위도 값
    */
   lat: number;
+
   /**
    * 마커의 경도 값
    */
   lng: number;
+
   /**
    * 마커에 추가할 InfoWindow content
    */
-  infoWindow?: string;
+  infoWindow?: KakaoMapMarkerInfoWindow;
 
   /**
    * 마커 이미지,
@@ -62,6 +64,11 @@ export type KakaoMapMarkerProps = {
    * 로드뷰 상에서 마커의 가시반경(m 단위), 두 지점 사이의 거리가 지정한 값보다 멀어지면 마커는 로드뷰에서 보이지 않게 됨
    */
   range?: number;
+
+  /**
+   * 클릭 이벤트
+   */
+  onClickKakaoMapMarker?: any;
 };
 
 const emits = defineEmits(['onLoadKakaoMapMarker']);
@@ -116,6 +123,10 @@ const initMarker = (map: kakao.maps.Map): void => {
   changeMarkerImage(props.image);
   emits('onLoadKakaoMapMarker', marker.value);
   marker.value.setMap(map);
+  kakao.maps.event.addListener(marker, 'click', function () {
+    // 마커 위에 인포윈도우를 표시합니다
+    props.onClickKakaoMapMarker();
+  });
 };
 
 /**
@@ -158,16 +169,21 @@ watch([() => props.image], () => {
 <template>
   <div>
     <KakaoMapInfoWindow
-      v-if="props.infoWindow && props.infoWindow.length > 0"
+      v-if="$slots.infoWindow"
       :marker="marker"
       :lat="props.lat"
       :lng="props.lng"
-      :content="props.infoWindow"
+      :visible="props?.infoWindow?.visible"
     >
-    </KakaoMapInfoWindow>
-
-    <KakaoMapInfoWindow v-if="$slots.infoWindow" :marker="marker" :lat="props.lat" :lng="props.lng">
       <slot name="infoWindow"> </slot>
     </KakaoMapInfoWindow>
+    <KakaoMapInfoWindow
+      v-if="!$slots.infoWindow && props.infoWindow?.content && props.infoWindow?.content.length > 0"
+      :marker="marker"
+      :lat="props.lat"
+      :lng="props.lng"
+      :content="props.infoWindow?.content"
+      :visible="props.infoWindow?.visible"
+    />
   </div>
 </template>
