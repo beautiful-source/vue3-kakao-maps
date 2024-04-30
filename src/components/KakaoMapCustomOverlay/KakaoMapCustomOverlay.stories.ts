@@ -168,7 +168,7 @@ export const CloseCustomOverlay: Story = {
   }
 };
 
-export const inVisible: Story = {
+export const InVisible: Story = {
   name: '보이지 않게 커스텀오버레이 생성하기',
   render: (args: KakaoMapCustomOverlayProps) => ({
     components: { KakaoMap, KakaoMapCustomOverlay, KakaoMapMarker },

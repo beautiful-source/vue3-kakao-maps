@@ -132,7 +132,7 @@ export const WithMarker: Story = {
   }
 };
 
-export const inVisible: Story = {
+export const InVisible: Story = {
   name: '보이지 않게 인포윈도우 생성하기',
   render: (args: KakaoMapInfoWindowProps) => ({
     components: { KakaoMap, KakaoMapInfoWindow, KakaoMapMarker },
