@@ -32,6 +32,6 @@ export type KakaoMapMarkerImage = {
 };
 
 export type KakaoMapMarkerInfoWindow = {
-  content: string | undefined;
-  visible?: boolean | undefined;
+  content: string;
+  visible: boolean;
 };

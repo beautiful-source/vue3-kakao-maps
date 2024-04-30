@@ -54,7 +54,7 @@ export const BasicCustomOverlay: Story = {
     <KakaoMap
       :lat='37.566826'
       :lng='126.9786567'>
-      <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" >` +
+      <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" :visible="args.visible">` +
       customOverlayContent +
       `</KakaoMapCustomOverlay>
     </KakaoMap>
@@ -77,7 +77,7 @@ export const ContentDefault: Story = {
     },
     template: `
           <KakaoMap :lat="37.566826" :lng="126.9786567">
-            <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" :content="content">
+            <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" :content="content" :visible="args.visible">
             </KakaoMapCustomOverlay>
           </KakaoMap>
         `
@@ -103,7 +103,7 @@ export const WithMarker: Story = {
       :lng='126.9786567'
     >
     <KakaoMapMarker :lat="37.566826" :lng="126.9786567" />
-      <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" :yAnchor="args.yAnchor">` +
+    <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" :yAnchor="args.yAnchor" :visible="args.visible">` +
       customOverlayContent +
       `</KakaoMapCustomOverlay>
     </KakaoMap>
@@ -141,7 +141,7 @@ export const CloseCustomOverlay: Story = {
       :lng='126.9786567'
     >
       <KakaoMapMarker :lat="37.566826" :lng="126.9786567" />
-      <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" :yAnchor="args.yAnchor" @onLoadKakaoMapCustomOverlay="onLoadKakaoMapCustomOverlay">
+      <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" :yAnchor="args.yAnchor" @onLoadKakaoMapCustomOverlay="onLoadKakaoMapCustomOverlay" :visible="args.visible">
         <div style="padding: 10px; background-color: white; border: 1px solid #ccc; border-radius: 5px; ">
           <div style="font-weight: bold; margin-bottom: 5px;">
             카카오 스페이스닷원
@@ -165,5 +165,30 @@ export const CloseCustomOverlay: Story = {
   args: {
     ...서울특별시청_좌표,
     yAnchor: 1.4
+  }
+};
+
+export const inVisible: Story = {
+  name: '보이지 않게 커스텀오버레이 생성하기',
+  render: (args: KakaoMapCustomOverlayProps) => ({
+    components: { KakaoMap, KakaoMapCustomOverlay, KakaoMapMarker },
+    tags: ['autodocs'],
+    setup() {
+      useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
+      return { args };
+    },
+    template:
+      `<KakaoMap :lat="37.566826" :lng="126.9786567" :draggable="true">
+        <KakaoMapMarker :lat="37.566826" :lng="126.9786567" />
+        <KakaoMapCustomOverlay :lat="args.lat" :lng="args.lng" :yAnchor="args.yAnchor" :visible="args.visible">` +
+      customOverlayContent +
+      `</KakaoMapCustomOverlay>
+    </KakaoMap>
+    `
+  }),
+  args: {
+    ...서울특별시청_좌표,
+    yAnchor: 1.4,
+    visible: false
   }
 };

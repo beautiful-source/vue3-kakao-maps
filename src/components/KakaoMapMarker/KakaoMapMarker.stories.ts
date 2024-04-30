@@ -1,9 +1,16 @@
-import { KakaoMap, KakaoMapMarker, type KakaoMapMarkerImage, type KakaoMapMarkerInfoWindow } from '@/components';
+import {
+  KakaoMap,
+  KakaoMapMarker,
+  type KakaoMapMarkerImage,
+  type KakaoMapMarkerInfoWindow,
+  type KakaoMapMarkerListItem
+} from '@/components';
 import { 서울특별시청_좌표 } from '@/constants/coordinate';
 import { DEFAULT_MARKER_IMAGE } from '@/constants/markerImage';
 import useKakao from '@/util/useKakao';
 import type { Meta, StoryObj } from '@storybook/vue3';
 import type { KakaoMapMarkerProps } from './KakaoMapMarker.vue';
+import { ref } from 'vue';
 
 const meta = {
   title: 'Components/KakaoMapMarker',
@@ -118,6 +125,87 @@ export const MarkerWithInfoWindowSlot: Story = {
   render: renderKakaoMapMarkerSlot,
   name: '인포윈도우가 있는 마커2',
 
+  args: {
+    ...서울특별시청_좌표
+  }
+};
+
+export const MarkerWithInfoWindowEvent: Story = {
+  name: '마커에 클릭 이벤트 등록하기1',
+  render: (args: any) => ({
+    components: { KakaoMapMarker, KakaoMap },
+    setup() {
+      useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
+      const visibleRef = ref<boolean>(true);
+
+      const onClickKakaoMapMarker = (): void => {
+        visibleRef.value = !visibleRef.value;
+      };
+      return { args, onClickKakaoMapMarker, visibleRef };
+    },
+    template: `
+    <KakaoMap :lat="37.566826" :lng="126.9786567">
+    <KakaoMapMarker
+      :lat="37.566826"
+      :lng="126.9786567"
+      :infoWindow="{ content: 'Hello World', visible: visibleRef }"
+      @onClickKakaoMapMarker="onClickKakaoMapMarker"
+    />
+  </KakaoMap>
+    `
+  }),
+  args: {
+    ...서울특별시청_좌표
+  }
+};
+
+export const MarkerWithInfoWindowListEvent: Story = {
+  name: '마커에 클릭 이벤트 등록하기2',
+  render: (args: any) => ({
+    components: { KakaoMapMarker, KakaoMap },
+    setup() {
+      useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
+      const list = ref<KakaoMapMarkerListItem[]>([
+        {
+          lat: 37.56562,
+          lng: 126.978,
+          infoWindow: {
+            content: '서울',
+            visible: false
+          }
+        },
+        {
+          lat: 37.5682,
+          lng: 126.9766,
+          infoWindow: {
+            content: '서울2',
+            visible: true
+          }
+        },
+        { lat: 37.5678, lng: 126.97985 },
+        { lat: 37.566826, lng: 126.9786567 }
+      ]);
+
+      const onClickKakaoMapMarker = (markerItem: KakaoMapMarkerListItem): void => {
+        if (markerItem.infoWindow?.visible !== null && markerItem.infoWindow?.visible !== undefined) {
+          markerItem.infoWindow.visible = !markerItem.infoWindow.visible;
+        }
+      };
+      return { args, onClickKakaoMapMarker, list };
+    },
+    template: `
+    <KakaoMap :lat="37.566826" :lng="126.9786567">
+      <KakaoMapMarker
+        v-for="(marker, index) in list"
+        :key="marker.key === undefined ? index : marker.key"
+        :lat="marker.lat"
+        :lng="marker.lng"
+        :infoWindow="{ content: marker.infoWindow?.content, visible: marker.infoWindow?.visible }"
+        @on-click-kakao-map-marker="onClickKakaoMapMarker(marker)"
+      />
+    </KakaoMap>
+    `
+  }),
   args: {
     ...서울특별시청_좌표
   }
