@@ -5,6 +5,7 @@ import useKakao from '@/util/useKakao';
 import KakaoMapMoveCenter from './KakaoMapMoveCenter.vue';
 import { computed, ref } from 'vue';
 import { 서울특별시청_좌표 } from '@/constants/coordinate';
+import { DEFAULT_MAP_SIZE } from '@/constants/mapSize';
 
 const meta = {
   title: 'Components/KakaoMap',
@@ -49,48 +50,40 @@ const renderKakaoMap: any = (args: KakaoMapProps) => ({
   `
 });
 
-export const Default: Story = {
+export const BasicKakaoMap: Story = {
   name: '지도 생성하기',
   render: renderKakaoMap,
   args: {
-    lat: 37.566826,
-    lng: 126.9786567,
-    width: '40rem',
-    height: '50rem',
+    ...서울특별시청_좌표,
+    ...DEFAULT_MAP_SIZE,
     draggable: true,
     level: 3,
     scrollwheel: true,
     tileAnimation: true,
-    keyboardShortcuts: false
+    keyboardShortcuts: false,
+    markerList: [],
+    mapTypeId: 1
   }
 };
 
 const markerList = [
   {
-    lat: 33.450705,
-    lng: 126.570667
+    lat: 37.56562,
+    lng: 126.978
   },
   {
-    lat: 33.450936,
-    lng: 126.569477
+    lat: 37.5682,
+    lng: 126.9766
   },
-  { lat: 33.450879, lng: 126.56994 },
-  { lat: 33.451393, lng: 126.570738 }
+  { lat: 37.5678, lng: 126.97985 },
+  { lat: 37.566826, lng: 126.9786567 }
 ];
 
 export const MapWithMarkerList: Story = {
   name: '여러개 마커 표시하기',
   render: renderKakaoMap,
   args: {
-    lat: 33.450705,
-    lng: 126.570667,
-    width: '20rem',
-    height: '20rem',
-    draggable: true,
-    level: 3,
-    scrollwheel: true,
-    tileAnimation: true,
-    keyboardShortcuts: false,
+    ...BasicKakaoMap.args,
     markerList
   }
 };
