@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/util/useKakao';
-import type { KakaoMapMarkerListItem } from '../MapMarker/types';
 import { inject, watch, type Ref } from 'vue';
+import type { KakaoMapMarkerListItem } from '../KakaoMapMarker/types';
 
 export type KakaoMapPolylineProps = {
   pathList: KakaoMapMarkerListItem[];
