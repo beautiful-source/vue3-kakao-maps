@@ -18,8 +18,7 @@ module.exports = {
   plugins: ['vue'],
   rules: {
     '@typescript-eslint/consistent-type-definitions': 'off',
-    'vue/no-undef-components': 'error',
-    'vue/no-mutating-props': 'off'
+    'vue/no-undef-components': 'error'
   },
   ignorePatterns: ['dist/**/*']
 };
