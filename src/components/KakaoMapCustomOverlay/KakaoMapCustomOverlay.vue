@@ -141,6 +141,20 @@ watch(
     customOverlay.value?.setZIndex(newZIndex ?? 0);
   }
 );
+
+/**
+ * visible 변경 감지
+ */
+watch(
+  () => props.visible,
+  (newVisible) => {
+    if (!newVisible) {
+      customOverlay?.value !== null && customOverlay.value !== undefined && customOverlay.value?.setMap(null);
+    } else if (isKakaoMapApiLoaded?.value && mapRef?.value !== undefined && mapRef?.value !== null) {
+      initKakaoMapCustomOverlay(mapRef.value);
+    }
+  }
+);
 </script>
 
 <template>

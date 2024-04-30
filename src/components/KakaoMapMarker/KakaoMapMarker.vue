@@ -64,14 +64,12 @@ export type KakaoMapMarkerProps = {
    * 로드뷰 상에서 마커의 가시반경(m 단위), 두 지점 사이의 거리가 지정한 값보다 멀어지면 마커는 로드뷰에서 보이지 않게 됨
    */
   range?: number;
-
-  /**
-   * 클릭 이벤트
-   */
-  onClickKakaoMapMarker?: any;
 };
 
-const emits = defineEmits(['onLoadKakaoMapMarker']);
+/**
+ * marker 객체에 적용되는 이벤트 함수
+ */
+const emits = defineEmits(['onLoadKakaoMapMarker', 'onClickKakaoMapMarker']);
 
 const props = defineProps<KakaoMapMarkerProps>();
 /**
@@ -123,9 +121,8 @@ const initMarker = (map: kakao.maps.Map): void => {
   changeMarkerImage(props.image);
   emits('onLoadKakaoMapMarker', marker.value);
   marker.value.setMap(map);
-  kakao.maps.event.addListener(marker, 'click', function () {
-    // 마커 위에 인포윈도우를 표시합니다
-    props.onClickKakaoMapMarker();
+  kakao.maps.event.addListener(marker.value, 'click', () => {
+    emits('onClickKakaoMapMarker');
   });
 };
 
