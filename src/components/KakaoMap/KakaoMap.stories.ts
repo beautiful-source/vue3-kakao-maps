@@ -2,8 +2,10 @@ import type { Meta, StoryObj } from '@storybook/vue3';
 import { KakaoMap } from '@/components';
 import type { KakaoMapProps } from './KakaoMap.vue';
 import useKakao from '@/util/useKakao';
+import KakaoMapMoveCenter from './KakaoMapMoveCenter.vue';
 import { computed, ref } from 'vue';
 import { 서울특별시청_좌표 } from '@/constants/coordinate';
+import { DEFAULT_MAP_SIZE } from '@/constants/mapSize';
 
 const meta = {
   title: 'Components/KakaoMap',
@@ -48,80 +50,84 @@ const renderKakaoMap: any = (args: KakaoMapProps) => ({
   `
 });
 
-export const Default: Story = {
+export const BasicKakaoMap: Story = {
   name: '지도 생성하기',
   render: renderKakaoMap,
   args: {
-    lat: 37.566826,
-    lng: 126.9786567,
-    width: '40rem',
-    height: '50rem',
+    ...서울특별시청_좌표,
+    ...DEFAULT_MAP_SIZE,
     draggable: true,
     level: 3,
     scrollwheel: true,
     tileAnimation: true,
-    keyboardShortcuts: false
+    keyboardShortcuts: false,
+    markerList: [],
+    mapTypeId: 1
   }
 };
 
 const markerList = [
   {
-    lat: 33.450705,
-    lng: 126.570667
+    lat: 37.56562,
+    lng: 126.978
   },
   {
-    lat: 33.450936,
-    lng: 126.569477
+    lat: 37.5682,
+    lng: 126.9766
   },
-  { lat: 33.450879, lng: 126.56994 },
-  { lat: 33.451393, lng: 126.570738 }
+  { lat: 37.5678, lng: 126.97985 },
+  { lat: 37.566826, lng: 126.9786567 }
 ];
 
 export const MapWithMarkerList: Story = {
   name: '여러개 마커 표시하기',
   render: renderKakaoMap,
   args: {
-    lat: 33.450705,
-    lng: 126.570667,
-    width: '20rem',
-    height: '20rem',
-    draggable: true,
-    level: 3,
-    scrollwheel: true,
-    tileAnimation: true,
-    keyboardShortcuts: false,
+    ...BasicKakaoMap.args,
     markerList
   }
 };
 
-const renderMoveCenter: any = (args: KakaoMapProps) => ({
-  components: { KakaoMap },
-  setup() {
-    useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
-    const curLat = ref(33.450701);
-    const curLng = ref(126.570667);
-
-    const move = (newLat: number, newLng: number): void => {
-      curLat.value = newLat;
-      curLng.value = newLng;
-    };
-
-    return {
-      curLat,
-      curLng,
-      move
-    };
-  },
-  template: `
-      <KakaoMap :lat="curLat" :lng="curLng"></KakaoMap>
-      <button @click="move(33.452613, 126.570888)">moveTo1</button>
-      <button @click="move(33.45058, 126.574942)">moveTo2</button>
-    `
-});
-
 export const MoveCenter: Story = {
   name: '지도 이동시키기',
-  render: renderMoveCenter
+  render: (args: any) => ({
+    components: { KakaoMapMoveCenter },
+    setup() {
+      return { args };
+    },
+    template: '<KakaoMapMoveCenter />'
+  }),
+  parameters: {
+    docs: {
+      source: {
+        type: 'dynamic',
+        code: `
+        <script setup lang="ts">
+          import { KakaoMap } from '@/components';
+          import useKakao from '@/util/useKakao';
+          import { ref } from 'vue';
+
+          useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
+
+          const curLat = ref(33.450701);
+          const curLng = ref(126.570667);
+
+          const move = (newLat: number, newLng: number): void => {
+            curLat.value = newLat;
+            curLng.value = newLng;
+          };
+          </script>
+
+          <template>
+            <KakaoMap :lat="curLat" :lng="curLng"></KakaoMap>
+            <button @click="move(33.452613, 126.570888)">moveTo1</button>
+            <button @click="move(33.45058, 126.574942)">moveTo2</button>
+          </template>
+        `
+      },
+      showSource: true
+    }
+  }
 };
 
 const renderGetMapInfo: any = (args: KakaoMapProps) => ({
