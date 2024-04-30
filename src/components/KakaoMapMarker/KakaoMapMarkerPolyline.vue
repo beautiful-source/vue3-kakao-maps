@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { isKakaoMapApiLoaded } from '@/util/useKakao';
-import { computed, inject, ref, watch, type ComputedRef, type Ref } from 'vue';
+import { computed, inject, ref, type ComputedRef, type Ref } from 'vue';
 import type { KakaoMapMarkerListItem } from './types';
 import KakaoMapMarker from './KakaoMapMarker.vue';
 import KakaoMapPolyline from '../KakaoMapPolyline/KakaoMapPolyline.vue';
+import KakaoMapCustomOverlay from '../KakaoMapCustomOverlay/KakaoMapCustomOverlay.vue';
 
 /**
  * KakaoMapMarkerPolyline 컴포넌트 생성을 위한 타입
@@ -26,11 +26,6 @@ const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
  * 마커 객체 리스트 (드래그된 마커 추적)
  */
 const mapMarkerList: Ref<kakao.maps.Marker[]> = ref([]);
-
-/**
- * 마커 순서를 표시할 커스텀오버레이 리스트
- */
-let customOverlayList: kakao.maps.CustomOverlay[] = [];
 
 /**
  * 폴리라인이 지나갈 경로
@@ -69,66 +64,6 @@ const updateMarkerLatLng = (marker: kakao.maps.Marker): void => {
   markerListProps[targetIndex].lat = marker.getPosition().getLat();
   markerListProps[targetIndex].lng = marker.getPosition().getLng();
 };
-
-/**
- * 커스텀오버레이의 content
- * @param order
- */
-const content = (order: string): string => {
-  return `<div>${order}</div>`;
-};
-
-/**
- * 커스텀오버레이 생성
- */
-const initCustomOverlay = (): void => {
-  props.markerList.forEach((item) => {
-    const position = new kakao.maps.LatLng(item.lat, item.lng);
-
-    const customOverlay = new kakao.maps.CustomOverlay({
-      map: mapRef?.value,
-      position,
-      content: content(customOverlayList.length + ''),
-      yAnchor: 0
-    });
-    customOverlayList.push(customOverlay);
-  });
-};
-
-/**
- * 커스텀오버레이 삭제
- */
-const resetCustomOverlay = (): void => {
-  customOverlayList.forEach((item) => {
-    item.setMap(null);
-  });
-  customOverlayList = [];
-};
-
-/**
- * 상위 컴포넌트에서 map을 주입받으면 커스텀오버레이 생성
- */
-watch(
-  [() => isKakaoMapApiLoaded.value, () => mapRef, () => mapRef?.value],
-  ([isKakaoMapApiLoaded, mapRef, newMap]) => {
-    if (isKakaoMapApiLoaded && mapRef !== undefined && newMap !== undefined) {
-      initCustomOverlay();
-    }
-  },
-  { immediate: true }
-);
-
-/**
- * props의 markerList 변경 감지
- */
-watch(
-  () => props.markerList,
-  () => {
-    resetCustomOverlay();
-    initCustomOverlay();
-  },
-  { deep: true }
-);
 </script>
 
 <template>
@@ -147,7 +82,14 @@ watch(
     >
     </KakaoMapMarker>
     <KakaoMapPolyline :linePath="linePath"></KakaoMapPolyline>
-
+    <KakaoMapCustomOverlay
+      v-for="(marker, index) in props.markerList"
+      :key="index"
+      :lat="marker.lat"
+      :lng="marker.lng"
+      :content="marker.key === undefined ? index + 1 + '' : marker.key + ''"
+      :y-anchor="0"
+    ></KakaoMapCustomOverlay>
     <slot></slot>
   </div>
 </template>
