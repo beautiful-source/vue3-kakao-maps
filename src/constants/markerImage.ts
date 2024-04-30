@@ -1,4 +1,4 @@
-import type { KakaoMapMarkerImage } from '@/components';
+import type { KakaoMapMarkerImage } from '@/types';
 
 export const DEFAULT_MARKER_IMAGE_WIDTH: number = 30;
 export const DEFAULT_MARKER_IMAGE_HEIGHT: number = 30;

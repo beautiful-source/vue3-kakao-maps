@@ -3,7 +3,7 @@ import { KakaoMap, KakaoMapInfoWindow, KakaoMapMarker } from '@/components';
 import type { KakaoMapInfoWindowProps } from './KakaoMapInfoWindow.vue';
 import { ref } from 'vue';
 import { 서울특별시청_좌표 } from '@/constants/coordinate';
-import useKakao from '@/util/useKakao';
+import useKakao from '@/utils/useKakao';
 
 const meta = {
   title: 'Components/KakaoMapInfoWindow',
