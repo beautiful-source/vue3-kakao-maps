@@ -37,7 +37,7 @@ const renderKakaoMapMarker: any = (args: KakaoMapMarkerProps) => ({
   },
   template: `
     <KakaoMap :lat="args.lat" :lng="args.lng" :draggable="true" >
-      <KakaoMapMarker :lat="args.lat" :lng="args.lng" :infoWindow="args.infoWindow" :image="args.image"></KakaoMapMarker>
+      <KakaoMapMarker :lat="args.lat" :lng="args.lng" :infoWindow="args.infoWindow" :image="args.image"/>
     </KakaoMap>
   `
 });
@@ -71,7 +71,7 @@ export const MarkerImage: Story = {
     },
     template: `
       <KakaoMap :lat="args.lat" :lng="args.lng" :draggable="true">
-        <KakaoMapMarker :lat="args.lat" :lng="args.lng" :image="args.image"></KakaoMapMarker>
+        <KakaoMapMarker :lat="args.lat" :lng="args.lng" :image="args.image"/>
       </KakaoMap>
     `
   }),
@@ -94,7 +94,7 @@ export const MarkerWithInfoWindow: Story = {
     },
     template: `
       <KakaoMap :lat="args.lat" :lng="args.lng" :draggable="true">
-        <KakaoMapMarker :lat="args.lat" :lng="args.lng" :image="args.image" :infoWindow="infoWindow"></KakaoMapMarker>
+        <KakaoMapMarker :lat="args.lat" :lng="args.lng" :image="args.image" :infoWindow="infoWindow"/>
       </KakaoMap>
     `
   }),
@@ -146,12 +146,12 @@ export const MarkerWithInfoWindowEvent: Story = {
     template: `
     <KakaoMap :lat="37.566826" :lng="126.9786567">
     <KakaoMapMarker
-      :lat="37.566826"
-      :lng="126.9786567"
+      :lat="args.lat"
+      :lng="args.lng"
       :infoWindow="{ content: 'Hello World', visible: visibleRef }"
       @onClickKakaoMapMarker="onClickKakaoMapMarker"
     />
-  </KakaoMap>
+    </KakaoMap>
     `
   }),
   args: {
@@ -200,7 +200,10 @@ export const MarkerWithInfoWindowListEvent: Story = {
         :key="marker.key === undefined ? index : marker.key"
         :lat="marker.lat"
         :lng="marker.lng"
-        :infoWindow="{ content: marker.infoWindow?.content, visible: marker.infoWindow?.visible }"
+        :infoWindow="{
+          content: marker.infoWindow?.content || '',
+          visible: marker.infoWindow?.visible ?? true,
+        }"
         @on-click-kakao-map-marker="onClickKakaoMapMarker(marker)"
       />
     </KakaoMap>
