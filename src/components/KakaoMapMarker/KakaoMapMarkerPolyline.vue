@@ -15,8 +15,6 @@ type KakaoMapMarkerPolylineProps = {
   markerList: KakaoMapMarkerListItem[];
 };
 
-// const emits = defineEmits(['dragEndKakaoMapMarker']);
-
 const props = defineProps<KakaoMapMarkerPolylineProps>();
 
 /**
@@ -29,30 +27,42 @@ const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
  */
 const mapMarkerList: Ref<kakao.maps.Marker[]> = ref([]);
 
+/**
+ * 마커 순서를 표시할 커스텀오버레이 리스트
+ */
 let customOverlayList: kakao.maps.CustomOverlay[] = [];
 
+/**
+ * 폴리라인을 구성하는 좌표 리스트
+ */
 const linePath: ComputedRef<kakao.maps.LatLng[]> = computed(() => {
   return props.markerList.map((item) => {
     return new kakao.maps.LatLng(item.lat, item.lng);
   });
 });
 
-const addMapMarker = (marker: kakao.maps.Marker): void => {
+/**
+ * 마커 객체를 리스트에 추가함
+ * @param marker
+ */
+const addMapMarkerList = (marker: kakao.maps.Marker): void => {
   mapMarkerList.value.push(marker);
 };
 
+/**
+ * 마커 객체를 리스트에서 삭제함
+ * @param marker
+ */
+const deleteMapMarker = (marker: kakao.maps.Marker): void => {
+  const targetIndex = mapMarkerList.value.indexOf(marker);
+  mapMarkerList.value.splice(targetIndex, 1);
+};
+
 const updateMarkerList = (marker: kakao.maps.Marker): void => {
-  const backup = props.markerList;
   const targetIndex = mapMarkerList.value.indexOf(marker);
 
-  console.log('에러나는 위치');
-
-  backup[targetIndex].lat = marker.getPosition().getLat();
-  backup[targetIndex].lng = marker.getPosition().getLng();
-
-  // console.log('에러나는 위치2');
-
-  // emits('dragEndKakaoMapMarker', backup);
+  props.markerList[targetIndex].lat = marker.getPosition().getLat();
+  props.markerList[targetIndex].lng = marker.getPosition().getLng();
 };
 
 const content = (order: string): string => {
@@ -111,8 +121,9 @@ watch(
       :lat="marker.lat"
       :lng="marker.lng"
       :draggable="true"
-      @on-load-kakao-map-marker="addMapMarker"
+      @on-load-kakao-map-marker="addMapMarkerList"
       @drag-end-kakao-map-marker="updateMarkerList"
+      @delete-kakao-map-marker="deleteMapMarker"
     >
     </KakaoMapMarker>
     <KakaoMapPolyline :linePath="linePath"></KakaoMapPolyline>

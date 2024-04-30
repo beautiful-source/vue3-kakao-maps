@@ -64,7 +64,7 @@ export type KakaoMapMarkerProps = {
   range?: number;
 };
 
-const emits = defineEmits(['onLoadKakaoMapMarker', 'dragEndKakaoMapMarker']);
+const emits = defineEmits(['onLoadKakaoMapMarker', 'dragEndKakaoMapMarker', 'deleteKakaoMapMarker']);
 
 const props = defineProps<KakaoMapMarkerProps>();
 /**
@@ -130,6 +130,7 @@ const draggableMarkerEvent = (map: kakao.maps.Map, marker: kakao.maps.Marker): v
  * 컴포넌트 언마운트 시 map에서 marker 삭제
  */
 onBeforeUnmount(() => {
+  emits('deleteKakaoMapMarker', marker);
   marker.value?.setMap(null);
 });
 
