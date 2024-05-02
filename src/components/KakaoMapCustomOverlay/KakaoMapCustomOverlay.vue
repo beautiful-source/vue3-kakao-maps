@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isKakaoMapApiLoaded } from '@/util/useKakao';
+import { isKakaoMapApiLoaded } from '@/utils/useKakao';
 import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
 
 export type KakaoMapCustomOverlayProps = {
