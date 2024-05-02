@@ -11,9 +11,9 @@
 
 카카오맵 API의 `지도`, `마커`, `인포윈도우`, `커스텀 오버레이`, `마커 클러스터`등을 컴포넌트 형태로 제공합니다.
 
-사용 예시 및 컴포넌트 별 세부 속성값은 [Docs](https://6620c768715fd00a32d656ec-uilycffpjo.chromatic.com/?path=/docs/components-kakaomap--docs)에서 확인하실 수 있습니다.
+사용 예시 및 컴포넌트 별 세부 속성값은 [**Docs**](https://6620c768715fd00a32d656ec-mpdjongclw.chromatic.com/?path=/docs/stories-readme--component)에서 확인하실 수 있습니다.
 
-**!! 현재 24년 5월 중순 완성을 목표로 개발 중입니다. 하단 [기능 추가 일정](#기능-추가-일정) 확인하시어 [다운로드](https://www.npmjs.com/package/vue3-kakao-maps) 하시기 바랍니다.**
+**!! 현재 24년 5월 중순 완성을 목표로 개발 중입니다. 하단 [개발 일정](#개발-일정) 확인하시어 [다운로드](https://www.npmjs.com/package/vue3-kakao-maps) 하시기 바랍니다.**
 
 [`vue3-kakao-maps`에 관한 소중한 생각을 남겨주세요!](https://forms.gle/qZty6EQDRD8Q3b3i9)
 

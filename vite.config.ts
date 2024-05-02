@@ -1,18 +1,15 @@
-import { fileURLToPath, URL } from 'node:url';
-
-import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import VueDevTools from 'vite-plugin-vue-devtools';
 import path from 'node:path';
-import dts from 'vite-plugin-dts';
+import { fileURLToPath, URL } from 'node:url';
+import { defineConfig } from 'vite';
+import VueDevTools from 'vite-plugin-vue-devtools';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'src/index.ts'),
+      entry: { index: path.resolve(__dirname, 'src/index.ts') },
       name: 'Vue3KakaoMaps',
-      fileName: 'index'
+      fileName: (format, entryName) => (format === 'es' ? `${entryName}.js` : `${entryName}.cjs`)
     },
     rollupOptions: {
       // 최종 빌드에서 제외할 외부 라이브러리
@@ -24,7 +21,7 @@ export default defineConfig({
       }
     }
   },
-  plugins: [vue(), VueDevTools(), dts()],
+  plugins: [vue(), VueDevTools()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
