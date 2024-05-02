@@ -58,7 +58,7 @@ pnpm install vue3-kakao-maps
 ```js
 import { createApp } from 'vue';
 import App from './App.vue';
-import { useKakao } from 'vue3-kakao-maps';
+import { useKakao } from 'vue3-kakao-maps/@utils';
 
 useKakao('API key');
 createApp(App).mount('#app');
@@ -92,7 +92,7 @@ const coordinate = {
 - 지도 이동시키기
 - 마커 생성하기
 
-### 2024.04.26
+### 2024.04.30 <span style="color:yellowgreen; font-weight:bold">(v2.0.0)</span>
 
 - 지도 정보 얻어오기
 - 여러개 마커 표시하기
