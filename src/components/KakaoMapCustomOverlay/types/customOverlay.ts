@@ -1,3 +1,6 @@
+/**
+ * KakaoMapCustomOverlay 컴포넌트 생성을 위한 타입
+ */
 export type KakaoMapCustomOverlayProps = {
   /**
    * 커스텀 오버레이의 위도 값
@@ -30,7 +33,7 @@ export type KakaoMapCustomOverlayProps = {
   zIndex?: number;
 
   /**
-     * true 로 설정하면 컨텐츠 영역을 클릭했을 경우 지도 이벤트를 막아준다, 최초 생성시에만 적용됩니다.
-  ,   */
+   * true 로 설정하면 컨텐츠 영역을 클릭했을 경우 지도 이벤트를 막아준다, 최초 생성시에만 적용됩니다.
+   */
   clickable?: boolean;
 };

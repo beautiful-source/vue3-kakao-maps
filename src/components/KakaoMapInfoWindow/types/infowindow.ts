@@ -1,3 +1,6 @@
+/**
+ * KakaoMapInfoWindow 컴포넌트 생성을 위한 타입
+ */
 export type KakaoMapInfoWindowProps = {
   /**
    * 인포윈도우의 위도 값

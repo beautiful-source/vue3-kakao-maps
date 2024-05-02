@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 import { KakaoMap } from '@/components';
-import type { KakaoMapProps } from '@/components/KakaoMap/types';
-import type { KakaoMapMarkerListItem } from '@/components/KakaoMapMarker/types';
+import type { KakaoMapProps, KakaoMapMarkerListItem } from '@/components/KakaoMap/types';
 import useKakao from '@/utils/useKakao';
 
 const meta = {

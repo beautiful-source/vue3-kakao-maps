@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/utils/useKakao';
 import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
-import type { KakaoMapInfoWindowProps } from '@/components/KakaoMapInfoWindow/types';
+import type { KakaoMapInfoWindowProps } from './types';
 
 const emits = defineEmits(['onLoadKakaoMapInfoWindow']);
 

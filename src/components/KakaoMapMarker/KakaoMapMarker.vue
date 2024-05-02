@@ -2,7 +2,7 @@
 import { isKakaoMapApiLoaded } from '@/utils/useKakao';
 import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
 import KakaoMapInfoWindow from '../KakaoMapInfoWindow/KakaoMapInfoWindow.vue';
-import type { KakaoMapMarkerProps, KakaoMapMarkerImage } from '@/components/KakaoMapMarker/types';
+import type { KakaoMapMarkerProps, KakaoMapMarkerImage } from './types';
 import { DEFAULT_MARKER_IMAGE, DEFAULT_MARKER_IMAGE_HEIGHT, DEFAULT_MARKER_IMAGE_WIDTH } from '@/constants/markerImage';
 
 const emits = defineEmits(['onLoadKakaoMapMarker']);

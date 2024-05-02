@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/utils/useKakao';
 import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
-import type { KakaoMapCustomOverlayProps } from '@/components/KakaoMapCustomOverlay/types';
+import type { KakaoMapCustomOverlayProps } from './types';
 
 const emits = defineEmits(['onLoadKakaoMapCustomOverlay']);
 

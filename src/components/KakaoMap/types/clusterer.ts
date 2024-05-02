@@ -1,4 +1,4 @@
-import type { KakaoMapMarkerListItem } from '@/components/KakaoMapMarker/types';
+import type { KakaoMapMarkerListItem } from './index';
 export type MarkerClusterInfo = {
   /**
    * 클러스터링 할 마커 배열
@@ -36,6 +36,7 @@ export type MarkerClusterInfo = {
    */
 
   texts?: string[] | ((size: number) => string);
+
   /**
    * 클러스터 크기를 구분하는 값을 가진 배열 또는 구분값 생성함수 (기본값 : [10, 100, 1000, 10000])
    */

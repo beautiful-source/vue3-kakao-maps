@@ -2,7 +2,7 @@
 import { isKakaoMapApiLoaded } from '@/utils/useKakao';
 import { ref, watch, computed, onMounted, provide, toRaw } from 'vue';
 import { KakaoMapMarker } from '@/components';
-import type { KakaoMapProps, MarkerClusterInfo } from '@/components/KakaoMap/types';
+import type { KakaoMapProps, MarkerClusterInfo } from './types';
 
 const props = withDefaults(defineProps<KakaoMapProps>(), {
   width: '40rem',
@@ -125,7 +125,6 @@ watch(
 watch(
   () => props.scrollwheel,
   (scrollwheel) => {
-    console.log('scrollwheel');
     if (scrollwheel === undefined) {
       map.value?.setZoomable(true);
     } else {
