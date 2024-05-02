@@ -26,3 +26,22 @@ export type KakaoMapMarkerImage = {
   imageHeight?: number;
   imageOption: kakao.maps.MarkerImageOptions;
 };
+
+export type KakaoMapInfoWindowListItem = {
+  /**
+   * 인포윈도우의 고유한 key
+   */
+  key?: number | string;
+  /**
+   * 인포윈도우의 위도 값
+   */
+  lat: number;
+  /**
+   * 인포윈도우의 경도 값
+   */
+  lng: number;
+  /**
+   * 인포윈도우의 내용. 문자열, 엘리먼트 또는 HTML 문자열 형태입니다.
+   */
+  content?: string;
+};

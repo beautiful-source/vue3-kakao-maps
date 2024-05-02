@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/utils/useKakao';
 import { ref, watch, computed, onMounted, provide } from 'vue';
-import { KakaoMapMarker } from '@/components';
-import type { KakaoMapMarkerListItem } from '@/types';
+import { KakaoMapInfoWindow, KakaoMapMarker } from '@/components';
+import type { KakaoMapMarkerListItem, KakaoMapInfoWindowListItem } from '@/types';
 
 export type KakaoMapProps = {
   /**
@@ -17,6 +17,10 @@ export type KakaoMapProps = {
    * 지도에 표시할 marker 데이터의 리스트
    */
   markerList?: KakaoMapMarkerListItem[];
+  /**
+   * 지도에 표시할 marker 데이터의 리스트
+   */
+  infoWindowList?: KakaoMapInfoWindowListItem[];
   /**
    * 지도의 위도 값
    */
@@ -245,17 +249,25 @@ const initMap = (): void => {
 
 <template>
   <div ref="kakaoMapRef" :style="mapStyle">
-    <div v-if="props.markerList && map !== null">
+    <template v-if="props.markerList">
       <KakaoMapMarker
         v-for="(marker, index) in props.markerList"
-        :id="index"
         :key="marker.key === undefined ? index : marker.key"
-        :map="map"
         :lat="marker.lat"
         :lng="marker.lng"
         :info-window="marker.infoWindow"
       />
-    </div>
+    </template>
+
+    <template v-if="props.infoWindowList">
+      <KakaoMapInfoWindow
+        v-for="(infoWindow, index) in props.infoWindowList"
+        :key="infoWindow.key === undefined ? index : infoWindow.key"
+        :lat="infoWindow.lat"
+        :lng="infoWindow.lng"
+        :content="infoWindow.content"
+      />
+    </template>
     <slot></slot>
   </div>
 </template>
