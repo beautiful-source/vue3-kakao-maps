@@ -18,6 +18,10 @@ export type KakaoMapMarkerListItem = {
    * 마커에 추가할 InfoWindow content
    */
   infoWindow?: string;
+  /**
+   * 마커의 드래그 여부
+   */
+  draggable?: boolean;
 };
 
 export type KakaoMapMarkerImage = {
