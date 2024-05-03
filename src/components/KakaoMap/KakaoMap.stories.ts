@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/vue3';
 import { KakaoMap } from '@/components';
 import type { KakaoMapProps } from '@/components/KakaoMap/types';
-import useKakao from '@/utils/useKakao';
-import KakaoMapMoveCenter from '@/stories/KakaoMap/KakaoMapMoveCenter.vue';
-import { computed, ref } from 'vue';
 import { 서울특별시청_좌표 } from '@/constants/coordinate';
 import { DEFAULT_MAP_SIZE } from '@/constants/mapSize';
+import KakaoMapMoveCenter from '@/stories/KakaoMap/KakaoMapMoveCenter.vue';
+import useKakao from '@/utils/useKakao';
+import type { Meta, StoryObj } from '@storybook/vue3';
+import { computed, ref } from 'vue';
 
 const meta = {
   title: 'Components/KakaoMap',

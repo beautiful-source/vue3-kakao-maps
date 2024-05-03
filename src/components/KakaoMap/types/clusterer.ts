@@ -1,9 +1,9 @@
-import type { KakaoMapMarkerListItem } from './index';
+import type { KakaoMapMarkerProps } from '@/components/KakaoMapMarker/types';
 export type MarkerClusterInfo = {
   /**
    * 클러스터링 할 마커 배열
    */
-  markers?: KakaoMapMarkerListItem[];
+  markers?: KakaoMapMarkerProps[];
 
   /**
    * 클러스터의 격자 크기 (기본값: 60)

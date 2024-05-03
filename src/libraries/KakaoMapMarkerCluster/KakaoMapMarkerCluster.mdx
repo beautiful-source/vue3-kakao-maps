@@ -5,15 +5,15 @@ import * as KakaoMapMarkerClusterStories from './KakaoMapMarkerCluster.stories.t
 
 <Title />
 
-# <Subtitle />
+<Subtitle />
 
 ```js
 <script>
-    import { KakaoMap, type KakaoMapMarkerListItem } from '@/components';
+    import { KakaoMap, type KakaoMapMarkerProps } from '@/components';
     import useKakao from '@/util/useKakao';
     useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '', ['clusterer']);
 
-    const list: KakaoMapMarkerListItem[] = [
+    const list: KakaoMapMarkerProps[] = [
   {
     lat: 37.27943075229118,
     lng: 127.01763998406159
@@ -78,7 +78,7 @@ import * as KakaoMapMarkerClusterStories from './KakaoMapMarkerCluster.stories.t
   <tbody>
     <tr>
       <td>markers</td>
-      <td>Array&lt;KakaoMapMarkerListItem&gt;</td>
+      <td>Array&lt;KakaoMapMarkerProps&gt;</td>
       <td>클러스터링 할 마커 배열</td>
       <td>KakaoMapMarker 페이지에서 parameter를 확인하세요</td>
     </tr>

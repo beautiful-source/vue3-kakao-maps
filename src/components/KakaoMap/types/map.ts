@@ -17,6 +17,10 @@ export type KakaoMapProps = {
    */
   markerList?: KakaoMapMarkerListItem[];
   /**
+   * 지도에 표시할 marker 데이터의 리스트
+   */
+  infoWindowList?: KakaoMapInfoWindowListItem[];
+  /**
    * 지도에 표시할 marker cluster의 속성 및 데이터 리스트
    */
   markerCluster?: MarkerClusterInfo;
@@ -86,59 +90,38 @@ export type KakaoMapMarkerListItem = {
    * 마커의 고유한 key
    */
   key?: number | string;
-
   /**
    * 마커의 위도 값
    */
   lat: number;
-
   /**
    * 마커의 경도 값
    */
   lng: number;
-
   /**
    * 마커에 추가할 InfoWindow content
    */
   infoWindow?: string;
+};
 
+/**
+ * KakaoMap의 infoWindowList의 아이템 타입
+ */
+export type KakaoMapInfoWindowListItem = {
   /**
-   * 마커의 이미지
+   * 인포윈도우의 고유한 key
    */
-  image?: kakao.maps.MarkerImage;
-
+  key?: number | string;
   /**
-   * 마커 엘리먼트의 타이틀 속성 값 (툴팁)
+   * 인포윈도우의 위도 값
    */
-  title?: string;
-
+  lat: number;
   /**
-   * 드래그 가능한 마커, 로드뷰에 올릴 경우에는 유효하지 않다.
+   * 인포윈도우의 경도 값
    */
-  draggable?: boolean;
-
+  lng: number;
   /**
-   * 클릭 가능한 마커
+   * 인포윈도우의 내용. 문자열, 엘리먼트 또는 HTML 문자열 형태입니다.
    */
-  clickable?: boolean;
-
-  /**
-   * 마커 엘리먼트의 z-index 속성 값
-   */
-  zIndex?: number;
-
-  /**
-   * 마커 투명도 (0-1)
-   */
-  opacity?: number;
-
-  /**
-   * 로드뷰에 올라있는 마커의 높이 값(m 단위)
-   */
-  altitude?: number;
-
-  /**
-   * 로드뷰 상에서 마커의 가시반경(m 단위), 두 지점 사이의 거리가 지정한 값보다 멀어지면 마커는 로드뷰에서 보이지 않게 된다.
-   */
-  range?: number;
+  content?: string;
 };
