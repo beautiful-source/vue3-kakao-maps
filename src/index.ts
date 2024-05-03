@@ -14,4 +14,3 @@ const Vue3KakaoMaps: Plugin = {
 export { Vue3KakaoMaps };
 export * from './components';
 export * from './utils';
-export type * from './types';
