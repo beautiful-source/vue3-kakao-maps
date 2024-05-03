@@ -1,79 +1,8 @@
 <script setup lang="ts">
-import { isKakaoMapApiLoaded } from '@/util/useKakao';
-import { ref, watch, computed, onMounted, provide } from 'vue';
-import { KakaoMapMarker } from '@/components';
-import type { KakaoMapMarkerListItem } from '@/components';
-
-export type KakaoMapProps = {
-  /**
-   * 지도의 가로 길이
-   */
-  width?: number | string;
-  /**
-   * 지도의 세로 길이
-   */
-  height?: number | string;
-  /**
-   * 지도에 표시할 marker 데이터의 리스트
-   */
-  markerList?: KakaoMapMarkerListItem[];
-  /**
-   * 지도의 위도 값
-   */
-  lat: number;
-  /**
-   * 지도의 경도 값
-   */
-  lng: number;
-  /**
-   * 확대 수준 (기본값: 3)
-   */
-  level?: number;
-
-  /**
-   *  지도 종류를 설정합니다. 기본값은 일반 지도(1), (베이스) 일반 지도: 1, (베이스) 스카이뷰:2, (베이스) 하이브리드(스카이뷰 + 레이블): 3, (오버레이) 레이블: 4, (오버레이) 로드뷰: 5, (오버레이) 교통정보: 6, (오버레이) 지형도: 7, (오버레이) 자전거: 8, (오버레이) 스카이뷰를 위한 자전거 (어두운 지도에서 활용): 9, (오버레이) 지적편집도: 10
-   */
-  mapTypeId?: kakao.maps.MapTypeId;
-
-  /**
-   * 마우스 드래그, 휠, 모바일 터치를 이용한 시점 변경(이동, 확대, 축소) 가능 여부
-   */
-  draggable?: boolean;
-
-  /**
-   * 마우스 휠, 모바일 터치를 이용한 확대 및 축소 가능 여부
-   */
-  scrollwheel?: boolean;
-
-  /**
-   * 더블클릭 이벤트 및 더블클릭 확대 가능 여부, 최초 생성시에만 적용됩니다.
-   */
-  disableDoubleClick?: boolean;
-
-  /**
-   * 더블클릭 확대 가능 여부, 최초 생성시에만 적용됩니다.
-   */
-  disableDoubleClickZoom?: boolean;
-
-  /**
-   * 투영법 지정 (기본값: kakao.maps.ProjectionId.WCONG)
-   */
-  projectionId?: string;
-
-  /**
-   * 지도 타일 애니메이션 설정 여부 (기본값: true)
-   */
-  tileAnimation?: boolean;
-
-  /**
-   * 키보드의 방향키와 +,-키로 지도 이동,확대,축소 가능여부를 설정한다. speed 속성은 지도의 이동속도이며, 처음 생성시에만 적용된다.
-   */
-  keyboardShortcuts?:
-    | boolean
-    | {
-        speed: number;
-      };
-};
+import { KakaoMapInfoWindow, KakaoMapMarker } from '@/components';
+import { isKakaoMapApiLoaded } from '@/utils/useKakao';
+import { computed, onMounted, provide, ref, toRaw, watch } from 'vue';
+import type { KakaoMapProps, MarkerClusterInfo } from './types';
 
 const props = withDefaults(defineProps<KakaoMapProps>(), {
   width: '40rem',
@@ -89,11 +18,64 @@ const props = withDefaults(defineProps<KakaoMapProps>(), {
 const emits = defineEmits(['onLoadKakaoMap']);
 
 const kakaoMapRef = ref<null | HTMLElement>(null);
-const map = ref<null | kakao.maps.Map>(null);
+const map = ref<kakao.maps.Map>();
 provide('mapRef', map);
+
+/**
+ * 지도를 생성하는 함수
+ */
+const initMap = (): void => {
+  const options = {
+    center: new kakao.maps.LatLng(props.lat, props.lng),
+    ...props
+  };
+  if (kakaoMapRef.value !== null) {
+    map.value = new window.kakao.maps.Map(kakaoMapRef.value, options);
+    emits('onLoadKakaoMap', map.value);
+  }
+};
+
+/**
+ * Marker Cluster 기능
+ */
+const clusterer = ref<kakao.maps.MarkerClusterer>();
+const initCluster = (info: MarkerClusterInfo): void => {
+  if (info.markers === undefined) {
+    throw new Error('MarkerList가 없습니다.');
+  }
+  if (map.value !== null) {
+    /**
+     * kakao.maps.Marker[] 생성
+     */
+    const markers = ref<kakao.maps.Marker[]>([]);
+    info.markers.forEach((markerInfo) => {
+      const marker = new kakao.maps.Marker({
+        position: new kakao.maps.LatLng(markerInfo.lat, markerInfo.lng),
+        image: markerInfo.image ?? undefined,
+        title: markerInfo.title ?? undefined,
+        draggable: typeof markerInfo.draggable === 'boolean' ? markerInfo.draggable : false,
+        clickable: typeof markerInfo.clickable === 'boolean' ? markerInfo.clickable : false,
+        zIndex: typeof markerInfo.zIndex === 'number' ? markerInfo.zIndex : 0,
+        opacity: markerInfo.opacity ?? 1.0,
+        altitude: markerInfo.altitude ?? 0,
+        range: markerInfo.range ?? undefined
+      });
+      markers.value?.push(marker);
+    });
+    clusterer.value = new kakao.maps.MarkerClusterer({
+      map: toRaw(map.value),
+      ...info,
+      markers: markers.value
+    });
+  }
+};
+
 onMounted(() => {
   if (isKakaoMapApiLoaded.value) {
     initMap();
+    if (props.markerCluster !== undefined) {
+      initCluster(props.markerCluster);
+    }
   }
 });
 
@@ -105,6 +87,9 @@ watch(
   (isKakaoMapApiLoaded) => {
     if (isKakaoMapApiLoaded) {
       initMap();
+      if (props.markerCluster !== undefined) {
+        initCluster(props.markerCluster);
+      }
     }
   }
 );
@@ -227,35 +212,29 @@ watch(
     }
   }
 );
-
-/**
- * 지도를 생성하는 함수
- */
-const initMap = (): void => {
-  const options = {
-    center: new kakao.maps.LatLng(props.lat, props.lng),
-    ...props
-  };
-  if (kakaoMapRef.value !== null) {
-    map.value = new window.kakao.maps.Map(kakaoMapRef.value, options);
-    emits('onLoadKakaoMap', map.value);
-  }
-};
 </script>
 
 <template>
   <div ref="kakaoMapRef" :style="mapStyle">
-    <div v-if="props.markerList && map !== null">
+    <template v-if="props.markerList && props.markerCluster === undefined">
       <KakaoMapMarker
         v-for="(marker, index) in props.markerList"
-        :id="index"
         :key="marker.key === undefined ? index : marker.key"
-        :map="map"
         :lat="marker.lat"
         :lng="marker.lng"
         :info-window="marker.infoWindow"
       />
-    </div>
+    </template>
+
+    <template v-if="props.infoWindowList">
+      <KakaoMapInfoWindow
+        v-for="(infoWindow, index) in props.infoWindowList"
+        :key="infoWindow.key === undefined ? index : infoWindow.key"
+        :lat="infoWindow.lat"
+        :lng="infoWindow.lng"
+        :content="infoWindow.content"
+      />
+    </template>
     <slot></slot>
   </div>
 </template>
