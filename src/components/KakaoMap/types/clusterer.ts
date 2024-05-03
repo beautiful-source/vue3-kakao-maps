@@ -1,4 +1,5 @@
-import type { KakaoMapMarkerProps } from '@/components/KakaoMapMarker/types';
+import type { KakaoMapMarkerProps } from '../../KakaoMapMarker/types';
+
 export type MarkerClusterInfo = {
   /**
    * 클러스터링 할 마커 배열

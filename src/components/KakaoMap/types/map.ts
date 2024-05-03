@@ -1,4 +1,4 @@
-import type { MarkerClusterInfo } from '@/components/KakaoMap/types';
+import type { MarkerClusterInfo } from './clusterer';
 
 /**
  * KakaoMap 컴포넌트 생성을 위한 타입
