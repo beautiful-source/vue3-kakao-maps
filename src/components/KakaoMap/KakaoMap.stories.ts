@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 import { KakaoMap } from '@/components';
-import type { KakaoMapProps } from './KakaoMap.vue';
+import type { KakaoMapProps } from '@/components/KakaoMap/types';
 import useKakao from '@/utils/useKakao';
 import KakaoMapMoveCenter from '@/stories/KakaoMap/KakaoMapMoveCenter.vue';
 import { computed, ref } from 'vue';

@@ -1,0 +1,30 @@
+export function Header() {
+  return <h1>Library 사용하기</h1>;
+}
+
+<Header />
+
+kakao map api에서는 `clusterer`, `services`, `drawing` 라이브러리를 지원하고 있습니다.
+
+자세한 라이브러리 정보는 [공식 문서](https://apis.map.kakao.com/web/guide/#library)를 참고해주세요.
+
+사용을 위해 하단의 튜토리얼을 따라 설정을 추가해주세요.
+
+## 시작하기
+
+**카카오맵 API에 라이브러리 추가하기**
+
+`main.{js|ts}`에서 useKakao 호출부에 `['LIBRARY']`를 추가하여 라이브러리를 로드합니다.
+
+kakao map에서는 `clusterer`, `services`, `drawing` 라이브러리를 지원하고 있습니다.
+
+`LIBRARY` 토큰 부분에 사용하고자하는 라이브러리 이름을 적으면 해당 라이브러리를 불러올 수 있습니다.
+
+```js
+import { createApp } from 'vue';
+import App from './App.vue';
+import { useKakao } from 'vue3-kakao-maps';
+
+useKakao('API key', ['clusterer', 'services', 'drawing']); //각 라이브러리는 ',(콤마)'로 구분합니다.
+createApp(App).mount('#app');
+```

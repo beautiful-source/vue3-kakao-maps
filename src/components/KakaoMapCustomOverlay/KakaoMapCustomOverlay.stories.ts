@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 import { KakaoMap, KakaoMapCustomOverlay, KakaoMapMarker } from '@/components';
-import type { KakaoMapCustomOverlayProps } from './KakaoMapCustomOverlay.vue';
+import type { KakaoMapCustomOverlayProps } from '@/components/KakaoMapCustomOverlay/types';
 import { 서울특별시청_좌표 } from '@/constants/coordinate';
 import useKakao from '@/utils/useKakao';
 import { ref } from 'vue';
