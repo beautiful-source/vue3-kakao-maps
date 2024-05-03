@@ -43,38 +43,38 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof KakaoMapInfoWindow>;
 
-// const renderKakaoMap: any = (
-//   args: KakaoMapInfoWindowProps & {
-//     default: HTMLElement | string;
-//   }
-// ) => ({
-//   components: { KakaoMap, KakaoMapInfoWindow },
-//   tags: ['autodocs'],
-//   setup() {
-//     useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
-//     return { args, KakaoMapInfoWindow };
-//   },
-//   template: `
-//   <KakaoMap
-//   :lat='37.566826'
-//   :lng='126.9786567'
-//   >
-//   <KakaoMapInfoWindow :lat="args.lat" :lng="args.lng" :removable="args.removable" :content="args?.content">
-//   ${args.default}
-//   </KakaoMapInfoWindow>
-//   </KakaoMap>
-// `
-// });
+const renderKakaoMap: any = (
+  args: KakaoMapInfoWindowProps & {
+    default: string;
+  }
+) => ({
+  components: { KakaoMap, KakaoMapInfoWindow },
+  tags: ['autodocs'],
+  setup() {
+    useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
+    return { args, KakaoMapInfoWindow };
+  },
+  template: `
+  <KakaoMap
+  :lat='37.566826'
+  :lng='126.9786567'
+  >
+  <KakaoMapInfoWindow :lat="args.lat" :lng="args.lng" :removable="args.removable" :content="args?.content">
+  ${args.default}
+  </KakaoMapInfoWindow>
+  </KakaoMap>
+`
+});
 
-// export const Default: Story = {
-//   name: '인포윈도우 생성하기',
-//   render: renderKakaoMap,
-//   args: {
-//     ...서울특별시청_좌표,
-//     removable: true,
-//     default: '<div>Hello World!</div>'
-//   }
-// };
+export const Default: Story = {
+  name: '인포윈도우 생성하기',
+  render: renderKakaoMap,
+  args: {
+    ...서울특별시청_좌표,
+    removable: true,
+    default: '<div>Hello World!</div>'
+  }
+};
 
 export const ContentDefault: Story = {
   name: '인포윈도우 생성하기2',

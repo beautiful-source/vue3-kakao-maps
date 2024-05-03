@@ -9,7 +9,6 @@ const meta = {
   parameters: {
     componentSubtitle: '카카오 지도 마커 클러스터러입니다.'
   },
-  //   tags: ['autodocs'],
   argTypes: {}
 } satisfies Meta<typeof KakaoMap>;
 
