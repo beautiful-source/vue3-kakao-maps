@@ -1,5 +1,5 @@
 /**
- * KakaoMap의 markerList의 아이템 타입
+ *  KakaoMapMarker 컴포넌트 생성을 위한 타입
  */
 export type KakaoMapMarkerProps = {
   /**
