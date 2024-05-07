@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/utils/useKakao';
 import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
-import KakaoMapInfoWindow from '../KakaoMapInfoWindow/KakaoMapInfoWindow.vue';
+import { KakaoMapInfoWindow } from '@/components';
 import type { KakaoMapMarkerProps, KakaoMapMarkerImage } from './types';
 import { DEFAULT_MARKER_IMAGE, DEFAULT_MARKER_IMAGE_HEIGHT, DEFAULT_MARKER_IMAGE_WIDTH } from '@/constants/markerImage';
 
-const emits = defineEmits(['onLoadKakaoMapMarker']);
+const emits = defineEmits(['onLoadKakaoMapMarker', 'onClickKakaoMapMarker']);
 
 const props = defineProps<KakaoMapMarkerProps>();
 /**
@@ -57,6 +57,9 @@ const initMarker = (map: kakao.maps.Map): void => {
   changeMarkerImage(props.image);
   emits('onLoadKakaoMapMarker', marker.value);
   marker.value.setMap(map);
+  kakao.maps.event.addListener(marker.value, 'click', () => {
+    emits('onClickKakaoMapMarker');
+  });
 };
 
 /**
@@ -99,16 +102,21 @@ watch([() => props.image], () => {
 <template>
   <div>
     <KakaoMapInfoWindow
-      v-if="props.infoWindow && props.infoWindow.length > 0"
+      v-if="$slots.infoWindow"
       :marker="marker"
       :lat="props.lat"
       :lng="props.lng"
-      :content="props.infoWindow"
+      :visible="props?.infoWindow?.visible"
     >
-    </KakaoMapInfoWindow>
-
-    <KakaoMapInfoWindow v-if="$slots.infoWindow" :marker="marker" :lat="props.lat" :lng="props.lng">
       <slot name="infoWindow"> </slot>
     </KakaoMapInfoWindow>
+    <KakaoMapInfoWindow
+      v-if="!$slots.infoWindow && props.infoWindow?.content && props.infoWindow?.content.length > 0"
+      :marker="marker"
+      :lat="props.lat"
+      :lng="props.lng"
+      :content="props.infoWindow?.content"
+      :visible="props.infoWindow?.visible"
+    />
   </div>
 </template>

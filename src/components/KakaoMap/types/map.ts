@@ -1,3 +1,4 @@
+import type { KakaoMapMarkerInfoWindow } from '@/components/KakaoMapMarker/types';
 import type { MarkerClusterInfo } from './clusterer';
 
 /**
@@ -8,30 +9,37 @@ export type KakaoMapProps = {
    * 지도의 가로 길이
    */
   width?: number | string;
+
   /**
    * 지도의 세로 길이
    */
   height?: number | string;
+
   /**
    * 지도에 표시할 marker 데이터의 리스트
    */
   markerList?: KakaoMapMarkerListItem[];
+
   /**
    * 지도에 표시할 marker 데이터의 리스트
    */
   infoWindowList?: KakaoMapInfoWindowListItem[];
+
   /**
    * 지도에 표시할 marker cluster의 속성 및 데이터 리스트
    */
   markerCluster?: MarkerClusterInfo;
+
   /**
    * 지도의 위도 값
    */
   lat: number;
+
   /**
    * 지도의 경도 값
    */
   lng: number;
+
   /**
    * 확대 수준 (기본값: 3)
    */
@@ -90,18 +98,21 @@ export type KakaoMapMarkerListItem = {
    * 마커의 고유한 key
    */
   key?: number | string;
+
   /**
    * 마커의 위도 값
    */
   lat: number;
+
   /**
    * 마커의 경도 값
    */
   lng: number;
+
   /**
-   * 마커에 추가할 InfoWindow content
+   * 마커에 추가할 인포윈도우 content
    */
-  infoWindow?: string;
+  infoWindow?: KakaoMapMarkerInfoWindow;
 };
 
 /**
@@ -112,16 +123,24 @@ export type KakaoMapInfoWindowListItem = {
    * 인포윈도우의 고유한 key
    */
   key?: number | string;
+
   /**
    * 인포윈도우의 위도 값
    */
   lat: number;
+
   /**
    * 인포윈도우의 경도 값
    */
   lng: number;
+
   /**
-   * 인포윈도우의 내용. 문자열, 엘리먼트 또는 HTML 문자열 형태입니다.
+   * 인포윈도우의 내용. 문자열, HTML 문자열 형태입니다.
    */
   content?: string;
+
+  /**
+   * 사용자가 좌표를 클릭하기 전에 인포윈도우를 표시할 것인지 여부 (기본값: true)
+   */
+  visible?: boolean;
 };

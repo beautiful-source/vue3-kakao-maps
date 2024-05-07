@@ -48,4 +48,9 @@ export type KakaoMapInfoWindowProps = {
    * 기본값은 500입니다.
    */
   range?: number;
+
+  /**
+   * 사용자가 좌표를 클릭하기 전에 인포윈도우를 표시할 것인지 여부 (기본값: true)
+   */
+  visible?: boolean;
 };

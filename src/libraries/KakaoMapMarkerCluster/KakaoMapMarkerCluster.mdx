@@ -10,7 +10,7 @@ import * as KakaoMapMarkerClusterStories from './KakaoMapMarkerCluster.stories.t
 ```js
 <script>
     import { KakaoMap, type KakaoMapMarkerProps } from '@/components';
-    import useKakao from '@/util/useKakao';
+    import useKakao from '@/utils/useKakao';
     useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '', ['clusterer']);
 
     const list: KakaoMapMarkerProps[] = [
