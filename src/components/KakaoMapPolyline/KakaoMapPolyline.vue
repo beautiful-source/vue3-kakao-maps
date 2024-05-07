@@ -103,5 +103,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div></div>
+  <div>
+    <slot></slot>
+  </div>
 </template>

@@ -4,6 +4,7 @@ import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
 import KakaoMapInfoWindow from '../KakaoMapInfoWindow/KakaoMapInfoWindow.vue';
 import type { KakaoMapMarkerImage } from './types';
 import { DEFAULT_MARKER_IMAGE, DEFAULT_MARKER_IMAGE_HEIGHT, DEFAULT_MARKER_IMAGE_WIDTH } from '@/constants/markerImage';
+import KakaoMapCustomOverlay from '../KakaoMapCustomOverlay/KakaoMapCustomOverlay.vue';
 
 /**
  * KakaoMapMarker 컴포넌트 생성을 위한 타입
@@ -62,6 +63,16 @@ export type KakaoMapMarkerProps = {
    * 로드뷰 상에서 마커의 가시반경(m 단위), 두 지점 사이의 거리가 지정한 값보다 멀어지면 마커는 로드뷰에서 보이지 않게 됨
    */
   range?: number;
+
+  /**
+   * 지도에 표시되는 마커의 순서
+   */
+  order?: number | string;
+
+  /**
+   * 마커의 순서가 표시될 y축 방향 높이
+   */
+  orderBottomMargin?: string;
 };
 
 const emits = defineEmits(['onLoadKakaoMapMarker', 'dragEndKakaoMapMarker', 'deleteKakaoMapMarker']);
@@ -120,10 +131,25 @@ const initMarker = (map: kakao.maps.Map): void => {
   draggableMarkerEvent(map, marker.value);
 };
 
+/**
+ * 마커 드래그 이벤트를 감지합니다.
+ * @param map
+ * @param marker
+ */
 const draggableMarkerEvent = (map: kakao.maps.Map, marker: kakao.maps.Marker): void => {
   kakao.maps.event.addListener(marker, 'dragend', function (mouseEvent: any) {
     emits('dragEndKakaoMapMarker', marker);
   });
+};
+
+/**
+ * 마커 순서를 지도에 표시하기 위한 커스텀 오버레이 content 입니다.
+ * @param order
+ */
+const content = (order: string | number): string => {
+  return `<div style="position:relative; bottom:${props.orderBottomMargin}">
+        ${order}
+      </div>`;
 };
 
 /**
@@ -178,5 +204,8 @@ watch([() => props.image], () => {
     <KakaoMapInfoWindow v-if="$slots.infoWindow" :marker="marker" :lat="props.lat" :lng="props.lng">
       <slot name="infoWindow"> </slot>
     </KakaoMapInfoWindow>
+
+    <KakaoMapCustomOverlay v-if="props.order" :lat="props.lat" :lng="props.lng" :y-anchor="0" :content="content(props.order)">
+    </KakaoMapCustomOverlay>
   </div>
 </template>

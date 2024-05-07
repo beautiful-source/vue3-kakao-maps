@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, onUpdated, ref, type ComputedRef, type Ref } from 'vue';
-import type { KakaoMapMarkerImage, KakaoMapMarkerListItem } from './types';
+import { computed, inject, ref, type ComputedRef, type Ref } from 'vue';
+import type { KakaoMapMarkerListItem } from './types';
 import KakaoMapMarker from './KakaoMapMarker.vue';
 import KakaoMapCustomOverlay from '../KakaoMapCustomOverlay/KakaoMapCustomOverlay.vue';
 import KakaoMapPolyline from '../KakaoMapPolyline/KakaoMapPolyline.vue';
@@ -13,19 +13,6 @@ type KakaoMapMarkerPolylineProps = {
    * 지도에 표시할 마커 리스트
    */
   markerList: KakaoMapMarkerListItem[];
-  /**
-   * 마커의 순서 표시 여부
-   */
-  showMarkerOrder?: boolean;
-  /**
-   * 마커의 순서가 표시될 y축 방향 높이
-   */
-  yAnchorMarkerOrder?: string;
-  /**
-   * 마커 이미지,
-   * 이미지를 설정하지 않으면 기본 마커 이미지로 보임
-   */
-  image?: KakaoMapMarkerImage;
   /**
    * 선의 화살표 여부
    */
@@ -46,6 +33,10 @@ type KakaoMapMarkerPolylineProps = {
    *선의 스타일
    */
   strokeStyle?: kakao.maps.StrokeStyles;
+  /**
+   * 마커의 순서 표시 여부
+   */
+  showMarkerOrder?: boolean;
 };
 
 const props = defineProps<KakaoMapMarkerPolylineProps>();
@@ -98,13 +89,11 @@ const updateMarkerLatLng = (marker: kakao.maps.Marker): void => {
   markerListProps[targetIndex].lng = marker.getPosition().getLng();
 };
 
-const customOverlayRef: Ref<HTMLDivElement[]> = ref([]);
-
-onUpdated(() => {
-  customOverlayRef.value.forEach((element) => {
-    element.style.setProperty('--custom-overlay-y-anchor', props.yAnchorMarkerOrder ?? '0');
-  });
-});
+const content = (order: string | number, orderBottomMargin: string | undefined): string => {
+  return `<div style="position:relative; bottom:${orderBottomMargin}">
+        ${order}
+      </div>`;
+};
 </script>
 
 <template>
@@ -117,7 +106,7 @@ onUpdated(() => {
       :lat="marker.lat"
       :lng="marker.lng"
       :draggable="marker.draggable"
-      :image="props.image"
+      :image="marker.image"
       @on-load-kakao-map-marker="addMapMarkerList"
       @drag-end-kakao-map-marker="updateMarkerLatLng"
       @delete-kakao-map-marker="deleteMapMarker"
@@ -132,23 +121,16 @@ onUpdated(() => {
     </div>
   </div>
 
-  <div v-show="props.markerList && props.showMarkerOrder">
+  <div v-if="props.markerList && props.showMarkerOrder">
     <KakaoMapCustomOverlay
       v-for="(marker, index) in props.markerList"
       :key="index"
       :lat="marker.lat"
       :lng="marker.lng"
       :y-anchor="0"
+      :content="content(marker.order !== undefined ? marker.order : index, marker.orderBottomMargin)"
     >
-      <div ref="customOverlayRef" class="customoverlay">{{ marker.key ? marker.key : index }}</div>
     </KakaoMapCustomOverlay>
   </div>
   <slot></slot>
 </template>
-
-<style scoped lang="scss">
-.customoverlay {
-  position: relative;
-  bottom: var(--custom-overlay-y-anchor);
-}
-</style>
