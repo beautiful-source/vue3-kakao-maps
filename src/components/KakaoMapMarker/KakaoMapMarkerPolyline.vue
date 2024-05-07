@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, inject, ref, type ComputedRef, type Ref } from 'vue';
-import type { KakaoMapMarkerListItem } from './types';
+import { computed, inject, onMounted, ref, type ComputedRef, type Ref } from 'vue';
 import KakaoMapMarker from './KakaoMapMarker.vue';
 import KakaoMapCustomOverlay from '../KakaoMapCustomOverlay/KakaoMapCustomOverlay.vue';
 import KakaoMapPolyline from '../KakaoMapPolyline/KakaoMapPolyline.vue';
+import type { KakaoMapMarkerListItem } from '../KakaoMap/types';
 
 /**
  * KakaoMapMarkerPolyline 컴포넌트 생성을 위한 타입
@@ -52,15 +52,6 @@ const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
 const mapMarkerList: Ref<kakao.maps.Marker[]> = ref([]);
 
 /**
- * 폴리라인이 지나갈 경로
- */
-const linePath: ComputedRef<kakao.maps.LatLng[]> = computed(() => {
-  return props.markerList.map((item) => {
-    return new kakao.maps.LatLng(item.lat, item.lng);
-  });
-});
-
-/**
  * 마커 객체를 리스트에 추가하는 함수
  * @param marker
  */
@@ -89,11 +80,32 @@ const updateMarkerLatLng = (marker: kakao.maps.Marker): void => {
   markerListProps[targetIndex].lng = marker.getPosition().getLng();
 };
 
+/**
+ * 마커 순서를 지도에 표시하기 위한 커스텀 오버레이 content
+ * @param order
+ * @param orderBottomMargin
+ */
 const content = (order: string | number, orderBottomMargin: string | undefined): string => {
   return `<div style="position:relative; bottom:${orderBottomMargin}">
         ${order}
       </div>`;
 };
+
+/**
+ * 폴리라인이 지나갈 경로
+ */
+let linePath: ComputedRef<kakao.maps.LatLng[]>;
+
+/**
+ * 컴포넌트가 마운트되면 폴리라인이 지나갈 경로를 계산합니다.
+ */
+onMounted(() => {
+  linePath = computed(() => {
+    return props.markerList.map((item) => {
+      return new kakao.maps.LatLng(item.lat, item.lng);
+    });
+  });
+});
 </script>
 
 <template>

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 import { KakaoMap, KakaoMapInfoWindow, KakaoMapMarker } from '@/components';
-import type { KakaoMapInfoWindowProps } from './KakaoMapInfoWindow.vue';
+import type { KakaoMapInfoWindowProps } from '@/components/KakaoMapInfoWindow/types';
 import { ref } from 'vue';
 import { 서울특별시청_좌표 } from '@/constants/coordinate';
-import useKakao from '@/util/useKakao';
+import useKakao from '@/utils/useKakao';
 
 const meta = {
   title: 'Components/KakaoMapInfoWindow',
@@ -45,7 +45,7 @@ type Story = StoryObj<typeof KakaoMapInfoWindow>;
 
 const renderKakaoMap: any = (
   args: KakaoMapInfoWindowProps & {
-    default: HTMLElement | string;
+    default: string;
   }
 ) => ({
   components: { KakaoMap, KakaoMapInfoWindow },

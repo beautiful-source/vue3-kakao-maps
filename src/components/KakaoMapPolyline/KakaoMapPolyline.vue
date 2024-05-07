@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isKakaoMapApiLoaded } from '@/util/useKakao';
+import { isKakaoMapApiLoaded } from '@/utils';
 import { inject, onBeforeUnmount, watch, type Ref } from 'vue';
 
 /**
@@ -74,10 +74,10 @@ const initPolyline = (map: kakao.maps.Map): void => {
  * 상위 컴포넌트에서 map을 주입받으면 폴리라인 생성
  */
 watch(
-  [() => isKakaoMapApiLoaded.value, () => mapRef, () => mapRef?.value],
-  ([isKakaoMapApiLoaded, mapRef, newMap]) => {
-    if (isKakaoMapApiLoaded && mapRef !== undefined && newMap !== undefined) {
-      initPolyline(newMap);
+  [() => isKakaoMapApiLoaded.value, () => mapRef?.value, () => isKakaoMapApiLoaded, () => mapRef],
+  ([isKakaoMapApiLoaded, mapRef]) => {
+    if (isKakaoMapApiLoaded && mapRef !== undefined && mapRef !== null) {
+      initPolyline(mapRef);
     }
   },
   { immediate: true }
