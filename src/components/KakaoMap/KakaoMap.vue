@@ -222,7 +222,7 @@ watch(
         :key="marker.key === undefined ? index : marker.key"
         :lat="marker.lat"
         :lng="marker.lng"
-        :info-window="marker.infoWindow"
+        :info-window="marker?.infoWindow"
         :draggable="marker.draggable"
         :image="marker.image"
         :order="marker.order"
@@ -237,6 +237,7 @@ watch(
         :lat="infoWindow.lat"
         :lng="infoWindow.lng"
         :content="infoWindow.content"
+        :visible="infoWindow.visible"
       />
     </template>
     <slot></slot>
