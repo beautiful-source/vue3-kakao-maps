@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 import { KakaoMap, KakaoMapInfoWindow, KakaoMapMarker } from '@/components';
-import type { KakaoMapInfoWindowProps } from './KakaoMapInfoWindow.vue';
+import type { KakaoMapInfoWindowProps } from '@/components/KakaoMapInfoWindow/types';
 import { ref } from 'vue';
 import { 서울특별시청_좌표 } from '@/constants/coordinate';
-import useKakao from '@/util/useKakao';
+import useKakao from '@/utils/useKakao';
 
 const meta = {
   title: 'Components/KakaoMapInfoWindow',
   component: KakaoMapInfoWindow,
   parameters: {
-    componentSubtitle: '카카오 기본 KakaoMapInfoWindow 컴포넌트입니다.'
+    componentSubtitle: '기본 커스텀 오버레이 컴포넌트입니다.'
   },
   tags: ['autodocs'],
   argTypes: {
@@ -50,7 +50,7 @@ type Story = StoryObj<typeof KakaoMapInfoWindow>;
 
 const renderKakaoMap: any = (
   args: KakaoMapInfoWindowProps & {
-    default: HTMLElement | string;
+    default: string;
   }
 ) => ({
   components: { KakaoMap, KakaoMapInfoWindow },

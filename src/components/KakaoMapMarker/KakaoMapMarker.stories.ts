@@ -1,16 +1,11 @@
-import {
-  KakaoMap,
-  KakaoMapMarker,
-  type KakaoMapMarkerImage,
-  type KakaoMapMarkerInfoWindow,
-  type KakaoMapMarkerListItem
-} from '@/components';
+import { KakaoMap, KakaoMapMarker } from '@/components';
+import type { KakaoMapMarkerProps, KakaoMapMarkerImage, KakaoMapMarkerInfoWindow } from '@/components/KakaoMapMarker/types';
 import { 서울특별시청_좌표 } from '@/constants/coordinate';
-import { DEFAULT_MARKER_IMAGE } from '@/constants/markerImage';
-import useKakao from '@/util/useKakao';
+import useKakao from '@/utils/useKakao';
 import type { Meta, StoryObj } from '@storybook/vue3';
-import type { KakaoMapMarkerProps } from './KakaoMapMarker.vue';
+import { DEFAULT_MARKER_IMAGE } from '@/constants/markerImage';
 import { ref } from 'vue';
+import type { KakaoMapMarkerListItem } from '../KakaoMap/types';
 
 const meta = {
   title: 'Components/KakaoMapMarker',

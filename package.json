@@ -1,13 +1,17 @@
 {
   "name": "vue3-kakao-maps",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": false,
   "type": "module",
   "main": "./dist/index.umd.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "!dist/stories",
+    "!dist/constants",
+    "!dist/libraries",
+    "!**/*.stories.*"
   ],
   "exports": {
     ".": {
@@ -16,11 +20,20 @@
         "default": "./dist/index.js"
       },
       "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.umd.cjs"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
       }
     },
-    "./style.css": "./dist/style.css"
+    "./@utils": {
+      "import": {
+        "types": "./dist/utils/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/utils/index.d.ts",
+        "default": "./dist/index.cjs"
+      }
+    }
   },
   "scripts": {
     "dev": "vite",
@@ -34,7 +47,7 @@
     "lint": "eslint --cache --cache-location .eslintcache --fix --ext .ts,.vue src/",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "prepack": "vite build"
+    "prepack": "run-p build"
   },
   "dependencies": {
     "kakao.maps.d.ts": "^0.1.39"
@@ -73,7 +86,6 @@
     "storybook": "^8.0.9",
     "typescript": "~5.4.0",
     "vite": "^5.2.8",
-    "vite-plugin-dts": "^3.8.2",
     "vite-plugin-vue-devtools": "^7.0.25",
     "vitest": "^1.4.0",
     "vue": "^3.4.23",
@@ -81,7 +93,7 @@
   },
   "description": "kakao maps component library with vue3 and TS",
   "license": "MIT",
-  "homepage": "https://6620c768715fd00a32d656ec-mpdjongclw.chromatic.com/?path=/docs/stories-readme--component",
+  "homepage": "https://6620c768715fd00a32d656ec-qjvjkblfbq.chromatic.com/?path=/docs/stories-readme--overview",
   "keywords": [
     "vue",
     "vue3",

@@ -1,0 +1,151 @@
+import { Meta, Title, Primary, Controls, Stories, Subtitle, Source, Canvas } from '@storybook/blocks';
+import * as KakaoMapMarkerClusterStories from './KakaoMapMarkerCluster.stories.ts';
+
+<Meta of={KakaoMapMarkerClusterStories} />
+
+<Title />
+
+<Subtitle />
+
+```js
+<script>
+    import { KakaoMap, type KakaoMapMarkerProps } from '@/components';
+    import useKakao from '@/util/useKakao';
+    useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '', ['clusterer']);
+
+    const list: KakaoMapMarkerProps[] = [
+  {
+    lat: 37.27943075229118,
+    lng: 127.01763998406159
+  },
+  {
+    lat: 37.55915668706214,
+    lng: 126.92536526611102
+  },
+  {
+    lat: 35.13854258261161,
+    lng: 129.1014781294671
+  },
+  {
+    lat: 37.55518388656961,
+    lng: 126.92926237742505
+  },
+  {
+    lat: 35.20618517638034,
+    lng: 129.07944301057026
+  },
+  {
+    lat: 37.561110808242056,
+    lng: 126.9831268386891
+  }
+];
+</script>
+
+<template>
+    <KakaoMap :lat="36.34" :lng="127.77" :level="14" :markerCluster="{ markers: list }" />
+</template>
+```
+
+<Canvas of={KakaoMapMarkerClusterStories.MarkerCluster} />
+
+## `props`
+
+컴포넌트는 다음과 같은 `props`를 전달받을 수 있습니다:
+
+<Controls />
+
+---
+
+## 컴포넌트를 활용한 기능
+
+컴포넌트를 활용해 다음과 같은 기능을 구현할 수 있습니다.
+
+<Stories />
+
+{' '}
+
+<h2>MarkerClusterInfo</h2>
+<p>아래는 클러스터링에 사용되는 마커 클러스터 정보입니다.</p>
+<table>
+  <thead>
+    <tr>
+      <th>속성명</th>
+      <th>타입</th>
+      <th>설명</th>
+      <th>기본값</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>markers</td>
+      <td>Array&lt;KakaoMapMarkerProps&gt;</td>
+      <td>클러스터링 할 마커 배열</td>
+      <td>KakaoMapMarker 페이지에서 parameter를 확인하세요</td>
+    </tr>
+    <tr>
+      <td>gridSize</td>
+      <td>Number</td>
+      <td>클러스터의 격자 크기. 화면 픽셀 단위이며 해당 격자 영역 안에 마커가 포함되면 클러스터에 포함시킨다</td>
+      <td>60</td>
+    </tr>
+    <tr>
+      <td>averageCenter</td>
+      <td>Boolean</td>
+      <td>마커들의 좌표 평균을 클러스터 좌표 설정 여부</td>
+      <td>false</td>
+    </tr>
+    <tr>
+      <td>minLevel</td>
+      <td>Number</td>
+      <td>클러스터링 할 지도의 최소 레벨 값. 지정한 숫자에 해당하는 레벨 미만에서는 클러스터링 하지 않는다</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>minClusterSize</td>
+      <td>Number</td>
+      <td>클러스터링 할 최소 마커 수</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>styles</td>
+      <td>Array&lt;Object&gt;</td>
+      <td>클러스터의 스타일. 여러개를 선언하면 calculator 로 구분된 사이즈 구간마다 서로 다른 스타일을 적용시킬 수 있다</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>texts</td>
+      <td>Array&lt;String&gt; | Function</td>
+      <td>클러스터에 표시할 문자열 또는 문자열 생성 함수</td>
+      <td>"클러스터에 포함된 숫자"</td>
+    </tr>
+    <tr>
+      <td>calculator</td>
+      <td>Array&lt;Number&gt; | Function</td>
+      <td>클러스터 크기를 구분하는 값을 가진 배열 또는 구분값 생성함수</td>
+      <td>[10, 100, 1000, 10000]</td>
+    </tr>
+    <tr>
+      <td>disableClickZoom</td>
+      <td>Boolean</td>
+      <td>클러스터 클릭 시 지도 확대 여부. true로 설정하면 클러스터 클릭 시 확대 되지 않는다</td>
+      <td>false</td>
+    </tr>
+    <tr>
+      <td>clickable</td>
+      <td>Boolean</td>
+      <td>
+        클러스터 클릭 가능 여부 지정 옵션. false일 경우 클러스터의 clusterclick, clusterdblclick, clusterrightclick 이벤트가
+        발생하지 않으며, 커서가 변경되지 않는다.
+      </td>
+      <td>true</td>
+    </tr>
+    <tr>
+      <td>hoverable</td>
+      <td>Boolean</td>
+      <td>
+        클러스터에 마우스 over/out 가능 여부 지정 옵션. false일 경우 클러스터의 clusterover, clusterout 이벤트가 발생하지 않는다.
+      </td>
+      <td>true</td>
+    </tr>
+  </tbody>
+</table>
