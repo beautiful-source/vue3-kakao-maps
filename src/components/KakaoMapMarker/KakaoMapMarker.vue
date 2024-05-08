@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/utils/useKakao';
 import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
-import { KakaoMapInfoWindow } from '@/components';
+import { KakaoMapCustomOverlay, KakaoMapInfoWindow } from '@/components';
 import type { KakaoMapMarkerProps, KakaoMapMarkerImage } from './types';
 import { DEFAULT_MARKER_IMAGE, DEFAULT_MARKER_IMAGE_HEIGHT, DEFAULT_MARKER_IMAGE_WIDTH } from '@/constants/markerImage';
 
-const emits = defineEmits(['onLoadKakaoMapMarker', 'onClickKakaoMapMarker']);
+const emits = defineEmits(['onLoadKakaoMapMarker', 'onClickKakaoMapMarker', 'dragEndKakaoMapMarker', 'deleteKakaoMapMarker']);
 
 const props = defineProps<KakaoMapMarkerProps>();
 /**
- * kakao api로 생성한 marker 객체
  */
 const marker = ref<kakao.maps.Marker | undefined>();
 /**
@@ -51,21 +50,47 @@ const initMarker = (map: kakao.maps.Map): void => {
   }
   const markerPosition = new kakao.maps.LatLng(props.lat, props.lng);
   marker.value = new kakao.maps.Marker({
-    position: markerPosition
+    position: markerPosition,
+    draggable: props.draggable
   });
 
   changeMarkerImage(props.image);
   emits('onLoadKakaoMapMarker', marker.value);
   marker.value.setMap(map);
+
   kakao.maps.event.addListener(marker.value, 'click', () => {
     emits('onClickKakaoMapMarker');
   });
+
+  draggableMarkerEvent(map, marker.value);
+};
+
+/**
+ * 마커 드래그 이벤트를 감지합니다.
+ * @param map
+ * @param marker
+ */
+const draggableMarkerEvent = (map: kakao.maps.Map, marker: kakao.maps.Marker): void => {
+  kakao.maps.event.addListener(marker, 'dragend', function (mouseEvent: any) {
+    emits('dragEndKakaoMapMarker', marker);
+  });
+};
+
+/**
+ * 마커 순서를 지도에 표시하기 위한 커스텀 오버레이 content 입니다.
+ * @param order
+ */
+const content = (order: string | number): string => {
+  return `<div style="position:relative; bottom:${props.orderBottomMargin}">
+        ${order}
+      </div>`;
 };
 
 /**
  * 컴포넌트 언마운트 시 map에서 marker 삭제
  */
 onBeforeUnmount(() => {
+  emits('deleteKakaoMapMarker', marker);
   marker.value?.setMap(null);
 });
 
@@ -110,13 +135,7 @@ watch([() => props.image], () => {
     >
       <slot name="infoWindow"> </slot>
     </KakaoMapInfoWindow>
-    <KakaoMapInfoWindow
-      v-if="!$slots.infoWindow && props.infoWindow?.content && props.infoWindow?.content.length > 0"
-      :marker="marker"
-      :lat="props.lat"
-      :lng="props.lng"
-      :content="props.infoWindow?.content"
-      :visible="props.infoWindow?.visible"
-    />
+
+    <KakaoMapCustomOverlay v-if="props.order" :lat="props.lat" :lng="props.lng" :y-anchor="0" :content="content(props.order)" />
   </div>
 </template>

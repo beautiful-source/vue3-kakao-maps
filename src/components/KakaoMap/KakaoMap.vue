@@ -223,6 +223,10 @@ watch(
         :lat="marker.lat"
         :lng="marker.lng"
         :info-window="marker?.infoWindow"
+        :draggable="marker.draggable"
+        :image="marker.image"
+        :order="marker.order"
+        :order-bottom-margin="marker.orderBottomMargin"
       />
     </template>
 
