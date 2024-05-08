@@ -5,7 +5,14 @@ import { KakaoMapCustomOverlay, KakaoMapInfoWindow } from '@/components';
 import type { KakaoMapMarkerProps, KakaoMapMarkerImage } from './types';
 import { DEFAULT_MARKER_IMAGE, DEFAULT_MARKER_IMAGE_HEIGHT, DEFAULT_MARKER_IMAGE_WIDTH } from '@/constants/markerImage';
 
-const emits = defineEmits(['onLoadKakaoMapMarker', 'onClickKakaoMapMarker', 'dragEndKakaoMapMarker', 'deleteKakaoMapMarker']);
+const emits = defineEmits([
+  'onLoadKakaoMapMarker',
+  'onClickKakaoMapMarker',
+  'dragEndKakaoMapMarker',
+  'mouseOverKakaoMapMarker',
+  'mouseOutKakaoMapMarker',
+  'deleteKakaoMapMarker'
+]);
 
 const props = defineProps<KakaoMapMarkerProps>();
 /**
@@ -64,11 +71,20 @@ const initMarker = (map: kakao.maps.Map): void => {
   emits('onLoadKakaoMapMarker', marker.value);
   marker.value.setMap(map);
 
-  kakao.maps.event.addListener(marker.value, 'click', () => {
+  clickMarkerEvent(marker.value);
+  mouseOverMarkerEvent(marker.value);
+  mouseOutMarkerEvent(marker.value);
+  draggableMarkerEvent(map, marker.value);
+};
+
+/**
+ * 마커 클릭 이벤트를 감지합니다.
+ * @param marker
+ */
+const clickMarkerEvent = (marker: kakao.maps.Marker): void => {
+  kakao.maps.event.addListener(marker, 'click', () => {
     emits('onClickKakaoMapMarker');
   });
-
-  draggableMarkerEvent(map, marker.value);
 };
 
 /**
@@ -77,8 +93,28 @@ const initMarker = (map: kakao.maps.Map): void => {
  * @param marker
  */
 const draggableMarkerEvent = (map: kakao.maps.Map, marker: kakao.maps.Marker): void => {
-  kakao.maps.event.addListener(marker, 'dragend', function (mouseEvent: any) {
+  kakao.maps.event.addListener(marker, 'dragend', function (mouseEvent: kakao.maps.event.MouseEvent) {
     emits('dragEndKakaoMapMarker', marker);
+  });
+};
+
+/**
+ * 마커 마우스 오버 이벤트를 감지합니다.
+ * @param marker
+ */
+const mouseOverMarkerEvent = (marker: kakao.maps.Marker): void => {
+  kakao.maps.event.addListener(marker, 'mouseover', () => {
+    emits('mouseOverKakaoMapMarker');
+  });
+};
+
+/**
+ * 마커 마우스 아웃 이벤트를 감지합니다.
+ * @param marker
+ */
+const mouseOutMarkerEvent = (marker: kakao.maps.Marker): void => {
+  kakao.maps.event.addListener(marker, 'mouseout', () => {
+    emits('mouseOutKakaoMapMarker');
   });
 };
 
