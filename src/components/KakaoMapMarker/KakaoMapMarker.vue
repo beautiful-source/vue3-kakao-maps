@@ -51,7 +51,13 @@ const initMarker = (map: kakao.maps.Map): void => {
   const markerPosition = new kakao.maps.LatLng(props.lat, props.lng);
   marker.value = new kakao.maps.Marker({
     position: markerPosition,
-    draggable: props.draggable
+    title: props.title,
+    draggable: props.draggable,
+    clickable: props.clickable,
+    zIndex: props.zIndex,
+    opacity: props.opacity,
+    altitude: props.altitude,
+    range: props.range
   });
 
   changeMarkerImage(props.image);
@@ -122,6 +128,70 @@ watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
 watch([() => props.image], () => {
   changeMarkerImage(props.image);
 });
+
+/**
+ * title 변경감지
+ */
+watch(
+  () => props.title,
+  (title) => {
+    if (title !== undefined) {
+      marker.value?.setTitle(title);
+    }
+  }
+);
+
+/**
+ * draggable 변경감지
+ */
+watch(
+  () => props.draggable,
+  (draggable) => {
+    if (draggable === undefined || draggable) {
+      marker.value?.setDraggable(true);
+    } else {
+      marker.value?.setDraggable(false);
+    }
+  }
+);
+
+/**
+ * clickable 변경감지
+ */
+watch(
+  () => props.clickable,
+  (clickable) => {
+    if (clickable === undefined || clickable) {
+      marker.value?.setClickable(true);
+    } else {
+      marker.value?.setClickable(false);
+    }
+  }
+);
+
+/**
+ * zIndex 변경감지
+ */
+watch(
+  () => props.zIndex,
+  (zIndex) => {
+    if (zIndex !== undefined) {
+      marker.value?.setZIndex(Number(zIndex));
+    }
+  }
+);
+
+/**
+ * opacity 변경감지
+ */
+watch(
+  () => props.opacity,
+  (opacity) => {
+    if (opacity !== undefined) {
+      marker.value?.setOpacity(Number(opacity));
+    }
+  }
+);
 </script>
 
 <template>
