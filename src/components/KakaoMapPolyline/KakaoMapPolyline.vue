@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/utils';
 import { inject, onBeforeUnmount, watch, type Ref } from 'vue';
-import type { KakaoMapPolylineProps } from './types/polyline';
+import type { KakaoMapPolylineProps } from './types';
 
 const props = withDefaults(defineProps<KakaoMapPolylineProps>(), {
   strokeWeight: 3,

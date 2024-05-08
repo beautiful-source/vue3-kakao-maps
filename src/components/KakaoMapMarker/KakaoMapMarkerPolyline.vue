@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, onMounted, ref, type ComputedRef, type Ref } from 'vue';
-import KakaoMapMarker from './KakaoMapMarker.vue';
-import KakaoMapCustomOverlay from '../KakaoMapCustomOverlay/KakaoMapCustomOverlay.vue';
-import KakaoMapPolyline from '../KakaoMapPolyline/KakaoMapPolyline.vue';
-import type { KakaoMapMarkerPolylineProps } from '../KakaoMapPolyline/types/polyline';
+import { KakaoMapCustomOverlay, KakaoMapMarker, KakaoMapPolyline } from '@/components';
+import type { KakaoMapMarkerPolylineProps } from '../KakaoMapPolyline/types';
 
 const props = defineProps<KakaoMapMarkerPolylineProps>();
 
@@ -88,14 +86,9 @@ onMounted(() => {
       @on-load-kakao-map-marker="addMapMarkerList"
       @drag-end-kakao-map-marker="updateMarkerLatLng"
       @delete-kakao-map-marker="deleteMapMarker"
-    >
-    </KakaoMapMarker>
+    />
     <div v-for="(path, index) in linePath" :key="index">
-      <KakaoMapPolyline
-        v-if="index !== linePath.length - 1"
-        :linePath="[path, linePath[index + 1]]"
-        :endArrow="props.endArrow"
-      ></KakaoMapPolyline>
+      <KakaoMapPolyline v-if="index !== linePath.length - 1" :linePath="[path, linePath[index + 1]]" :endArrow="props.endArrow" />
     </div>
   </div>
 
@@ -107,8 +100,7 @@ onMounted(() => {
       :lng="marker.lng"
       :y-anchor="0"
       :content="content(marker.order !== undefined ? marker.order : index, marker.orderBottomMargin)"
-    >
-    </KakaoMapCustomOverlay>
+    />
   </div>
   <slot></slot>
 </template>

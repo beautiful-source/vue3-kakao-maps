@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/utils/useKakao';
 import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
-import { KakaoMapInfoWindow } from '@/components';
+import { KakaoMapCustomOverlay, KakaoMapInfoWindow } from '@/components';
 import type { KakaoMapMarkerProps, KakaoMapMarkerImage } from './types';
 import { DEFAULT_MARKER_IMAGE, DEFAULT_MARKER_IMAGE_HEIGHT, DEFAULT_MARKER_IMAGE_WIDTH } from '@/constants/markerImage';
-import KakaoMapCustomOverlay from '../KakaoMapCustomOverlay/KakaoMapCustomOverlay.vue';
 
 const emits = defineEmits(['onLoadKakaoMapMarker', 'onClickKakaoMapMarker', 'dragEndKakaoMapMarker', 'deleteKakaoMapMarker']);
 
@@ -137,7 +136,6 @@ watch([() => props.image], () => {
       <slot name="infoWindow"> </slot>
     </KakaoMapInfoWindow>
 
-    <KakaoMapCustomOverlay v-if="props.order" :lat="props.lat" :lng="props.lng" :y-anchor="0" :content="content(props.order)">
-    </KakaoMapCustomOverlay>
+    <KakaoMapCustomOverlay v-if="props.order" :lat="props.lat" :lng="props.lng" :y-anchor="0" :content="content(props.order)" />
   </div>
 </template>
