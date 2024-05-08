@@ -136,6 +136,15 @@ watch([() => props.image], () => {
       <slot name="infoWindow"> </slot>
     </KakaoMapInfoWindow>
 
+    <KakaoMapInfoWindow
+      v-else-if="props.infoWindow"
+      :marker="marker"
+      :lat="props.lat"
+      :lng="props.lng"
+      :content="props?.infoWindow?.content"
+      :visible="props?.infoWindow?.visible"
+    />
+
     <KakaoMapCustomOverlay v-if="props.order" :lat="props.lat" :lng="props.lng" :y-anchor="0" :content="content(props.order)" />
   </div>
 </template>
