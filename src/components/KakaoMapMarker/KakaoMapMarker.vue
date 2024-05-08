@@ -175,7 +175,7 @@ watch(
 watch(
   () => props.zIndex,
   (zIndex) => {
-    if (zIndex !== undefined) {
+    if (zIndex !== undefined && !isNaN(zIndex)) {
       marker.value?.setZIndex(Number(zIndex));
     }
   }
@@ -187,8 +187,10 @@ watch(
 watch(
   () => props.opacity,
   (opacity) => {
-    if (opacity !== undefined) {
+    if (opacity !== undefined && !isNaN(opacity)) {
       marker.value?.setOpacity(Number(opacity));
+    } else {
+      marker.value?.setOpacity(1);
     }
   }
 );
