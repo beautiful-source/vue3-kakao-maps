@@ -1,14 +1,41 @@
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", ".eslintrc.cjs"],
+  "exclude": ["src/**/__tests__/*"],
+  "compilerOptions": {
+    // Type Checking
+    "strict": true,
+
+    // Modules
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "paths": {
+      "@/*": ["./src/*"]
     },
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.vitest.json"
-    }
-  ]
+    "types": ["kakao.maps.d.ts"],
+    // adjusting file structure of the output file
+    "rootDir": "src",
+
+    // Projects
+    "composite": true,
+
+    // Emit
+    "outDir": "dist",
+    "emitDeclarationOnly": true,
+
+    // Language and Environment
+    // Required in Vue projects
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
+
+    // Interop Constraints
+    // see <https://vitejs.dev/guide/features.html#isolatedmodules>
+    "isolatedModules": true,
+    // <https://devblogs.microsoft.com/typescript/announcing-typescript-5-0/#verbatimmodulesyntax>
+    // Any imports or exports without a type modifier are left around. This is important for `<script setup>`.
+    // Anything that uses the type modifier is dropped entirely.
+    "verbatimModuleSyntax": true,
+
+    // Completeness
+    "skipLibCheck": true
+  }
 }

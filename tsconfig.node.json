@@ -5,7 +5,8 @@
     "vitest.config.*",
     "cypress.config.*",
     "nightwatch.conf.*",
-    "playwright.config.*"
+    "playwright.config.*",
+    ".eslintrc.cjs"
   ],
   "compilerOptions": {
     "composite": true,
@@ -14,6 +15,7 @@
 
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "types": ["node"]
+    "types": ["node", "kakao.maps.d.ts"],
+    "allowJs": true // JavaScript 파일 포함 허용
   }
 }

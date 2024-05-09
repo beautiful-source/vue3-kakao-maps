@@ -1,8 +1,40 @@
 {
   "name": "vue3-kakao-maps",
-  "version": "0.0.0",
-  "private": true,
+  "version": "2.2.0",
+  "private": false,
   "type": "module",
+  "main": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "!dist/stories",
+    "!dist/constants",
+    "!dist/libraries",
+    "!**/*.stories.*"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./@utils": {
+      "import": {
+        "types": "./dist/utils/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/utils/index.d.ts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -10,31 +42,69 @@
     "test:unit": "vitest",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "prepare": "husky install",
+    "format": "prettier --write src/",
+    "lint": "eslint --cache --cache-location .eslintcache --fix --ext .ts,.vue src/",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "prepack": "run-p build"
   },
   "dependencies": {
-    "vue": "^3.4.21"
+    "kakao.maps.d.ts": "^0.1.39"
   },
   "devDependencies": {
-    "@rushstack/eslint-patch": "^1.8.0",
+    "@chromatic-com/storybook": "1.3.2",
+    "@rushstack/eslint-patch": "^1.10.2",
+    "@storybook/addon-docs": "^8.0.9",
+    "@storybook/addon-essentials": "^8.0.8",
+    "@storybook/addon-interactions": "^8.0.8",
+    "@storybook/addon-links": "^8.0.8",
+    "@storybook/blocks": "^8.0.8",
+    "@storybook/test": "^8.0.8",
+    "@storybook/vue3": "^8.0.8",
+    "@storybook/vue3-vite": "^8.0.8",
     "@tsconfig/node20": "^20.1.4",
     "@types/jsdom": "^21.1.6",
     "@types/node": "^20.12.5",
+    "@typescript-eslint/parser": "^7.1.0",
     "@vitejs/plugin-vue": "^5.0.4",
-    "@vue/eslint-config-prettier": "^9.0.0",
-    "@vue/eslint-config-typescript": "^13.0.0",
     "@vue/test-utils": "^2.4.5",
     "@vue/tsconfig": "^0.5.1",
     "eslint": "^8.57.0",
-    "eslint-plugin-vue": "^9.23.0",
+    "eslint-config-love": "^47.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-storybook": "^0.8.0",
+    "eslint-plugin-vue": "^9.22.0",
+    "husky": "^8.0.3",
     "jsdom": "^24.0.0",
     "npm-run-all2": "^6.1.2",
     "prettier": "^3.2.5",
+    "sass": "^1.75.0",
+    "storybook": "^8.0.9",
     "typescript": "~5.4.0",
     "vite": "^5.2.8",
     "vite-plugin-vue-devtools": "^7.0.25",
     "vitest": "^1.4.0",
+    "vue": "^3.4.23",
     "vue-tsc": "^2.0.11"
-  }
+  },
+  "description": "kakao maps component library with vue3 and TS",
+  "license": "MIT",
+  "homepage": "https://6620c768715fd00a32d656ec-qjvjkblfbq.chromatic.com/?path=/docs/stories-readme--overview",
+  "keywords": [
+    "vue",
+    "vue3",
+    "kakao",
+    "kakao map",
+    "map",
+    "map api",
+    "카카오",
+    "카카오맵",
+    "카카오 맵",
+    "지도",
+    "지도 api"
+  ]
 }
