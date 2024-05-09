@@ -5,7 +5,14 @@ import { KakaoMapCustomOverlay, KakaoMapInfoWindow } from '@/components';
 import type { KakaoMapMarkerProps, KakaoMapMarkerImage } from './types';
 import { DEFAULT_MARKER_IMAGE, DEFAULT_MARKER_IMAGE_HEIGHT, DEFAULT_MARKER_IMAGE_WIDTH } from '@/constants/markerImage';
 
-const emits = defineEmits(['onLoadKakaoMapMarker', 'onClickKakaoMapMarker', 'dragEndKakaoMapMarker', 'deleteKakaoMapMarker']);
+const emits = defineEmits([
+  'onLoadKakaoMapMarker',
+  'onClickKakaoMapMarker',
+  'dragEndKakaoMapMarker',
+  'mouseOverKakaoMapMarker',
+  'mouseOutKakaoMapMarker',
+  'deleteKakaoMapMarker'
+]);
 
 const props = defineProps<KakaoMapMarkerProps>();
 /**
@@ -51,18 +58,33 @@ const initMarker = (map: kakao.maps.Map): void => {
   const markerPosition = new kakao.maps.LatLng(props.lat, props.lng);
   marker.value = new kakao.maps.Marker({
     position: markerPosition,
-    draggable: props.draggable
+    title: props.title,
+    draggable: props.draggable,
+    clickable: props.clickable,
+    zIndex: props.zIndex,
+    opacity: props.opacity,
+    altitude: props.altitude,
+    range: props.range
   });
 
   changeMarkerImage(props.image);
   emits('onLoadKakaoMapMarker', marker.value);
   marker.value.setMap(map);
 
-  kakao.maps.event.addListener(marker.value, 'click', () => {
+  clickMarkerEvent(marker.value);
+  mouseOverMarkerEvent(marker.value);
+  mouseOutMarkerEvent(marker.value);
+  draggableMarkerEvent(map, marker.value);
+};
+
+/**
+ * 마커 클릭 이벤트를 감지합니다.
+ * @param marker
+ */
+const clickMarkerEvent = (marker: kakao.maps.Marker): void => {
+  kakao.maps.event.addListener(marker, 'click', () => {
     emits('onClickKakaoMapMarker');
   });
-
-  draggableMarkerEvent(map, marker.value);
 };
 
 /**
@@ -71,8 +93,28 @@ const initMarker = (map: kakao.maps.Map): void => {
  * @param marker
  */
 const draggableMarkerEvent = (map: kakao.maps.Map, marker: kakao.maps.Marker): void => {
-  kakao.maps.event.addListener(marker, 'dragend', function (mouseEvent: any) {
+  kakao.maps.event.addListener(marker, 'dragend', function (mouseEvent: kakao.maps.event.MouseEvent) {
     emits('dragEndKakaoMapMarker', marker);
+  });
+};
+
+/**
+ * 마커 마우스 오버 이벤트를 감지합니다.
+ * @param marker
+ */
+const mouseOverMarkerEvent = (marker: kakao.maps.Marker): void => {
+  kakao.maps.event.addListener(marker, 'mouseover', () => {
+    emits('mouseOverKakaoMapMarker');
+  });
+};
+
+/**
+ * 마커 마우스 아웃 이벤트를 감지합니다.
+ * @param marker
+ */
+const mouseOutMarkerEvent = (marker: kakao.maps.Marker): void => {
+  kakao.maps.event.addListener(marker, 'mouseout', () => {
+    emits('mouseOutKakaoMapMarker');
   });
 };
 
@@ -122,6 +164,64 @@ watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
 watch([() => props.image], () => {
   changeMarkerImage(props.image);
 });
+
+/**
+ * title 변경감지
+ */
+watch(
+  () => props.title,
+  (title) => {
+    if (title !== undefined) {
+      marker.value?.setTitle(title);
+    }
+  }
+);
+
+/**
+ * draggable 변경감지
+ */
+watch(
+  () => props.draggable,
+  (draggable) => {
+    marker.value?.setDraggable(draggable !== undefined && draggable);
+  }
+);
+
+/**
+ * clickable 변경감지
+ */
+watch(
+  () => props.clickable,
+  (clickable) => {
+    marker.value?.setDraggable(clickable !== undefined && clickable);
+  }
+);
+
+/**
+ * zIndex 변경감지
+ */
+watch(
+  () => props.zIndex,
+  (zIndex) => {
+    if (zIndex !== undefined && isFinite(zIndex)) {
+      marker.value?.setZIndex(Number(zIndex));
+    }
+  }
+);
+
+/**
+ * opacity 변경감지
+ */
+watch(
+  () => props.opacity,
+  (opacity) => {
+    if (opacity !== undefined && isFinite(opacity)) {
+      marker.value?.setOpacity(Number(opacity));
+    } else {
+      marker.value?.setOpacity(1);
+    }
+  }
+);
 </script>
 
 <template>
