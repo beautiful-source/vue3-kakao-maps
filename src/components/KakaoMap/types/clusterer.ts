@@ -44,7 +44,7 @@ export type MarkerClusterInfo = {
   calculator?: number[] | ((size: number) => number[]);
 
   /**
-   * 클러스터 클릭 시 지도 확대 여부 (기본값: true)
+   * 클러스터 클릭 시 지도 확대 여부 (기본값: false)
    */
   disableClickZoom?: boolean;
 
