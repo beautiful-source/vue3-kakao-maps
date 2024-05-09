@@ -183,11 +183,7 @@ watch(
 watch(
   () => props.draggable,
   (draggable) => {
-    if (draggable === undefined || draggable) {
-      marker.value?.setDraggable(true);
-    } else {
-      marker.value?.setDraggable(false);
-    }
+    marker.value?.setDraggable(draggable !== undefined && draggable);
   }
 );
 
@@ -197,11 +193,7 @@ watch(
 watch(
   () => props.clickable,
   (clickable) => {
-    if (clickable === undefined || clickable) {
-      marker.value?.setClickable(true);
-    } else {
-      marker.value?.setClickable(false);
-    }
+    marker.value?.setDraggable(clickable !== undefined && clickable);
   }
 );
 
@@ -211,7 +203,7 @@ watch(
 watch(
   () => props.zIndex,
   (zIndex) => {
-    if (zIndex !== undefined && !isNaN(zIndex)) {
+    if (zIndex !== undefined && isFinite(zIndex)) {
       marker.value?.setZIndex(Number(zIndex));
     }
   }
@@ -223,7 +215,7 @@ watch(
 watch(
   () => props.opacity,
   (opacity) => {
-    if (opacity !== undefined && !isNaN(opacity)) {
+    if (opacity !== undefined && isFinite(opacity)) {
       marker.value?.setOpacity(Number(opacity));
     } else {
       marker.value?.setOpacity(1);
