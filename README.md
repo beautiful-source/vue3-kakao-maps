@@ -11,9 +11,7 @@
 
 카카오맵 API의 `지도`, `마커`, `인포윈도우`, `커스텀 오버레이`, `마커 클러스터`등을 컴포넌트 형태로 제공합니다.
 
-사용 예시 및 컴포넌트 별 세부 속성값은 [**Docs**](https://6620c768715fd00a32d656ec-mpdjongclw.chromatic.com/?path=/docs/stories-readme--component)에서 확인하실 수 있습니다.
-
-**!! 현재 24년 5월 중순 완성을 목표로 개발 중입니다. 하단 [개발 일정](#개발-일정) 확인하시어 [다운로드](https://www.npmjs.com/package/vue3-kakao-maps) 하시기 바랍니다.**
+사용 예시 및 컴포넌트 별 세부 속성값은 [**Docs**](https://vue3-kakao-maps-docs.vercel.app/components/kakaoMap)에서 확인하실 수 있습니다.
 
 [`vue3-kakao-maps`에 관한 소중한 생각을 남겨주세요!](https://forms.gle/qZty6EQDRD8Q3b3i9)
 
@@ -58,7 +56,7 @@ pnpm install vue3-kakao-maps
 ```js
 import { createApp } from 'vue';
 import App from './App.vue';
-import { useKakao } from 'vue3-kakao-maps';
+import { useKakao } from 'vue3-kakao-maps/@utils';
 
 useKakao('API key');
 createApp(App).mount('#app');
@@ -84,53 +82,8 @@ const coordinate = {
 </template>
 ```
 
-## 개발 일정
-
-### 2024.04.23 <span style="color:yellowgreen; font-weight:bold">(v1.0.0)</span>
-
-- 지도 생성하기
-- 지도 이동시키기
-- 마커 생성하기
-
-### 2024.04.26
-
-- 지도 정보 얻어오기
-- 여러개 마커 표시하기
-- 여러개 마커 제어하기
-- 마커 리스트 관리하기
-- 다른 이미지로 마커 생성하기
-- 마커에 인포윈도우 표시하기
-- 이미지 마커와 커스텀 오버레이
-
-### 2024.05.03
-
-- 마커 클러스터
-- 화면에 보이는 마커만 렌더링 최적화
-- 마커 선으로 연결하기
-- 좌표 주소로 변환하기
-- 영역 변경 이벤트 등록하기
-- 지도 반응형 처리
-- 주소로 장소 표시하기
-- order로 마커 생성하기
-- 클릭 이벤트 등록하기
-
-### 2024.05.10
-
-- 클릭한 위치에 마커 표시하기
-- 이동 이벤트 등록하기
-- 확대, 축소 이벤트 등록하기
-- 키워드로 장소 검색하기
-- geolocation으로 마커 표시하기
-
-### 2024.05.17
-
-- 카테고리로 장소 검색하기
-- 중심좌표 변경 이벤트 등록하기
-- 타일로드 이벤트 등록하기
-- 로딩 스피너
-
 ## 📧 Contact
 
-문의사항이 있거나 도움이 필요한 경우 하단의 이메일로 연락주시기 바립니다.
+문의사항이 있거나 도움이 필요한 경우 하단의 카카오톡 채널로 연락주시기 바립니다.
 
-- jayula107@gmail.com
+http://pf.kakao.com/_iiZUG/chat

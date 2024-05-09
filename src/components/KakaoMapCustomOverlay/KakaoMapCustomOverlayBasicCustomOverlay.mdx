@@ -1,0 +1,29 @@
+import { Meta, Title, Primary, Controls, Stories, Subtitle, Source, Canvas } from '@storybook/blocks';
+import * as KakaoMapCustomOverlayStories from './KakaoMapCustomOverlay.stories.ts';
+
+<Meta of={KakaoMapCustomOverlayStories} />
+
+<Title />
+
+# <Subtitle />
+
+<Primary />
+
+## `props`
+
+컴포넌트는 다음과 같은 `props`를 전달받을 수 있습니다:
+
+<Controls />
+
+---
+
+## 커스텀 오버레이를 활용한 기능
+
+컴포넌트를 활용해 다음과 같은 기능을 구현할 수 있습니다.
+
+### 닫기가 가능한 커스텀 오버레이
+
+닫기 가능한 커스텀 오버레이를 만들 수 있습니다.
+
+<Canvas of={KakaoMapCustomOverlayStories.CloseCustomOverlay} />
+<Source of={KakaoMapCustomOverlayStories.CloseCustomOverlay} />

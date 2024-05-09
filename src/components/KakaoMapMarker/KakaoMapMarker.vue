@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/utils/useKakao';
 import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
-import KakaoMapInfoWindow from '../KakaoMapInfoWindow/KakaoMapInfoWindow.vue';
+import { KakaoMapCustomOverlay, KakaoMapInfoWindow } from '@/components';
 import type { KakaoMapMarkerProps, KakaoMapMarkerImage } from './types';
 import { DEFAULT_MARKER_IMAGE, DEFAULT_MARKER_IMAGE_HEIGHT, DEFAULT_MARKER_IMAGE_WIDTH } from '@/constants/markerImage';
 
-const emits = defineEmits(['onLoadKakaoMapMarker']);
+const emits = defineEmits([
+  'onLoadKakaoMapMarker',
+  'onClickKakaoMapMarker',
+  'dragEndKakaoMapMarker',
+  'mouseOverKakaoMapMarker',
+  'mouseOutKakaoMapMarker',
+  'deleteKakaoMapMarker'
+]);
 
 const props = defineProps<KakaoMapMarkerProps>();
 /**
- * kakao api로 생성한 marker 객체
  */
 const marker = ref<kakao.maps.Marker | undefined>();
 /**
@@ -51,18 +57,82 @@ const initMarker = (map: kakao.maps.Map): void => {
   }
   const markerPosition = new kakao.maps.LatLng(props.lat, props.lng);
   marker.value = new kakao.maps.Marker({
-    position: markerPosition
+    position: markerPosition,
+    title: props.title,
+    draggable: props.draggable,
+    clickable: props.clickable,
+    zIndex: props.zIndex,
+    opacity: props.opacity,
+    altitude: props.altitude,
+    range: props.range
   });
 
   changeMarkerImage(props.image);
   emits('onLoadKakaoMapMarker', marker.value);
   marker.value.setMap(map);
+
+  clickMarkerEvent(marker.value);
+  mouseOverMarkerEvent(marker.value);
+  mouseOutMarkerEvent(marker.value);
+  draggableMarkerEvent(map, marker.value);
+};
+
+/**
+ * 마커 클릭 이벤트를 감지합니다.
+ * @param marker
+ */
+const clickMarkerEvent = (marker: kakao.maps.Marker): void => {
+  kakao.maps.event.addListener(marker, 'click', () => {
+    emits('onClickKakaoMapMarker');
+  });
+};
+
+/**
+ * 마커 드래그 이벤트를 감지합니다.
+ * @param map
+ * @param marker
+ */
+const draggableMarkerEvent = (map: kakao.maps.Map, marker: kakao.maps.Marker): void => {
+  kakao.maps.event.addListener(marker, 'dragend', function (mouseEvent: kakao.maps.event.MouseEvent) {
+    emits('dragEndKakaoMapMarker', marker);
+  });
+};
+
+/**
+ * 마커 마우스 오버 이벤트를 감지합니다.
+ * @param marker
+ */
+const mouseOverMarkerEvent = (marker: kakao.maps.Marker): void => {
+  kakao.maps.event.addListener(marker, 'mouseover', () => {
+    emits('mouseOverKakaoMapMarker');
+  });
+};
+
+/**
+ * 마커 마우스 아웃 이벤트를 감지합니다.
+ * @param marker
+ */
+const mouseOutMarkerEvent = (marker: kakao.maps.Marker): void => {
+  kakao.maps.event.addListener(marker, 'mouseout', () => {
+    emits('mouseOutKakaoMapMarker');
+  });
+};
+
+/**
+ * 마커 순서를 지도에 표시하기 위한 커스텀 오버레이 content 입니다.
+ * @param order
+ */
+const content = (order: string | number): string => {
+  return `<div style="position:relative; bottom:${props.orderBottomMargin}">
+        ${order}
+      </div>`;
 };
 
 /**
  * 컴포넌트 언마운트 시 map에서 marker 삭제
  */
 onBeforeUnmount(() => {
+  emits('deleteKakaoMapMarker', marker);
   marker.value?.setMap(null);
 });
 
@@ -94,21 +164,87 @@ watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
 watch([() => props.image], () => {
   changeMarkerImage(props.image);
 });
+
+/**
+ * title 변경감지
+ */
+watch(
+  () => props.title,
+  (title) => {
+    if (title !== undefined) {
+      marker.value?.setTitle(title);
+    }
+  }
+);
+
+/**
+ * draggable 변경감지
+ */
+watch(
+  () => props.draggable,
+  (draggable) => {
+    marker.value?.setDraggable(draggable !== undefined && draggable);
+  }
+);
+
+/**
+ * clickable 변경감지
+ */
+watch(
+  () => props.clickable,
+  (clickable) => {
+    marker.value?.setDraggable(clickable !== undefined && clickable);
+  }
+);
+
+/**
+ * zIndex 변경감지
+ */
+watch(
+  () => props.zIndex,
+  (zIndex) => {
+    if (zIndex !== undefined && isFinite(zIndex)) {
+      marker.value?.setZIndex(Number(zIndex));
+    }
+  }
+);
+
+/**
+ * opacity 변경감지
+ */
+watch(
+  () => props.opacity,
+  (opacity) => {
+    if (opacity !== undefined && isFinite(opacity)) {
+      marker.value?.setOpacity(Number(opacity));
+    } else {
+      marker.value?.setOpacity(1);
+    }
+  }
+);
 </script>
 
 <template>
   <div>
     <KakaoMapInfoWindow
-      v-if="props.infoWindow && props.infoWindow.length > 0"
+      v-if="$slots.infoWindow"
       :marker="marker"
       :lat="props.lat"
       :lng="props.lng"
-      :content="props.infoWindow"
+      :visible="props?.infoWindow?.visible"
     >
-    </KakaoMapInfoWindow>
-
-    <KakaoMapInfoWindow v-if="$slots.infoWindow" :marker="marker" :lat="props.lat" :lng="props.lng">
       <slot name="infoWindow"> </slot>
     </KakaoMapInfoWindow>
+
+    <KakaoMapInfoWindow
+      v-else-if="props.infoWindow"
+      :marker="marker"
+      :lat="props.lat"
+      :lng="props.lng"
+      :content="props?.infoWindow?.content"
+      :visible="props?.infoWindow?.visible"
+    />
+
+    <KakaoMapCustomOverlay v-if="props.order" :lat="props.lat" :lng="props.lng" :y-anchor="0" :content="content(props.order)" />
   </div>
 </template>

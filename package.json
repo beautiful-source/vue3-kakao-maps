@@ -1,6 +1,6 @@
 {
   "name": "vue3-kakao-maps",
-  "version": "2.0.0",
+  "version": "2.3.0",
   "private": false,
   "type": "module",
   "main": "./dist/index.umd.cjs",
@@ -10,6 +10,7 @@
     "dist",
     "!dist/stories",
     "!dist/constants",
+    "!dist/libraries",
     "!**/*.stories.*"
   ],
   "exports": {
@@ -20,7 +21,7 @@
       },
       "require": {
         "types": "./dist/index.d.ts",
-        "default": "./dist/index.umd.cjs"
+        "default": "./dist/index.cjs"
       }
     },
     "./@utils": {
@@ -92,7 +93,7 @@
   },
   "description": "kakao maps component library with vue3 and TS",
   "license": "MIT",
-  "homepage": "https://6620c768715fd00a32d656ec-mpdjongclw.chromatic.com/?path=/docs/stories-readme--component",
+  "homepage": "https://6620c768715fd00a32d656ec-qjvjkblfbq.chromatic.com/?path=/docs/stories-readme--overview",
   "keywords": [
     "vue",
     "vue3",

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 import { KakaoMap } from '@/components';
-import type { KakaoMapProps, KakaoMapMarkerListItem } from '@/components/KakaoMap/types';
+import type { KakaoMapProps } from '@/components/KakaoMap/types';
+import type { KakaoMapMarkerProps } from '@/components/KakaoMapMarker/types';
 import useKakao from '@/utils/useKakao';
 
 const meta = {
@@ -15,7 +16,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof KakaoMap>;
 
-const list: KakaoMapMarkerListItem[] = [
+const list: KakaoMapMarkerProps[] = [
   {
     lat: 37.27943075229118,
     lng: 127.01763998406159

@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { KakaoMapInfoWindow, KakaoMapMarker } from '@/components';
 import { isKakaoMapApiLoaded } from '@/utils/useKakao';
-import { ref, watch, computed, onMounted, provide, toRaw } from 'vue';
-import { KakaoMapMarker } from '@/components';
+import { computed, onMounted, provide, ref, toRaw, watch } from 'vue';
 import type { KakaoMapProps, MarkerClusterInfo } from './types';
 
 const props = withDefaults(defineProps<KakaoMapProps>(), {
@@ -20,6 +20,56 @@ const emits = defineEmits(['onLoadKakaoMap']);
 const kakaoMapRef = ref<null | HTMLElement>(null);
 const map = ref<kakao.maps.Map>();
 provide('mapRef', map);
+
+/**
+ * 지도를 생성하는 함수
+ */
+const initMap = (): void => {
+  const options = {
+    center: new kakao.maps.LatLng(props.lat, props.lng),
+    ...props
+  };
+  if (kakaoMapRef.value !== null) {
+    map.value = new window.kakao.maps.Map(kakaoMapRef.value, options);
+    emits('onLoadKakaoMap', map.value);
+  }
+};
+
+/**
+ * Marker Cluster 기능
+ */
+const clusterer = ref<kakao.maps.MarkerClusterer>();
+const initCluster = (info: MarkerClusterInfo): void => {
+  if (info.markers === undefined) {
+    throw new Error('MarkerList가 없습니다.');
+  }
+  if (map.value !== null) {
+    /**
+     * kakao.maps.Marker[] 생성
+     */
+    const markers = ref<kakao.maps.Marker[]>([]);
+    info.markers.forEach((markerInfo) => {
+      const marker = new kakao.maps.Marker({
+        position: new kakao.maps.LatLng(markerInfo.lat, markerInfo.lng),
+        image: markerInfo.image ?? undefined,
+        title: markerInfo.title ?? undefined,
+        draggable: typeof markerInfo.draggable === 'boolean' ? markerInfo.draggable : false,
+        clickable: typeof markerInfo.clickable === 'boolean' ? markerInfo.clickable : false,
+        zIndex: typeof markerInfo.zIndex === 'number' ? markerInfo.zIndex : 0,
+        opacity: markerInfo.opacity ?? 1.0,
+        altitude: markerInfo.altitude ?? 0,
+        range: markerInfo.range ?? undefined
+      });
+      markers.value?.push(marker);
+    });
+    clusterer.value = new kakao.maps.MarkerClusterer({
+      map: toRaw(map.value),
+      ...info,
+      markers: markers.value
+    });
+  }
+};
+
 onMounted(() => {
   if (isKakaoMapApiLoaded.value) {
     initMap();
@@ -51,24 +101,10 @@ type MapStyle = {
 
 const mapStyle = computed<MapStyle>(() => {
   return {
-    width: typeof props.width === 'number' ? props.width + 'px' : props.width,
-    height: typeof props.height === 'number' ? props.height + 'px' : props.height
+    width: isFinite(+props.width) ? props.width + 'px' : props.width,
+    height: isFinite(+props.height) ? props.height + 'px' : props.height
   };
 });
-
-/**
- * width, height 변경감지
- */
-watch(
-  [() => props.width, () => props.height],
-  ([newWidth, newHeight]) => {
-    mapStyle.value.width = newWidth;
-    mapStyle.value.height = newHeight;
-  },
-  {
-    deep: true
-  }
-);
 
 /**
  * LatLng 변경감지
@@ -162,70 +198,34 @@ watch(
     }
   }
 );
-
-/**
- * 지도를 생성하는 함수
- */
-const initMap = (): void => {
-  const options = {
-    center: new kakao.maps.LatLng(props.lat, props.lng),
-    ...props
-  };
-  if (kakaoMapRef.value !== null) {
-    map.value = new window.kakao.maps.Map(kakaoMapRef.value, options);
-    emits('onLoadKakaoMap', map.value);
-  }
-};
-
-/**
- * Marker Cluster 기능
- */
-const clusterer = ref<kakao.maps.MarkerClusterer>();
-const initCluster = (info: MarkerClusterInfo): void => {
-  if (info.markers === undefined) {
-    throw new Error('MarkerList가 없습니다.');
-  }
-  if (map.value !== null) {
-    /**
-     * kakao.maps.Marker[] 생성
-     */
-    const markers = ref<kakao.maps.Marker[]>([]);
-    info.markers.forEach((markerInfo) => {
-      const marker = new kakao.maps.Marker({
-        position: new kakao.maps.LatLng(markerInfo.lat, markerInfo.lng),
-        image: markerInfo.image ?? undefined,
-        title: markerInfo.title ?? undefined,
-        draggable: typeof markerInfo.draggable === 'boolean' ? markerInfo.draggable : false,
-        clickable: typeof markerInfo.clickable === 'boolean' ? markerInfo.clickable : false,
-        zIndex: typeof markerInfo.zIndex === 'number' ? markerInfo.zIndex : 0,
-        opacity: markerInfo.opacity ?? 1.0,
-        altitude: markerInfo.altitude ?? 0,
-        range: markerInfo.range ?? undefined
-      });
-      markers.value?.push(marker);
-    });
-    clusterer.value = new kakao.maps.MarkerClusterer({
-      map: toRaw(map.value),
-      ...info,
-      markers: markers.value
-    });
-  }
-};
 </script>
 
 <template>
   <div ref="kakaoMapRef" :style="mapStyle">
-    <div v-if="props.markerList && props.markerCluster == undefined && map !== null">
+    <template v-if="props.markerList && props.markerCluster === undefined">
       <KakaoMapMarker
         v-for="(marker, index) in props.markerList"
-        :id="index"
         :key="marker.key === undefined ? index : marker.key"
-        :map="map"
         :lat="marker.lat"
         :lng="marker.lng"
-        :info-window="marker.infoWindow"
+        :info-window="marker?.infoWindow"
+        :draggable="marker.draggable"
+        :image="marker.image"
+        :order="marker.order"
+        :order-bottom-margin="marker.orderBottomMargin"
       />
-    </div>
+    </template>
+
+    <template v-if="props.infoWindowList">
+      <KakaoMapInfoWindow
+        v-for="(infoWindow, index) in props.infoWindowList"
+        :key="infoWindow.key === undefined ? index : infoWindow.key"
+        :lat="infoWindow.lat"
+        :lng="infoWindow.lng"
+        :content="infoWindow.content"
+        :visible="infoWindow.visible"
+      />
+    </template>
     <slot></slot>
   </div>
 </template>
