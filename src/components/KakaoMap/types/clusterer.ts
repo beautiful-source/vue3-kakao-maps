@@ -31,8 +31,7 @@ export type MarkerClusterInfo = {
   styles?: object[];
 
   /**
-   * 클러스터에 표시할 문자열 또는 문자열 생성 함수.
-   * @default "클러스터에 포함된 숫자"
+   * 클러스터에 표시할 문자열 또는 문자열 생성 함수. (기본값: 클러스터에 포함된 숫자)
    */
 
   texts?: string[] | ((size: number) => string);
@@ -43,7 +42,7 @@ export type MarkerClusterInfo = {
   calculator?: number[] | ((size: number) => number[]);
 
   /**
-   * 클러스터 클릭 시 지도 확대 여부 (기본값: true)
+   * 클러스터 클릭 시 지도 확대 여부 (기본값: false)
    */
   disableClickZoom?: boolean;
 
