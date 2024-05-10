@@ -96,7 +96,7 @@ const clickMarkerEvent = (marker: kakao.maps.Marker): void => {
  * @param marker
  */
 const draggableMarkerEvent = (map: kakao.maps.Map, marker: kakao.maps.Marker): void => {
-  kakao.maps.event.addListener(marker, 'dragend', function (mouseEvent: any) {
+  kakao.maps.event.addListener(marker, 'dragend', function (mouseEvent: kakao.maps.event.MouseEvent) {
     emits('dragEndKakaoMapMarker', marker);
   });
 };
