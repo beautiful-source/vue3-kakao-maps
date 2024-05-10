@@ -1,13 +1,28 @@
 import type { KakaoMapMarkerListItem } from '@/components/KakaoMap/types';
 
 /**
+ * kakao.maps.Polyline의 path 옵션을 위한 latLng 타입
+ */
+export type KakaoMapLatLngItem = {
+  /**
+   * 지도의 위도 값
+   */
+  lat: number;
+
+  /**
+   * 지도의 경도 값
+   */
+  lng: number;
+};
+
+/**
  * KakaoMapPolyline 컴포넌트 생성을 위한 타입
  */
 export type KakaoMapPolylineProps = {
   /**
    * 폴리라인이 지나갈 경로
    */
-  linePath: kakao.maps.LatLng[];
+  latLngList: KakaoMapLatLngItem[];
 
   /**
    * 선의 화살표 여부
@@ -73,6 +88,11 @@ export type KakaoMapMarkerPolylineProps = {
    *선의 스타일
    */
   strokeStyle?: kakao.maps.StrokeStyles;
+
+  /**
+   * 선의 z-index 속성 값
+   */
+  zIndex?: number;
 
   /**
    * 마커의 순서 표시 여부
