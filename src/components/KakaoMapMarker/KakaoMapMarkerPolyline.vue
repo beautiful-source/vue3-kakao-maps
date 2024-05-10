@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, ref, type ComputedRef, type Ref } from 'vue';
+import { inject, ref, type Ref } from 'vue';
 import { KakaoMapCustomOverlay, KakaoMapMarker, KakaoMapPolyline } from '@/components';
 import type { KakaoMapMarkerPolylineProps } from '../KakaoMapPolyline/types';
 
@@ -9,11 +9,6 @@ const props = defineProps<KakaoMapMarkerPolylineProps>();
  * 마커가 표시될 지도 객체
  */
 const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
-
-/**
- * 폴리라인이 지나갈 경로
- */
-let linePath: ComputedRef<kakao.maps.LatLng[]>;
 
 /**
  * 마커 객체 리스트 (드래그된 마커 추적)
@@ -59,17 +54,6 @@ const content = (order: string | number, orderBottomMargin: string | undefined):
         ${order}
       </div>`;
 };
-
-/**
- * 폴리라인이 지나가는 경로인 linePath 계산
- */
-onMounted(() => {
-  linePath = computed(() => {
-    return props.markerList.map((item) => {
-      return new kakao.maps.LatLng(item.lat, item.lng);
-    });
-  });
-});
 </script>
 
 <template>
@@ -87,8 +71,20 @@ onMounted(() => {
       @drag-end-kakao-map-marker="updateMarkerLatLng"
       @delete-kakao-map-marker="deleteMapMarker"
     />
-    <div v-for="(path, index) in linePath" :key="index">
-      <KakaoMapPolyline v-if="index !== linePath.length - 1" :linePath="[path, linePath[index + 1]]" :endArrow="props.endArrow" />
+    <div v-for="(marker, index) in props.markerList" :key="index">
+      <KakaoMapPolyline
+        v-if="index !== props.markerList.length - 1"
+        :latLngList="[
+          { lat: props.markerList[index].lat, lng: props.markerList[index].lng },
+          { lat: props.markerList[index + 1].lat, lng: props.markerList[index + 1].lng }
+        ]"
+        :endArrow="props.endArrow"
+        :strokeWeight="props.strokeWeight"
+        :strokeColor="props.strokeColor"
+        :strokeOpacity="props.strokeOpacity"
+        :strokeStyle="props.strokeStyle"
+        :zIndex="props.zIndex"
+      />
     </div>
   </div>
 
