@@ -5,12 +5,12 @@ import type { KakaoMapMarkerListItem } from '@/components/KakaoMap/types';
  */
 export type KakaoMapLatLngItem = {
   /**
-   * 지도의 위도 값
+   * 좌표의 위도 값
    */
   lat: number;
 
   /**
-   * 지도의 경도 값
+   * 좌표의 경도 값
    */
   lng: number;
 };
