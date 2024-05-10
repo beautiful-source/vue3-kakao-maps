@@ -71,6 +71,46 @@ watch(
 );
 
 /**
+ * 화살표 여부 변경 감지
+ */
+watch(
+  () => props.endArrow,
+  () => {
+    polyline?.setMap(null);
+    if (mapRef !== undefined) {
+      initPolyline(mapRef.value);
+    }
+  }
+);
+
+/**
+ * stroke 옵션 변경 감지
+ */
+watch(
+  [() => props.strokeWeight, () => props.strokeColor, () => props.strokeOpacity, () => props.strokeStyle],
+  ([strokeWeight, strokeColor, strokeOpacity, strokeStyle]) => {
+    polyline?.setOptions({
+      strokeWeight,
+      strokeColor,
+      strokeOpacity,
+      strokeStyle
+    });
+  }
+);
+
+/**
+ * zIndex 변경 감지
+ */
+watch(
+  () => props.zIndex,
+  (zIndex) => {
+    if (zIndex !== undefined) {
+      polyline?.setZIndex(zIndex);
+    }
+  }
+);
+
+/**
  * 언마운트되면 map에서 폴리라인 삭제
  */
 onBeforeUnmount(() => {
