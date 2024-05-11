@@ -93,7 +93,7 @@
   },
   "description": "kakao maps component library with vue3 and TS",
   "license": "MIT",
-  "homepage": "https://vue3-kakao-maps-docs.vercel.app/",
+  "homepage": "https://vue3-kakao-maps.netlify.app/",
   "keywords": [
     "vue",
     "vue3",
