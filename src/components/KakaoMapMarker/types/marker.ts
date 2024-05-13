@@ -1,5 +1,5 @@
 /**
- * KakaoMapMarker 컴포넌트 생성을 위한 타입
+ *  KakaoMapMarker 컴포넌트 생성을 위한 타입
  */
 export type KakaoMapMarkerProps = {
   /**
@@ -13,9 +13,14 @@ export type KakaoMapMarkerProps = {
   lng: number;
 
   /**
-   * 마커에 추가할 InfoWindow content
+   * 마커에 추가할 인포윈도우 content
    */
-  infoWindow?: string;
+  infoWindow?: KakaoMapMarkerInfoWindow;
+
+  /**
+   * 마커 클릭 전 인포윈도우 표시 여부(기본값: true)
+   */
+  visible?: boolean;
 
   /**
    * 마커 이미지,
@@ -57,11 +62,26 @@ export type KakaoMapMarkerProps = {
    * 로드뷰 상에서 마커의 가시반경(m 단위), 두 지점 사이의 거리가 지정한 값보다 멀어지면 마커는 로드뷰에서 보이지 않게 됨
    */
   range?: number;
+
+  /**
+   * 지도에 표시되는 마커의 순서
+   */
+  order?: number | string;
+
+  /**
+   * 마커의 순서가 표시될 y축 방향 높이
+   */
+  orderBottomMargin?: string;
 };
 
 export type KakaoMapMarkerImage = {
   imageSrc: string;
   imageWidth?: number;
   imageHeight?: number;
-  imageOption: kakao.maps.MarkerImageOptions;
+  imageOption?: kakao.maps.MarkerImageOptions;
+};
+
+export type KakaoMapMarkerInfoWindow = {
+  content: string;
+  visible?: boolean;
 };

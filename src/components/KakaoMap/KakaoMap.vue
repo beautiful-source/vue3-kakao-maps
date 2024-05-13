@@ -101,24 +101,10 @@ type MapStyle = {
 
 const mapStyle = computed<MapStyle>(() => {
   return {
-    width: typeof props.width === 'number' ? props.width + 'px' : props.width,
-    height: typeof props.height === 'number' ? props.height + 'px' : props.height
+    width: isFinite(+props.width) ? props.width + 'px' : props.width,
+    height: isFinite(+props.height) ? props.height + 'px' : props.height
   };
 });
-
-/**
- * width, height 변경감지
- */
-watch(
-  [() => props.width, () => props.height],
-  ([newWidth, newHeight]) => {
-    mapStyle.value.width = newWidth;
-    mapStyle.value.height = newHeight;
-  },
-  {
-    deep: true
-  }
-);
 
 /**
  * LatLng 변경감지
@@ -222,7 +208,11 @@ watch(
         :key="marker.key === undefined ? index : marker.key"
         :lat="marker.lat"
         :lng="marker.lng"
-        :info-window="marker.infoWindow"
+        :info-window="marker?.infoWindow"
+        :draggable="marker.draggable"
+        :image="marker.image"
+        :order="marker.order"
+        :order-bottom-margin="marker.orderBottomMargin"
       />
     </template>
 
@@ -233,6 +223,7 @@ watch(
         :lat="infoWindow.lat"
         :lng="infoWindow.lng"
         :content="infoWindow.content"
+        :visible="infoWindow.visible"
       />
     </template>
     <slot></slot>

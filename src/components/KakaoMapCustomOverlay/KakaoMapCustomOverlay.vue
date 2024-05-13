@@ -8,7 +8,8 @@ const emits = defineEmits(['onLoadKakaoMapCustomOverlay']);
 const props = withDefaults(defineProps<KakaoMapCustomOverlayProps>(), {
   yAnchor: 0.5,
   xAnchor: 0.5,
-  clickable: false
+  clickable: false,
+  visible: true
 });
 /**
  * kakao api로 생성한 KakaoMapCustomOverlay 객체
@@ -45,6 +46,7 @@ const initKakaoMapCustomOverlay = (map: kakao.maps.Map): void => {
     clickable: props.clickable
   });
 
+  if (!props.visible) return;
   customOverlay.value.setMap(map);
   emits('onLoadKakaoMapCustomOverlay', customOverlay.value);
 };
@@ -64,6 +66,7 @@ onBeforeUnmount(() => {
 watch(
   [() => isKakaoMapApiLoaded.value, () => mapRef?.value, () => isKakaoMapApiLoaded, () => mapRef],
   ([isKakaoMapApiLoaded, mapRef]) => {
+    if (!props.visible) return;
     if (isKakaoMapApiLoaded && mapRef !== undefined && mapRef !== null) {
       initKakaoMapCustomOverlay(mapRef);
     }
@@ -95,6 +98,20 @@ watch(
   () => props.zIndex,
   (newZIndex) => {
     customOverlay.value?.setZIndex(newZIndex ?? 0);
+  }
+);
+
+/**
+ * visible 변경 감지
+ */
+watch(
+  () => props.visible,
+  (newVisible) => {
+    if (!newVisible) {
+      customOverlay?.value !== null && customOverlay.value !== undefined && customOverlay.value?.setMap(null);
+    } else if (isKakaoMapApiLoaded?.value && mapRef?.value !== undefined && mapRef?.value !== null) {
+      initKakaoMapCustomOverlay(mapRef.value);
+    }
   }
 );
 </script>

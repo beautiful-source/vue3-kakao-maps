@@ -9,7 +9,7 @@ const meta = {
   title: 'Components/KakaoMapInfoWindow',
   component: KakaoMapInfoWindow,
   parameters: {
-    componentSubtitle: '카카오 기본 KakaoMapInfoWindow 컴포넌트입니다.'
+    componentSubtitle: '기본 커스텀 오버레이 컴포넌트입니다.'
   },
   tags: ['autodocs'],
   argTypes: {
@@ -23,6 +23,11 @@ const meta = {
     },
     removable: {
       control: false
+    },
+    visible: {
+      control: {
+        type: 'boolean'
+      }
     },
     default: {
       name: 'KakaoMapInfoWindow의 content',
@@ -59,7 +64,7 @@ const renderKakaoMap: any = (
   :lat='37.566826'
   :lng='126.9786567'
   >
-  <KakaoMapInfoWindow :lat="args.lat" :lng="args.lng" :removable="args.removable" :content="args?.content">
+  <KakaoMapInfoWindow :lat="args.lat" :lng="args.lng" :removable="args.removable" :content="args?.content" :visible="args?.visible">
   ${args.default}
   </KakaoMapInfoWindow>
   </KakaoMap>
@@ -87,9 +92,9 @@ export const ContentDefault: Story = {
     },
     template: `
     <KakaoMap :lat="37.566826" :lng="126.9786567" :draggable="true">
-    <KakaoMapInfoWindow :lat="args.lat" :lng="args.lng" :content="args.content" />
-  </KakaoMap>
-  `
+      <KakaoMapInfoWindow :lat="args.lat" :lng="args.lng" :content="args.content" :visible="args?.visible"/>
+    </KakaoMap>
+    `
   }),
   args: {
     ...서울특별시청_좌표,
@@ -116,7 +121,7 @@ export const WithMarker: Story = {
     template: `
     <KakaoMap :lat="37.566826" :lng="126.9786567" :draggable="true">
       <KakaoMapMarker :lat="37.566826" :lng="126.9786567" @onLoadKakaoMapMarker="onLoadKakaoMapMarker" />
-      <KakaoMapInfoWindow :marker="marker" :lat="args.lat" :lng="args.lng" removable>
+      <KakaoMapInfoWindow :marker="marker" :lat="args.lat" :lng="args.lng" removable  :visible="args?.visible">
         <div>Hello World!</div>
       </KakaoMapInfoWindow>
     </KakaoMap>
@@ -124,5 +129,35 @@ export const WithMarker: Story = {
   }),
   args: {
     ...서울특별시청_좌표
+  }
+};
+
+export const InVisible: Story = {
+  name: '보이지 않게 인포윈도우 생성하기',
+  render: (args: KakaoMapInfoWindowProps) => ({
+    components: { KakaoMap, KakaoMapInfoWindow, KakaoMapMarker },
+    tags: ['autodocs'],
+    setup() {
+      useKakao(import.meta.env.VITE_KAKAO_APP_KEY ?? '');
+
+      const marker = ref<kakao.maps.Marker>();
+      const onLoadKakaoMapMarker = (newMarker: kakao.maps.Marker): void => {
+        marker.value = newMarker;
+      };
+
+      return { args, onLoadKakaoMapMarker, marker };
+    },
+    template: `
+    <KakaoMap :lat="37.566826" :lng="126.9786567" :draggable="true">
+      <KakaoMapMarker :lat="37.566826" :lng="126.9786567" @onLoadKakaoMapMarker="onLoadKakaoMapMarker" />
+      <KakaoMapInfoWindow :marker="marker" :lat="args.lat" :lng="args.lng" removable :visible="args.visible">
+        <div>Hello World!</div>
+      </KakaoMapInfoWindow>
+    </KakaoMap>
+    `
+  }),
+  args: {
+    ...서울특별시청_좌표,
+    visible: false
   }
 };
