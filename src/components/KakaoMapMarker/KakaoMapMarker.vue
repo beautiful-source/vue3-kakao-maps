@@ -3,7 +3,7 @@ import { isKakaoMapApiLoaded } from '@/utils/useKakao';
 import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
 import { KakaoMapCustomOverlay, KakaoMapInfoWindow } from '@/components';
 import type { KakaoMapMarkerProps, KakaoMapMarkerImage } from './types';
-import { DEFAULT_MARKER_IMAGE, DEFAULT_MARKER_IMAGE_HEIGHT, DEFAULT_MARKER_IMAGE_WIDTH } from '@/constants/markerImage';
+import { DEFAULT_MARKER_IMAGE } from '@/constants/markerImage';
 
 const emits = defineEmits([
   'onLoadKakaoMapMarker',
@@ -36,9 +36,12 @@ const changeMarkerImage = (image: KakaoMapMarkerImage | undefined): void => {
     image = DEFAULT_MARKER_IMAGE;
   }
 
+  const imageInfo = new Image();
+  imageInfo.src = image.imageSrc;
+
   const markerImage = new kakao.maps.MarkerImage(
     image.imageSrc,
-    new kakao.maps.Size(image.imageWidth ?? DEFAULT_MARKER_IMAGE_WIDTH, image.imageHeight ?? DEFAULT_MARKER_IMAGE_HEIGHT),
+    new kakao.maps.Size(image.imageWidth ?? imageInfo.width, image.imageHeight ?? imageInfo.height),
     image.imageOption
   );
 
