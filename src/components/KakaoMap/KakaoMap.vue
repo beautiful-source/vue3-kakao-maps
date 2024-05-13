@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<KakaoMapProps>(), {
   projectionId: 'kakao.maps.ProjectionId.WCONG',
   tileAnimation: true
 });
-const emits = defineEmits(['onLoadKakaoMap']);
+const emits = defineEmits(['onLoadKakaoMap','onLoadKakaoMapMarkerCluster']);
 
 const kakaoMapRef = ref<null | HTMLElement>(null);
 const map = ref<kakao.maps.Map>();
@@ -67,6 +67,7 @@ const initCluster = (info: MarkerClusterInfo): void => {
       ...info,
       markers: markers.value
     });
+    emits('onLoadKakaoMapMarkerCluster', clusterer.value);
   }
 };
 
@@ -216,7 +217,7 @@ watch(
       />
     </template>
 
-    <template v-if="props.infoWindowList">
+    <template v-if="props.infoWindowList && props.markerCluster === undefined">
       <KakaoMapInfoWindow
         v-for="(infoWindow, index) in props.infoWindowList"
         :key="infoWindow.key === undefined ? index : infoWindow.key"
