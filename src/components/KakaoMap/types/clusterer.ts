@@ -5,7 +5,7 @@ export type MarkerClusterInfo = {
   /**
    * 클러스터링 할 마커 배열
    */
-  markerProps?: KakaoMapMarkerProps[];
+  markers?: KakaoMapMarkerProps[];
 
   /**
    * 클러스터링 할 커스텀 오버레이 배열

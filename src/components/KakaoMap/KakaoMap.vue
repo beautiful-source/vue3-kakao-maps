@@ -40,33 +40,33 @@ const initMap = (): void => {
  */
 const clusterer = ref<kakao.maps.MarkerClusterer>();
 const initCluster = (info: MarkerClusterInfo): void => {
-  if (info.markerProps === undefined && info.customOverlayProps === undefined) {
+  if (info.markers === undefined && info.customOverlayProps === undefined) {
     throw new Error('클러스터 할 입력값이 없습니다.');
   } else if (map.value !== null) {
-    clusterer.value = new kakao.maps.MarkerClusterer({
-      map: toRaw(map.value),
-      ...info
-    });
-    if (info.markerProps !== undefined) {
+    if (info.markers !== undefined) {
       const inputList = ref<kakao.maps.Marker[]>([]);
       /**
-       * markerProps로 리스트 생성
+       * markers로 리스트 생성
        */
-      info.markerProps?.forEach((markerInfo) => {
+      info.markers?.forEach((markerInfo) => {
         const marker = new kakao.maps.Marker({
           position: new kakao.maps.LatLng(markerInfo.lat, markerInfo.lng),
-          image: markerInfo.image,
-          title: markerInfo.title,
-          draggable: markerInfo.draggable,
-          zIndex: markerInfo.zIndex,
-          opacity: markerInfo.opacity,
-          altitude: markerInfo.altitude,
-          range: markerInfo.range,
-          clickable: markerInfo.clickable
+          image: markerInfo.image ?? undefined,
+          title: markerInfo.title ?? undefined,
+          draggable: typeof markerInfo.draggable === 'boolean' ? markerInfo.draggable : false,
+          clickable: typeof markerInfo.clickable === 'boolean' ? markerInfo.clickable : false,
+          zIndex: typeof markerInfo.zIndex === 'number' ? markerInfo.zIndex : 0,
+          opacity: markerInfo.opacity ?? 1.0,
+          altitude: markerInfo.altitude ?? 0,
+          range: markerInfo.range ?? undefined
         });
         inputList.value?.push(marker);
       });
-      clusterer.value.addMarkers(inputList.value);
+      clusterer.value = new kakao.maps.MarkerClusterer({
+        map: toRaw(map.value),
+        ...info,
+        markers: inputList.value
+      });
     }
     if (info.customOverlayProps !== undefined) {
       const inputList = ref<kakao.maps.CustomOverlay[]>([]);
@@ -84,7 +84,11 @@ const initCluster = (info: MarkerClusterInfo): void => {
         });
         inputList.value?.push(customOverlay);
       });
-      clusterer.value.addMarkers(inputList.value);
+      clusterer.value = new kakao.maps.MarkerClusterer({
+        map: toRaw(map.value),
+        ...info,
+        markers: inputList.value
+      });
     }
     emits('onLoadKakaoMapMarkerCluster', clusterer.value);
   }
