@@ -2,6 +2,9 @@
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue", ".eslintrc.cjs"],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
+    // typescript 사용을 위한 버전 명시
+    "lib": ["dom", "es2021"],
+
     // Type Checking
     "strict": true,
 

@@ -1,10 +1,16 @@
 import type { KakaoMapMarkerProps } from '../../KakaoMapMarker/types';
+import type { KakaoMapCustomOverlayProps } from '../../KakaoMapCustomOverlay/types';
 
 export type MarkerClusterInfo = {
   /**
    * 클러스터링 할 마커 배열
    */
-  markers?: KakaoMapMarkerProps[];
+  markerProps?: KakaoMapMarkerProps[];
+
+  /**
+   * 클러스터링 할 커스텀 오버레이 배열
+   */
+  customOverlayProps?: KakaoMapCustomOverlayProps[];
 
   /**
    * 클러스터의 격자 크기 (기본값: 60)
@@ -32,8 +38,7 @@ export type MarkerClusterInfo = {
   styles?: object[];
 
   /**
-   * 클러스터에 표시할 문자열 또는 문자열 생성 함수.
-   * @default "클러스터에 포함된 숫자"
+   * 클러스터에 표시할 문자열 또는 문자열 생성 함수. (기본값: 클러스터에 포함된 숫자)
    */
 
   texts?: string[] | ((size: number) => string);
