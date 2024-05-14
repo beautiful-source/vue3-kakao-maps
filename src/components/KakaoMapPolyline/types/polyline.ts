@@ -1,5 +1,5 @@
-import type { KakaoMapMarkerListItem } from '@/components/KakaoMap/types';
-import type { KakaoMapLatLngItem } from '@/types';
+import type { KakaoMapMarkerListItem } from '../../KakaoMap/types';
+import type { KakaoMapLatLngItem } from '../../../types';
 
 /**
  * KakaoMapPolyline 컴포넌트 생성을 위한 타입
