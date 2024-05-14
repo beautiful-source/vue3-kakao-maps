@@ -55,14 +55,14 @@ const initCluster = (info: MarkerClusterInfo): void => {
       info.markerProps?.forEach((markerInfo) => {
         const marker = new kakao.maps.Marker({
           position: new kakao.maps.LatLng(markerInfo.lat, markerInfo.lng),
-          image: markerInfo.image ?? undefined,
-          title: markerInfo.title ?? undefined,
-          draggable: typeof markerInfo.draggable === 'boolean' ? markerInfo.draggable : false,
-          clickable: typeof markerInfo.clickable === 'boolean' ? markerInfo.clickable : false,
-          zIndex: typeof markerInfo.zIndex === 'number' ? markerInfo.zIndex : 0,
-          opacity: markerInfo.opacity ?? 1.0,
-          altitude: markerInfo.altitude ?? 0,
-          range: markerInfo.range ?? undefined
+          image: markerInfo.image,
+          title: markerInfo.title,
+          draggable: markerInfo.draggable,
+          zIndex: markerInfo.zIndex,
+          opacity: markerInfo.opacity,
+          altitude: markerInfo.altitude,
+          range: markerInfo.range,
+          clickable: markerInfo.clickable
         });
         inputList.value?.push(marker);
       });
@@ -76,11 +76,11 @@ const initCluster = (info: MarkerClusterInfo): void => {
       info.customOverlayProps?.forEach((markerInfo) => {
         const customOverlay = new kakao.maps.CustomOverlay({
           position: new kakao.maps.LatLng(markerInfo.lat, markerInfo.lng),
-          content: markerInfo.content ?? '',
-          xAnchor: typeof markerInfo.xAnchor === 'number' ? markerInfo.xAnchor : 0.5,
-          yAnchor: typeof markerInfo.yAnchor === 'number' ? markerInfo.yAnchor : 0.5,
-          zIndex: typeof markerInfo.zIndex === 'number' ? markerInfo.zIndex : 0,
-          clickable: typeof markerInfo.clickable === 'boolean' ? markerInfo.clickable : false
+          content: markerInfo.content,
+          xAnchor: markerInfo.xAnchor,
+          yAnchor: markerInfo.yAnchor,
+          zIndex: markerInfo.zIndex,
+          clickable: markerInfo.clickable
         });
         inputList.value?.push(customOverlay);
       });
