@@ -1,6 +1,6 @@
 {
   "name": "vue3-kakao-maps",
-  "version": "2.3.6",
+  "version": "2.3.5",
   "private": false,
   "type": "module",
   "main": "./dist/index.umd.cjs",
