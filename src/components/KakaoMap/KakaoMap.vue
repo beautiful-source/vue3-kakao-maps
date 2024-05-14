@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<KakaoMapProps>(), {
   projectionId: 'kakao.maps.ProjectionId.WCONG',
   tileAnimation: true
 });
-const emits = defineEmits(['onLoadKakaoMap','onLoadKakaoMapMarkerCluster']);
+const emits = defineEmits(['onLoadKakaoMap', 'onLoadKakaoMapMarkerCluster']);
 
 const kakaoMapRef = ref<null | HTMLElement>(null);
 const map = ref<kakao.maps.Map>();
@@ -40,33 +40,52 @@ const initMap = (): void => {
  */
 const clusterer = ref<kakao.maps.MarkerClusterer>();
 const initCluster = (info: MarkerClusterInfo): void => {
-  if (info.markers === undefined) {
-    throw new Error('MarkerList가 없습니다.');
-  }
-  if (map.value !== null) {
-    /**
-     * kakao.maps.Marker[] 생성
-     */
-    const markers = ref<kakao.maps.Marker[]>([]);
-    info.markers.forEach((markerInfo) => {
-      const marker = new kakao.maps.Marker({
-        position: new kakao.maps.LatLng(markerInfo.lat, markerInfo.lng),
-        image: markerInfo.image ?? undefined,
-        title: markerInfo.title ?? undefined,
-        draggable: typeof markerInfo.draggable === 'boolean' ? markerInfo.draggable : false,
-        clickable: typeof markerInfo.clickable === 'boolean' ? markerInfo.clickable : false,
-        zIndex: typeof markerInfo.zIndex === 'number' ? markerInfo.zIndex : 0,
-        opacity: markerInfo.opacity ?? 1.0,
-        altitude: markerInfo.altitude ?? 0,
-        range: markerInfo.range ?? undefined
-      });
-      markers.value?.push(marker);
-    });
+  if (info.markerProps === undefined && info.customOverlayProps === undefined) {
+    throw new Error('클러스터 할 입력값이 없습니다.');
+  } else if (map.value !== null) {
     clusterer.value = new kakao.maps.MarkerClusterer({
       map: toRaw(map.value),
-      ...info,
-      markers: markers.value
+      ...info
     });
+    if (info.markerProps !== undefined) {
+      const inputList = ref<kakao.maps.Marker[]>([]);
+      /**
+       * markerProps로 리스트 생성
+       */
+      info.markerProps?.forEach((markerInfo) => {
+        const marker = new kakao.maps.Marker({
+          position: new kakao.maps.LatLng(markerInfo.lat, markerInfo.lng),
+          image: markerInfo.image ?? undefined,
+          title: markerInfo.title ?? undefined,
+          draggable: typeof markerInfo.draggable === 'boolean' ? markerInfo.draggable : false,
+          clickable: typeof markerInfo.clickable === 'boolean' ? markerInfo.clickable : false,
+          zIndex: typeof markerInfo.zIndex === 'number' ? markerInfo.zIndex : 0,
+          opacity: markerInfo.opacity ?? 1.0,
+          altitude: markerInfo.altitude ?? 0,
+          range: markerInfo.range ?? undefined
+        });
+        inputList.value?.push(marker);
+      });
+      clusterer.value.addMarkers(inputList.value);
+    }
+    if (info.customOverlayProps !== undefined) {
+      const inputList = ref<kakao.maps.CustomOverlay[]>([]);
+      /**
+       * customOverlayProps로 리스트 생성
+       */
+      info.customOverlayProps?.forEach((markerInfo) => {
+        const customOverlay = new kakao.maps.CustomOverlay({
+          position: new kakao.maps.LatLng(markerInfo.lat, markerInfo.lng),
+          content: markerInfo.content ?? '',
+          xAnchor: typeof markerInfo.xAnchor === 'number' ? markerInfo.xAnchor : 0.5,
+          yAnchor: typeof markerInfo.yAnchor === 'number' ? markerInfo.yAnchor : 0.5,
+          zIndex: typeof markerInfo.zIndex === 'number' ? markerInfo.zIndex : 0,
+          clickable: typeof markerInfo.clickable === 'boolean' ? markerInfo.clickable : false
+        });
+        inputList.value?.push(customOverlay);
+      });
+      clusterer.value.addMarkers(inputList.value);
+    }
     emits('onLoadKakaoMapMarkerCluster', clusterer.value);
   }
 };
