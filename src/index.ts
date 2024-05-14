@@ -27,6 +27,7 @@ export * from './components';
 // utils
 export * from './utils';
 // types
+export type * from './types';
 export type * from './components/KakaoMap/types';
 export type * from './components/KakaoMapCustomOverlay/types';
 export type * from './components/KakaoMapInfoWindow/types';

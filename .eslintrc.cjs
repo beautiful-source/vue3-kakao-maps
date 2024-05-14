@@ -20,5 +20,23 @@ module.exports = {
     '@typescript-eslint/consistent-type-definitions': 'off',
     'vue/no-undef-components': 'error'
   },
-  ignorePatterns: ['dist/**/*']
+  ignorePatterns: ['dist/**/*'],
+  overrides: [
+    {
+      files: ['src/**/types/*.ts'],
+      rules: {
+        'no-restricted-imports': [
+          'error',
+          {
+            patterns: [
+              {
+                group: ['@*'],
+                message: 'Absolute imports are not allowed here.'
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 };
