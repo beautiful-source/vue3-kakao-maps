@@ -3,6 +3,16 @@ import { inject, ref, type Ref } from 'vue';
 import { KakaoMapCustomOverlay, KakaoMapMarker, KakaoMapPolyline } from '@/components';
 import type { KakaoMapMarkerPolylineProps } from '../KakaoMapPolyline/types';
 
+const emits = defineEmits([
+  // Marker event
+  'onLoadKakaoMapMarker',
+  'onClickKakaoMapMarker',
+  'dragEndKakaoMapMarker',
+  'mouseOverKakaoMapMarker',
+  'mouseOutKakaoMapMarker',
+  'deleteKakaoMapMarker'
+]);
+
 const props = defineProps<KakaoMapMarkerPolylineProps>();
 
 /**
@@ -21,6 +31,7 @@ const mapMarkerList: Ref<kakao.maps.Marker[]> = ref([]);
  */
 const addMapMarkerList = (marker: kakao.maps.Marker): void => {
   mapMarkerList.value.push(marker);
+  emits('onLoadKakaoMapMarker', marker);
 };
 
 /**
@@ -30,6 +41,7 @@ const addMapMarkerList = (marker: kakao.maps.Marker): void => {
 const deleteMapMarker = (marker: kakao.maps.Marker): void => {
   const targetIndex = mapMarkerList.value.indexOf(marker);
   mapMarkerList.value.splice(targetIndex, 1);
+  emits('deleteKakaoMapMarker', marker);
 };
 
 /**
@@ -42,6 +54,8 @@ const updateMarkerLatLng = (marker: kakao.maps.Marker): void => {
 
   markerListProps[targetIndex].lat = marker.getPosition().getLat();
   markerListProps[targetIndex].lng = marker.getPosition().getLng();
+
+  emits('dragEndKakaoMapMarker', marker);
 };
 
 /**
@@ -66,10 +80,14 @@ const content = (order: string | number, orderBottomMargin: string | undefined):
       :lat="marker.lat"
       :lng="marker.lng"
       :draggable="marker.draggable"
+      :clickable="marker.clickable"
       :image="marker.image"
-      @on-load-kakao-map-marker="addMapMarkerList"
-      @drag-end-kakao-map-marker="updateMarkerLatLng"
-      @delete-kakao-map-marker="deleteMapMarker"
+      @onLoadKakaoMapMarker="addMapMarkerList"
+      @dragEndKakaoMapMarker="updateMarkerLatLng"
+      @deleteKakaoMapMarker="deleteMapMarker"
+      @onClickKakaoMapMarker="emits('onClickKakaoMapMarker', marker)"
+      @mouseOverKakaoMapMarker="emits('mouseOverKakaoMapMarker', marker)"
+      @mouseOutKakaoMapMarker="emits('mouseOutKakaoMapMarker', marker)"
     />
     <div v-for="(marker, index) in props.markerList" :key="index">
       <KakaoMapPolyline
