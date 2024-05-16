@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/utils';
-import { computed, inject, onBeforeUnmount, watch, type ComputedRef, type Ref } from 'vue';
+import { computed, inject, onBeforeUnmount, ref, watch, type ComputedRef, type Ref } from 'vue';
 import type { KakaoMapPolylineProps } from './types';
+
+const emits = defineEmits(['onLoadKakaoMapPolyline']);
 
 const props = withDefaults(defineProps<KakaoMapPolylineProps>(), {
   strokeWeight: 3,
@@ -18,7 +20,7 @@ const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
 /**
  * 지도에 표시할 폴리라인 객체
  */
-let polyline: kakao.maps.Polyline | null = null;
+const polyline = ref<kakao.maps.Polyline | null>();
 
 /**
  * 폴리라인이 지나갈 경로
@@ -33,7 +35,7 @@ const linePath: ComputedRef<kakao.maps.LatLng[]> = computed(() => {
  * 폴리라인 객체를 생성하는 함수
  */
 const initPolyline = (map: kakao.maps.Map): void => {
-  polyline = new kakao.maps.Polyline({
+  polyline.value = new kakao.maps.Polyline({
     path: linePath.value,
     endArrow: props.endArrow,
     strokeWeight: props.strokeWeight,
@@ -43,7 +45,8 @@ const initPolyline = (map: kakao.maps.Map): void => {
     zIndex: props.zIndex
   });
 
-  polyline.setMap(map);
+  polyline.value.setMap(map);
+  emits('onLoadKakaoMapPolyline', polyline.value);
 };
 
 /**
@@ -65,7 +68,7 @@ watch(
 watch(
   () => props.latLngList,
   () => {
-    polyline?.setPath(linePath.value);
+    polyline.value?.setPath(linePath.value);
   },
   { deep: true }
 );
@@ -76,7 +79,7 @@ watch(
 watch(
   () => props.endArrow,
   () => {
-    polyline?.setMap(null);
+    polyline.value?.setMap(null);
     if (mapRef !== undefined) {
       initPolyline(mapRef.value);
     }
@@ -89,7 +92,7 @@ watch(
 watch(
   [() => props.strokeWeight, () => props.strokeColor, () => props.strokeOpacity, () => props.strokeStyle],
   ([strokeWeight, strokeColor, strokeOpacity, strokeStyle]) => {
-    polyline?.setOptions({
+    polyline.value?.setOptions({
       strokeWeight,
       strokeColor,
       strokeOpacity,
@@ -105,7 +108,7 @@ watch(
   () => props.zIndex,
   (zIndex) => {
     if (zIndex !== undefined) {
-      polyline?.setZIndex(zIndex);
+      polyline.value?.setZIndex(zIndex);
     }
   }
 );
@@ -114,7 +117,7 @@ watch(
  * 언마운트되면 map에서 폴리라인 삭제
  */
 onBeforeUnmount(() => {
-  polyline?.setMap(null);
+  polyline.value?.setMap(null);
 });
 </script>
 
