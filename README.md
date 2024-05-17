@@ -16,8 +16,6 @@
 [`vue3-kakao-maps`에 관한 소중한 생각을 남겨주세요!](https://forms.gle/qZty6EQDRD8Q3b3i9)
 
 <p align="center">
-<!--   <a href="https://circleci.com/gh/vuejs/vue/tree/dev"><img src="https://img.shields.io/circleci/project/github/vuejs/vue/dev.svg?sanitize=true" alt="Build Status"></a>
-  <a href="https://codecov.io/github/vuejs/vue?branch=dev"><img src="https://img.shields.io/codecov/c/github/vuejs/vue/dev.svg?sanitize=true" alt="Coverage Status"></a> -->
   <a href="https://npmcharts.com/compare/vue3-kakao-maps?minimal=true"><img src="https://img.shields.io/npm/dm/vue3-kakao-maps.svg?sanitize=true" alt="Downloads"></a>
   <a href="https://www.npmjs.com/package/vue3-kakao-maps"><img src="https://img.shields.io/npm/v/vue3-kakao-maps.svg?sanitize=true" alt="Version"></a>
   <a href="https://www.npmjs.com/package/vue"><img src="https://img.shields.io/npm/l/vue.svg?sanitize=true" alt="License"></a>
@@ -81,6 +79,12 @@ const coordinate = {
   </KakaoMap>
 </template>
 ```
+
+## `vue3-kakao-maps`로 만든 결과물
+
+`vue3-kakao-maps`에서 제공하는 `마커`, `커스텀 오버레이`, `폴리라인`, `키워드 검색`을 활용한 예제입니다. 여러 개의 마커를 사용하거나 이벤트를 추가할 수 있습니다.
+
+  <img width="100%" src="https://raw.githubusercontent.com/beautiful-source/vue3-kakao-maps-docs/develop/public/images/demo-page.gif?token=GHSAT0AAAAAACOOLE6LQ2VAN4UTBWOCJVZMZSG6UGQ" alt="데모 페이지"/>
 
 ## 📧 Contact
 
