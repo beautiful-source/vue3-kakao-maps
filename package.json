@@ -92,7 +92,7 @@
   },
   "description": "kakao maps component library with vue3 and TS",
   "license": "MIT",
-  "homepage": "https://vue3-kakao-maps.netlify.app/",
+  "homepage": "https://vue3-kakao-maps-docs.vercel.app/",
   "keywords": [
     "vue",
     "vue3",
@@ -104,6 +104,9 @@
     "카카오맵",
     "카카오 맵",
     "지도",
-    "지도 api"
+    "지도 api",
+    "vue 카카오맵",
+    "뷰 카카오맵",
+    "kakao map api"
   ]
 }
