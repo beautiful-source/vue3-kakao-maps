@@ -94,8 +94,8 @@ watch(
  */
 watch(
   [() => contentSlot?.value, () => contentSlot],
-  ([content, contentSlot]) => {
-    content !== undefined && infoWindow.value?.setContent(content);
+  ([content]) => {
+    content !== undefined && infoWindow.value !== undefined && infoWindow.value !== null && infoWindow.value?.setContent(content);
   },
   { deep: true }
 );

@@ -75,6 +75,20 @@ watch(
 );
 
 /**
+ * slot 변경 감지
+ */
+watch(
+  [() => contentSlot?.value, () => contentSlot],
+  ([content]) => {
+    content !== undefined &&
+      customOverlay.value !== undefined &&
+      customOverlay.value !== null &&
+      customOverlay.value?.setContent(content);
+  },
+  { deep: true }
+);
+
+/**
  * LatLng 변경 감지
  */
 watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
