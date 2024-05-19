@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { isKakaoMapApiLoaded } from '@/utils/useKakao';
-import { inject, nextTick, onBeforeUnmount, ref, watch, type Ref } from 'vue';
+import { inject, onBeforeUnmount, ref, watch, type Ref } from 'vue';
 import type { KakaoMapCustomOverlayProps } from './types';
 
 const emits = defineEmits(['onLoadKakaoMapCustomOverlay']);
@@ -30,13 +30,9 @@ const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
  * 카카오맵 위에 커스텀 오버레이를 생성합니다
  * @param map 커스텀 오버레이가 생성될 카카오맵
  */
-const initKakaoMapCustomOverlay = async (map: kakao.maps.Map): Promise<void> => {
+const initKakaoMapCustomOverlay = (map: kakao.maps.Map): void => {
   if (props.lat === undefined || props.lng === undefined) {
     throw new Error('KakaoMapCustomOverlay의 위치가 없습니다.');
-  }
-
-  if (props.content === undefined && contentSlot.value === undefined) {
-    await nextTick();
   }
 
   const position = new kakao.maps.LatLng(props.lat, props.lng);
@@ -69,13 +65,27 @@ onBeforeUnmount(() => {
  */
 watch(
   [() => isKakaoMapApiLoaded.value, () => mapRef?.value, () => isKakaoMapApiLoaded, () => mapRef],
-  async ([isKakaoMapApiLoaded, mapRef]) => {
+  ([isKakaoMapApiLoaded, mapRef]) => {
     if (!props.visible) return;
     if (isKakaoMapApiLoaded && mapRef !== undefined && mapRef !== null) {
-      await initKakaoMapCustomOverlay(mapRef);
+      initKakaoMapCustomOverlay(mapRef);
     }
   },
   { immediate: true }
+);
+
+/**
+ * slot 변경 감지
+ */
+watch(
+  [() => contentSlot?.value, () => contentSlot],
+  ([content]) => {
+    content !== undefined &&
+      customOverlay.value !== undefined &&
+      customOverlay.value !== null &&
+      customOverlay.value?.setContent(content);
+  },
+  { deep: true }
 );
 
 /**
@@ -110,11 +120,11 @@ watch(
  */
 watch(
   () => props.visible,
-  async (newVisible) => {
+  (newVisible) => {
     if (!newVisible) {
       customOverlay?.value !== null && customOverlay.value !== undefined && customOverlay.value?.setMap(null);
     } else if (isKakaoMapApiLoaded?.value && mapRef?.value !== undefined && mapRef?.value !== null) {
-      await initKakaoMapCustomOverlay(mapRef.value);
+      initKakaoMapCustomOverlay(mapRef.value);
     }
   }
 );
