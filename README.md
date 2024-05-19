@@ -84,7 +84,7 @@ const coordinate = {
 
 `vue3-kakao-maps`에서 제공하는 `마커`, `커스텀 오버레이`, `폴리라인`, `키워드 검색`을 활용한 예제입니다. 여러 개의 마커를 사용하거나 이벤트를 추가할 수 있습니다.
 
-  <img width="100%" src="https://raw.githubusercontent.com/beautiful-source/vue3-kakao-maps-docs/develop/public/images/demo-page.gif?token=GHSAT0AAAAAACOOLE6LQ2VAN4UTBWOCJVZMZSG6UGQ" alt="데모 페이지"/>
+   <img width="100%" src="https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihYn1tOFKF9LhiE4Ck_MaRDPJLFwl3zkFhzJZSfHuKDLb1Obbac84sU-pCGxw_ps0gx8I6UF48tjHEmQcDVAev55T4w3GJBawQ=w1920-h878" alt="데모 페이지"/>
 
 ## 📧 Contact
 
