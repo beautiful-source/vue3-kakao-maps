@@ -1,6 +1,6 @@
 <div align="center"><a href="https://vuejs.org">
   <img width="100" src="https://vuejs.org/images/logo.png" alt="Vue logo"></a>
-  <img width="100" src="https://drive.google.com/uc?export=view&id=1nIhN4NpBOQaY-jwYnzP7yMtMVvKAI18g" alt="카카오맵 api 이미지" width="200"/>
+  <img width="100" src="https://t1.kakaocdn.net/kakaocorp/kakaocorp/admin/1ca66319017800001.png" alt="카카오맵 api 이미지" width="200"/>
 </div>
 
 <h1>vue3-kakao-maps</h1>
@@ -12,8 +12,6 @@
 카카오맵 API의 `지도`, `마커`, `인포윈도우`, `커스텀 오버레이`, `마커 클러스터`등을 컴포넌트 형태로 제공합니다.
 
 사용 예시 및 컴포넌트 별 세부 속성값은 [**Docs**](https://vue3-kakao-maps-docs.vercel.app/components/kakaoMap)에서 확인하실 수 있습니다.
-
-[`vue3-kakao-maps`에 관한 소중한 생각을 남겨주세요!](https://forms.gle/qZty6EQDRD8Q3b3i9)
 
 <p align="center">
   <a href="https://npmcharts.com/compare/vue3-kakao-maps?minimal=true"><img src="https://img.shields.io/npm/dm/vue3-kakao-maps.svg?sanitize=true" alt="Downloads"></a>
@@ -84,10 +82,13 @@ const coordinate = {
 
 `vue3-kakao-maps`에서 제공하는 `마커`, `커스텀 오버레이`, `폴리라인`, `키워드 검색`을 활용한 예제입니다. 여러 개의 마커를 사용하거나 이벤트를 추가할 수 있습니다.
 
-   <img width="100%" src="https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihYn1tOFKF9LhiE4Ck_MaRDPJLFwl3zkFhzJZSfHuKDLb1Obbac84sU-pCGxw_ps0gx8I6UF48tjHEmQcDVAev55T4w3GJBawQ=w1920-h878" alt="데모 페이지"/>
+   <img width="100%" src="https://github.com/user-attachments/assets/a372e84b-c8fa-4cfa-85bd-cbe8277a3548" alt="데모 페이지"/>
 
 ## 📧 Contact
 
-문의사항이 있거나 도움이 필요한 경우 하단의 카카오톡 채널로 연락주시기 바립니다.
+문의사항이 있거나 도움이 필요한 경우 Github 이슈를 달아주세요!
 
-http://pf.kakao.com/_iiZUG/chat
+## 기여하기
+
+아직 Kakao 지도 Web API를 100% 구현하지 못했습니다.
+버그 또는 미구현 사항을 보완해서 Pull Request를 보내주시면 같이 잘 쓰도록 하겠습니다.
