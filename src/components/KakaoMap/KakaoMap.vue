@@ -37,69 +37,139 @@ const initMap = (): void => {
 
 /**
  * Marker Cluster 기능
+ * markerCluster가 바뀌면 클러스터를 매번 새로 만들지 않고, 추가·삭제·변경된 항목만 반영한다.
+ * 템플릿에 객체를 바로 쓰면 렌더링마다 새 객체가 오므로, 항목은 객체가 아니라 내용(JSON)으로 비교한다.
  */
-const clusterer = ref<kakao.maps.MarkerClusterer>();
-const initCluster = (info: MarkerClusterInfo): void => {
+type ClusterItem = kakao.maps.Marker | kakao.maps.CustomOverlay;
+type ClusterEntry = { key: string; item: ClusterItem };
+type ClusterMarkerInfo = NonNullable<MarkerClusterInfo['markers']>[number];
+type ClusterOverlayInfo = NonNullable<MarkerClusterInfo['customOverlayProps']>[number];
+
+/**
+ * 클러스터 옵션. 이 중 disableClickZoom, clickable, hoverable은 setter가 없어서 옵션이 바뀌면 클러스터를 새로 만든다.
+ */
+const CLUSTER_OPTION_KEYS = [
+  'gridSize',
+  'averageCenter',
+  'minLevel',
+  'minClusterSize',
+  'styles',
+  'texts',
+  'calculator',
+  'disableClickZoom',
+  'clickable',
+  'hoverable'
+] as const;
+
+let clusterer: kakao.maps.MarkerClusterer | undefined;
+let clusterOptionsKey = '';
+let clusterEntries: ClusterEntry[] = [];
+
+const createClusterMarker = (markerInfo: ClusterMarkerInfo): kakao.maps.Marker =>
+  new kakao.maps.Marker({
+    position: new kakao.maps.LatLng(markerInfo.lat, markerInfo.lng),
+    image: markerInfo.image ?? undefined,
+    title: markerInfo.title ?? undefined,
+    draggable: typeof markerInfo.draggable === 'boolean' ? markerInfo.draggable : false,
+    clickable: typeof markerInfo.clickable === 'boolean' ? markerInfo.clickable : false,
+    zIndex: typeof markerInfo.zIndex === 'number' ? markerInfo.zIndex : 0,
+    opacity: markerInfo.opacity ?? 1.0,
+    altitude: markerInfo.altitude ?? 0,
+    range: markerInfo.range ?? undefined
+  });
+
+const createClusterOverlay = (overlayInfo: ClusterOverlayInfo): kakao.maps.CustomOverlay =>
+  new kakao.maps.CustomOverlay({
+    position: new kakao.maps.LatLng(overlayInfo.lat, overlayInfo.lng),
+    content: overlayInfo.content,
+    xAnchor: overlayInfo.xAnchor,
+    yAnchor: overlayInfo.yAnchor,
+    zIndex: overlayInfo.zIndex,
+    clickable: overlayInfo.clickable
+  });
+
+/**
+ * 옵션 비교용 문자열. 함수 옵션(texts, calculator)은 소스 문자열로 비교한다.
+ */
+const toClusterOptionsKey = (info: MarkerClusterInfo): string =>
+  JSON.stringify(
+    CLUSTER_OPTION_KEYS.map((key) => {
+      const value = info[key];
+      return typeof value === 'function' ? value.toString() : value;
+    })
+  );
+
+/**
+ * 이전 항목과 비교해, 내용이 같은 항목은 기존 kakao 객체를 재사용하고 나머지만 새로 만든다.
+ */
+const diffClusterItems = (info: MarkerClusterInfo): { entries: ClusterEntry[]; added: ClusterItem[]; removed: ClusterItem[] } => {
+  const reusable = new Map<string, ClusterItem[]>();
+  clusterEntries.forEach(({ key, item }) => {
+    reusable.set(key, [...(reusable.get(key) ?? []), item]);
+  });
+
+  const entries: ClusterEntry[] = [];
+  const added: ClusterItem[] = [];
+  const take = (key: string, create: () => ClusterItem): void => {
+    const reused = reusable.get(key)?.pop();
+    const item = reused ?? create();
+    if (reused === undefined) added.push(item);
+    entries.push({ key, item });
+  };
+  info.markers?.forEach((markerInfo) => {
+    take(`marker:${JSON.stringify(markerInfo)}`, () => createClusterMarker(markerInfo));
+  });
+  info.customOverlayProps?.forEach((overlayInfo) => {
+    take(`overlay:${JSON.stringify(overlayInfo)}`, () => createClusterOverlay(overlayInfo));
+  });
+
+  return { entries, added, removed: Array.from(reusable.values()).flat() };
+};
+
+const removeCluster = (): void => {
+  clusterer?.clear();
+  clusterer?.setMap(null);
+  clusterer = undefined;
+  clusterOptionsKey = '';
+  clusterEntries = [];
+};
+
+/**
+ * markerCluster의 현재 값을 지도에 반영한다.
+ */
+const syncCluster = (info: MarkerClusterInfo | undefined): void => {
+  if (map.value === undefined) return;
+  if (info === undefined) {
+    removeCluster();
+    return;
+  }
   if (info.markers === undefined && info.customOverlayProps === undefined) {
     throw new Error('클러스터 할 입력값이 없습니다.');
-  } else if (map.value !== null) {
-    if (info.markers !== undefined) {
-      const inputList = ref<kakao.maps.Marker[]>([]);
-      /**
-       * markers로 리스트 생성
-       */
-      info.markers?.forEach((markerInfo) => {
-        const marker = new kakao.maps.Marker({
-          position: new kakao.maps.LatLng(markerInfo.lat, markerInfo.lng),
-          image: markerInfo.image ?? undefined,
-          title: markerInfo.title ?? undefined,
-          draggable: typeof markerInfo.draggable === 'boolean' ? markerInfo.draggable : false,
-          clickable: typeof markerInfo.clickable === 'boolean' ? markerInfo.clickable : false,
-          zIndex: typeof markerInfo.zIndex === 'number' ? markerInfo.zIndex : 0,
-          opacity: markerInfo.opacity ?? 1.0,
-          altitude: markerInfo.altitude ?? 0,
-          range: markerInfo.range ?? undefined
-        });
-        inputList.value?.push(marker);
-      });
-      clusterer.value = new kakao.maps.MarkerClusterer({
-        map: toRaw(map.value),
-        ...info,
-        markers: inputList.value
-      });
-    }
-    if (info.customOverlayProps !== undefined) {
-      const inputList = ref<kakao.maps.CustomOverlay[]>([]);
-      /**
-       * customOverlayProps로 리스트 생성
-       */
-      info.customOverlayProps?.forEach((markerInfo) => {
-        const customOverlay = new kakao.maps.CustomOverlay({
-          position: new kakao.maps.LatLng(markerInfo.lat, markerInfo.lng),
-          content: markerInfo.content,
-          xAnchor: markerInfo.xAnchor,
-          yAnchor: markerInfo.yAnchor,
-          zIndex: markerInfo.zIndex,
-          clickable: markerInfo.clickable
-        });
-        inputList.value?.push(customOverlay);
-      });
-      clusterer.value = new kakao.maps.MarkerClusterer({
-        map: toRaw(map.value),
-        ...info,
-        markers: inputList.value
-      });
-    }
-    emits('onLoadKakaoMapMarkerCluster', clusterer.value);
   }
+
+  const { entries, added, removed } = diffClusterItems(info);
+  const optionsKey = toClusterOptionsKey(info);
+  if (clusterer === undefined || optionsKey !== clusterOptionsKey) {
+    clusterer?.clear();
+    clusterer?.setMap(null);
+    clusterer = new kakao.maps.MarkerClusterer({
+      map: toRaw(map.value),
+      ...info,
+      markers: entries.map(({ item }) => item)
+    });
+    clusterOptionsKey = optionsKey;
+    emits('onLoadKakaoMapMarkerCluster', clusterer);
+  } else if (added.length > 0 || removed.length > 0) {
+    clusterer.removeMarkers(removed, true);
+    clusterer.addMarkers(added, true);
+    clusterer.redraw();
+  }
+  clusterEntries = entries;
 };
 
 onMounted(() => {
   if (isKakaoMapApiLoaded.value) {
     initMap();
-    if (props.markerCluster !== undefined) {
-      initCluster(props.markerCluster);
-    }
   }
 });
 
@@ -111,11 +181,26 @@ watch(
   (isKakaoMapApiLoaded) => {
     if (isKakaoMapApiLoaded) {
       initMap();
-      if (props.markerCluster !== undefined) {
-        initCluster(props.markerCluster);
-      }
     }
   }
+);
+
+/**
+ * 지도가 만들어졌을 때와 markerCluster가 바뀔 때마다 클러스터를 맞춘다.
+ * 마운트 뒤에 데이터를 받아와도 클러스터가 생긴다.
+ */
+watch(
+  () => map.value,
+  () => {
+    syncCluster(props.markerCluster);
+  }
+);
+watch(
+  () => props.markerCluster,
+  (info) => {
+    syncCluster(info);
+  },
+  { deep: true }
 );
 
 type MapStyle = {
