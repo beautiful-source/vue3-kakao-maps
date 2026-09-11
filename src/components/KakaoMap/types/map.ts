@@ -31,17 +31,17 @@ export type KakaoMapProps = {
   markerCluster?: MarkerClusterInfo;
 
   /**
-   * 지도의 위도 값
+   * 지도의 위도 값. `v-model:lat`으로 바인딩하면 사용자가 지도를 움직였을 때 갱신됩니다.
    */
   lat: number;
 
   /**
-   * 지도의 경도 값
+   * 지도의 경도 값. `v-model:lng`으로 바인딩하면 사용자가 지도를 움직였을 때 갱신됩니다.
    */
   lng: number;
 
   /**
-   * 확대 수준 (기본값: 3)
+   * 확대 수준 (기본값: 3). `v-model:level`로 바인딩하면 사용자가 확대·축소했을 때 갱신됩니다.
    */
   level?: number;
 
