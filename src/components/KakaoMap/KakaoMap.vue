@@ -15,11 +15,49 @@ const props = withDefaults(defineProps<KakaoMapProps>(), {
   projectionId: 'kakao.maps.ProjectionId.WCONG',
   tileAnimation: true
 });
-const emits = defineEmits(['onLoadKakaoMap', 'onLoadKakaoMapMarkerCluster']);
+const emits = defineEmits([
+  'onLoadKakaoMap',
+  'onLoadKakaoMapMarkerCluster',
+  // v-model:lat, v-model:lng, v-model:level
+  'update:lat',
+  'update:lng',
+  'update:level',
+  // 지도 이벤트: 마우스 이벤트는 (mouseEvent, map), 나머지는 (map)을 전달한다.
+  'click',
+  'dblclick',
+  'rightclick',
+  'mousemove',
+  'dragstart',
+  'drag',
+  'dragend',
+  'zoomStart',
+  'zoomChanged',
+  'centerChanged',
+  'boundsChanged',
+  'idle',
+  'tilesloaded',
+  'maptypeidChanged'
+]);
 
 const kakaoMapRef = ref<null | HTMLElement>(null);
 const map = ref<kakao.maps.Map>();
 provide('mapRef', map);
+
+/**
+ * 좌표 비교. 지도에서 읽은 좌표는 투영 변환을 거치며 소수점 끝자리가 달라질 수 있다.
+ */
+const isSameCoordinate = (a: number, b: number): boolean => Math.abs(a - b) < 1e-9;
+
+/**
+ * 이동·확대가 끝난 지도의 상태를 v-model(lat, lng, level)로 올려보낸다.
+ * 값이 같으면 보내지 않아서, 부모가 받은 값을 다시 내려줘도 지도가 또 움직이지 않는다.
+ */
+const syncModel = (kakaoMap: kakao.maps.Map): void => {
+  const center = kakaoMap.getCenter();
+  if (!isSameCoordinate(center.getLat(), props.lat)) emits('update:lat', center.getLat());
+  if (!isSameCoordinate(center.getLng(), props.lng)) emits('update:lng', center.getLng());
+  if (kakaoMap.getLevel() !== props.level) emits('update:level', kakaoMap.getLevel());
+};
 
 /**
  * 지도를 생성하는 함수
@@ -134,8 +172,62 @@ const mapStyle = computed<MapStyle>(() => {
  * LatLng 변경감지
  */
 watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
-  map.value?.panTo(new kakao.maps.LatLng(newLat, newLng));
+  if (map.value === undefined) return;
+  const center = map.value.getCenter();
+  // v-model로 지도에서 올라온 값이면 이미 그 위치라서 다시 이동하지 않는다.
+  if (isSameCoordinate(center.getLat(), newLat) && isSameCoordinate(center.getLng(), newLng)) return;
+  map.value.panTo(new kakao.maps.LatLng(newLat, newLng));
 });
+
+/**
+ * 카카오맵 이벤트 이름 → 컴포넌트 이벤트 이름
+ * 마우스 이벤트는 카카오가 넘겨준 MouseEvent 뒤에 map을, 나머지 이벤트는 map만 전달한다.
+ */
+const MAP_EVENTS = {
+  click: 'click',
+  dblclick: 'dblclick',
+  rightclick: 'rightclick',
+  mousemove: 'mousemove',
+  dragstart: 'dragstart',
+  drag: 'drag',
+  dragend: 'dragend',
+  zoom_start: 'zoomStart',
+  zoom_changed: 'zoomChanged',
+  center_changed: 'centerChanged',
+  bounds_changed: 'boundsChanged',
+  idle: 'idle',
+  tilesloaded: 'tilesloaded',
+  maptypeid_changed: 'maptypeidChanged'
+} as const;
+
+/**
+ * 카카오맵 이벤트를 컴포넌트 이벤트로 전달한다.
+ * 지도가 다시 만들어지거나 컴포넌트가 사라지면 등록한 리스너를 해제한다.
+ */
+watch(
+  () => map.value,
+  (newMap, _, onCleanup) => {
+    if (newMap === undefined) return;
+    const kakaoMap = toRaw(newMap);
+    const listeners = Object.entries(MAP_EVENTS).map(([type, name]): [string, (...args: unknown[]) => void] => [
+      type,
+      (...args) => {
+        // 이동·확대가 끝나면 v-model 값을 먼저 갱신한 뒤 idle을 알린다.
+        if (type === 'idle') syncModel(kakaoMap);
+        emits(name, ...args, kakaoMap);
+      }
+    ]);
+
+    listeners.forEach(([type, handler]) => {
+      kakao.maps.event.addListener(kakaoMap, type, handler);
+    });
+    onCleanup(() => {
+      listeners.forEach(([type, handler]) => {
+        kakao.maps.event.removeListener(kakaoMap, type, handler);
+      });
+    });
+  }
+);
 
 /**
  * draggable 변경 감지
@@ -157,11 +249,10 @@ watch(
 watch(
   () => props.level,
   (level) => {
-    if (level === undefined) {
-      map.value?.setLevel(3);
-    } else {
-      map.value?.setLevel(level);
-    }
+    const nextLevel = level ?? 3;
+    // v-model로 지도에서 올라온 값이면 이미 그 레벨이라서 다시 설정하지 않는다.
+    if (map.value === undefined || map.value.getLevel() === nextLevel) return;
+    map.value.setLevel(nextLevel);
   }
 );
 
