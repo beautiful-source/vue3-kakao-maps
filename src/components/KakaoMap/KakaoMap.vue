@@ -172,7 +172,7 @@ watch(
   () => props.mapTypeId,
   (mapTypeId) => {
     if (mapTypeId === undefined) {
-      map.value?.setMapTypeId(3);
+      map.value?.setMapTypeId(kakao.maps.MapTypeId.ROADMAP);
     } else {
       map.value?.setMapTypeId(mapTypeId);
     }
