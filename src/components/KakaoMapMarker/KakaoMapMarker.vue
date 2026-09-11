@@ -135,7 +135,7 @@ const content = (order: string | number): string => {
  * 컴포넌트 언마운트 시 map에서 marker 삭제
  */
 onBeforeUnmount(() => {
-  emits('deleteKakaoMapMarker', marker);
+  emits('deleteKakaoMapMarker', marker.value);
   marker.value?.setMap(null);
 });
 
