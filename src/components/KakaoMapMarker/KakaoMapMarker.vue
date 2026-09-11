@@ -24,7 +24,14 @@ const marker = ref<kakao.maps.Marker | undefined>();
 const mapRef = inject<Ref<kakao.maps.Map>>('mapRef');
 
 /**
+ * 마지막으로 요청한 마커 이미지 변경의 번호.
+ * 이미지 로드 중에 image prop이 다시 바뀌면, 늦게 끝난 이전 로드가 새 이미지를 덮어쓰지 않게 한다.
+ */
+let latestImageRequest = 0;
+
+/**
  * 마커 이미지를 변경함
+ * imageWidth, imageHeight가 없으면 이미지를 불러온 뒤 원본 크기로 설정한다.
  * @param image 기본 마커 대신 표시될 이미지
  */
 const changeMarkerImage = (image: KakaoMapMarkerImage | undefined): void => {
@@ -36,18 +43,25 @@ const changeMarkerImage = (image: KakaoMapMarkerImage | undefined): void => {
     image = DEFAULT_MARKER_IMAGE;
   }
 
-  const imageInfo = new Image();
-  imageInfo.src = image.imageSrc;
+  const { imageSrc, imageWidth, imageHeight, imageOption } = image;
+  const request = ++latestImageRequest;
+  const applyImage = (width: number, height: number): void => {
+    marker.value?.setImage(new kakao.maps.MarkerImage(imageSrc, new kakao.maps.Size(width, height), imageOption));
+  };
 
-  const markerImage = new kakao.maps.MarkerImage(
-    image.imageSrc,
-    new kakao.maps.Size(image.imageWidth ?? imageInfo.width, image.imageHeight ?? imageInfo.height),
-    image.imageOption
-  );
-
-  if (marker.value !== undefined) {
-    marker.value.setImage(markerImage);
+  if (imageWidth !== undefined && imageHeight !== undefined) {
+    applyImage(imageWidth, imageHeight);
+    return;
   }
+
+  // new Image() 직후에는 아직 로드 전이라 width, height가 0이다.
+  // 크기를 모르면 로드가 끝난 뒤에 원본 크기로 적용한다.
+  const imageInfo = new Image();
+  imageInfo.onload = () => {
+    if (request !== latestImageRequest) return;
+    applyImage(imageWidth ?? imageInfo.naturalWidth, imageHeight ?? imageInfo.naturalHeight);
+  };
+  imageInfo.src = imageSrc;
 };
 
 /*
