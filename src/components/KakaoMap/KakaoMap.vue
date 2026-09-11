@@ -131,6 +131,26 @@ const mapStyle = computed<MapStyle>(() => {
 });
 
 /**
+ * 지도 영역의 크기가 바뀌면 relayout한다.
+ * 카카오맵은 window resize만 스스로 처리해서, width/height 변경이나 탭·모달·v-show로 요소 크기만 바뀌면 직접 불러야 한다.
+ */
+watch(kakaoMapRef, (element, _, onCleanup) => {
+  if (element === null || typeof ResizeObserver === 'undefined') return;
+  const observer = new ResizeObserver(() => {
+    if (map.value === undefined) return;
+    const kakaoMap = toRaw(map.value);
+    // 크기가 바뀌어도 보던 중심이 유지되도록, relayout 전에 중심을 읽어 두었다가 다시 맞춘다.
+    const center = kakaoMap.getCenter();
+    kakaoMap.relayout();
+    kakaoMap.setCenter(center);
+  });
+  observer.observe(element);
+  onCleanup(() => {
+    observer.disconnect();
+  });
+});
+
+/**
  * LatLng 변경감지
  */
 watch([() => props.lat, () => props.lng], ([newLat, newLng]) => {
