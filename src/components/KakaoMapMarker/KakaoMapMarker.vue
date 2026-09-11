@@ -196,7 +196,7 @@ watch(
 watch(
   () => props.clickable,
   (clickable) => {
-    marker.value?.setDraggable(clickable !== undefined && clickable);
+    marker.value?.setClickable(clickable !== undefined && clickable);
   }
 );
 
